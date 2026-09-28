@@ -1,0 +1,22 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies and generated files
+node_modules/
+dist/
+build/
+coverage/
+.netlify/
+.DS_Store
+Thumbs.db
+*.log
+
+# Private operational data: never commit or publish
+private-data/
+imports/
+exports/
+backups/
