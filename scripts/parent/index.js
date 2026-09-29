@@ -3,10 +3,46 @@ import { configured, supabase } from "../auth/client.js";
 const status = document.querySelector("#status");
 const content = document.querySelector("#family-content");
 const signOut = document.querySelector("#sign-out");
+const invitationSection = document.querySelector("#invitations-section");
+const invitationList = document.querySelector("#invitations");
 
 function showError(message) {
   status.textContent = message;
   content.hidden = true;
+}
+
+async function loadInvitations() {
+  invitationList.replaceChildren();
+  invitationSection.hidden = true;
+  const { data, error } = await supabase.rpc("list_my_guardian_invitations");
+  // A preview built before the new migration must still show existing grants.
+  if (error?.code === "PGRST202") return false;
+  if (error) throw error;
+  for (const invite of data) {
+    const li = document.createElement("li");
+    const label = document.createElement("span");
+    label.textContent = `${invite.family_display_name} · expires ${new Date(invite.expires_at).toLocaleDateString()}`;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Accept access";
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      const { error: acceptError } = await supabase.rpc("accept_guardian_invitation", {
+        p_invitation_id: invite.invitation_id,
+      });
+      if (acceptError) {
+        button.disabled = false;
+        status.textContent = "Could not accept this invitation. It may have expired; contact New Vision Athletics.";
+        return;
+      }
+      status.textContent = "Family access accepted.";
+      await loadFamily().catch(() => showError("Could not refresh family access. Please try again."));
+    });
+    li.append(label, button);
+    invitationList.append(li);
+  }
+  invitationSection.hidden = !data.length;
+  return data.length > 0;
 }
 
 async function loadFamily() {
@@ -22,13 +58,17 @@ async function loadFamily() {
   }
   signOut.hidden = false;
 
+  const hasInvitations = await loadInvitations();
+
   const { data: grants, error: grantError } = await supabase
     .from("family_guardians")
     .select("family_id")
     .eq("user_id", auth.user.id);
   if (grantError) throw grantError;
   if (!grants.length) {
-    showError("This account has no family access yet. Please contact New Vision Athletics.");
+    showError(hasInvitations
+      ? "Review your family invitation below."
+      : "This account has no family access yet. Please contact New Vision Athletics.");
     return;
   }
 

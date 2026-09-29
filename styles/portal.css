@@ -7,11 +7,13 @@ h1 { margin: 1.5rem 0 .5rem; font-size: 2rem; }
 h2 { margin: 1.25rem 0 .25rem; font-size: 1.25rem; }
 p { line-height: 1.55; }
 label { display: block; margin: 1.5rem 0 .4rem; font-weight: 700; }
-input { width: 100%; padding: .85rem; border: 1px solid #7a9699; border-radius: .5rem; font: inherit; }
+input, select { width: 100%; padding: .85rem; border: 1px solid #7a9699; border-radius: .5rem; font: inherit; background: white; }
 button { margin-top: 1rem; padding: .85rem 1.2rem; border: 0; border-radius: .5rem; background: #146b72; color: white; font: inherit; font-weight: 700; cursor: pointer; }
 button:disabled { opacity: .55; cursor: wait; }
 button.secondary { margin: 0; padding: .55rem .8rem; background: #e8f5f5; color: #17484d; }
-a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #0b606a; outline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #0b606a; outline-offset: 3px; }
 .portal-header { display: flex; gap: 1rem; align-items: center; justify-content: space-between; }
+.card li { margin: .75rem 0; line-height: 1.5; }
+.card li button { margin: .4rem 0 .4rem .75rem; }
 .note { margin-top: 2rem; color: #4b6265; }
 [hidden] { display: none !important; }

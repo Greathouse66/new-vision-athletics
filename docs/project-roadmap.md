@@ -21,7 +21,8 @@ Acceptance: written decisions; no invented pricing, policy or credentials.
 - [ ] Implement migrations, roles, guardian-family links and audit records.
 - [x] Draft family/athlete/group migrations and guardian/coach read boundaries;
       deployment, access verification and audit records remain open.
-- [ ] Implement invitations and expiring email sign-in links.
+- [ ] Deploy and verify coach-approved guardian invitations and acceptance;
+      the email sign-in link works, but invitation delivery needs custom SMTP.
 - [ ] Enforce family isolation server-side; coach role assigned administratively.
 - [ ] Support revoking access and a second authorized guardian.
 Acceptance: unauthorized and cross-family reads/writes fail at the API/database layer.

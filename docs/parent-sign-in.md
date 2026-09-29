@@ -30,10 +30,10 @@ families and athletes only; sessions and balances do not exist in the schema yet
 ## Granting access
 
 The requested email must already be a Supabase Auth user. The sign-in
-form uses `shouldCreateUser: false`; it never grants family access. An authorized
-coach/admin must verify the guardian and insert their exact Auth user UUID and
-family UUID into `family_guardians`. A signed-in user with no guardian link sees
-an access-pending message. No public form can create guardian membership.
+form uses `shouldCreateUser: false`; it never grants family access. The coach
+approves the verified guardian's exact email for a family, and that guardian
+accepts the invitation after signing in. A signed-in user with no guardian
+link sees an access-pending message. See `guardian-access.md` for the workflow.
 
 Do not add real family records just to test the screen. With an existing test
 Auth user and no persistent family link, verify the access-pending state first.
@@ -49,8 +49,9 @@ opened `/parent/`. Before a guardian grant, the page showed no family access.
 Temporary dummy family and athlete rows plus a guardian link appeared in the
 browser after insertion. Deleting the exact dummy rows and refreshing removed
 access immediately; a follow-up SQL count returned zero for all three records.
-No real family records were used. Second-guardian isolation, custom SMTP, and
-the invitation/provisioning workflow still need verification.
+No real family records were used. Second-guardian isolation and custom SMTP
+still need verification; the invitation workflow was added afterward and has
+not yet been tested against the remote database.
 
 ## Hosted preview verification (2026-09-29)
 

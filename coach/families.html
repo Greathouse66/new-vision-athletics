@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Family access | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/families.js"></script>
+</head>
+<body>
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Family access</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <label for="family">Family</label>
+      <select id="family"></select>
+      <section>
+        <h2>Approve guardian email</h2>
+        <p>The guardian must sign in with this exact email and accept the invitation.
+          This screen does not send an email or create a sign-in account.</p>
+        <form id="invite-form">
+          <label for="email">Guardian email</label>
+          <input id="email" name="email" type="email" autocomplete="off" required maxlength="254">
+          <button type="submit">Approve invitation</button>
+        </form>
+      </section>
+      <section>
+        <h2>Pending invitations</h2>
+        <ul id="invitations"></ul>
+      </section>
+      <section>
+        <h2>Guardians with access</h2>
+        <ul id="guardians"></ul>
+      </section>
+      <p class="note">Review the family's records and verify each guardian's authority before approval.
+        To onboard a new address, an administrator must invite that email in Supabase Auth.
+        Email delivery to parents needs custom SMTP.</p>
+    </div>
+  </main>
+</body>
+</html>
