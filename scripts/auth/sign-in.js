@@ -7,6 +7,9 @@ const status = document.querySelector("#status");
 if (!configured) {
   status.textContent = "Parent sign-in is being set up. Please try again later.";
   button.disabled = true;
+} else {
+  status.textContent = "";
+  button.disabled = false;
 }
 
 form.addEventListener("submit", async (event) => {

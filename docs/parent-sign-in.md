@@ -19,7 +19,8 @@ families and athletes only; sessions and balances do not exist in the schema yet
    site's actual production origin, and allow its exact callback URL, such as
    `https://newvision-athletics.com/auth/callback.html`. If testing a Netlify
    preview, add that preview's exact callback URL too. For local testing on port
-   3000, allow `http://localhost:3000/auth/callback.html`.
+   3001, allow `http://localhost:3001/auth/callback.html`. The local port must
+   match the address serving `dist/`.
 4. Supabase's standard Magic Link email template must use its usual
    `{{ .ConfirmationURL }}` link so the `emailRedirectTo` option reaches our
    callback. If the template was customized, inspect and correct its destination.

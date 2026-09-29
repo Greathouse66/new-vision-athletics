@@ -14,12 +14,12 @@
     <a href="/" class="brand">New Vision Athletics</a>
     <h1>Parent sign-in</h1>
     <p>Enter the email connected to your family. We’ll send you a sign-in link; there’s no password to remember.</p>
-    <form id="sign-in-form">
+    <form id="sign-in-form" method="post">
       <label for="email">Email address</label>
       <input id="email" name="email" type="email" autocomplete="email" required>
-      <button type="submit">Email me a sign-in link</button>
+      <button type="submit" disabled>Email me a sign-in link</button>
     </form>
-    <p id="status" role="status" aria-live="polite"></p>
+    <p id="status" role="status" aria-live="polite">Loading sign-in…</p>
   </main>
 </body>
 </html>
