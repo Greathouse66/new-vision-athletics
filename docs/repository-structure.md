@@ -1,31 +1,44 @@
 # Repository structure
 
-Status: skeleton only. Existing root website files and Assets retain their exact names.
-Directories exist through .gitkeep; the following HTML/JS/CSS files are a planned implementation map, not working routes.
+The existing public website remains at the repository root. Netlify runs the build
+script and publishes only `dist/`. The coach and parent portal directories are
+planned routes; they are not working pages yet. No real family data is stored in
+the repository.
 
-| Area | Planned files / modules |
-| --- | --- |
-| coach | index.html (Today), groups.html, families.html, makeups.html, payments.html |
-| parent | index.html (sessions), makeups.html, payments.html |
-| auth | sign-in.html, callback.html |
-| styles | portal.css, coach.css, parent.css |
-| scripts | api.js, auth.js |
-| scripts/coach | attendance.js, groups.js, families.js, makeups.js, payments.js |
-| scripts/parent | sessions.js, makeups.js, payments.js |
-| backend/auth | Identity verification, role checks, guardian invitations |
-| backend/families | Family/athlete records, guardian relationships, import review |
-| backend/scheduling | Standing schedules, dated classes, enrollment, capacity |
-| backend/attendance | Presence, absence and audited corrections |
-| backend/cancellations | Timestamped cancellation and review decisions |
-| backend/makeups | Credit issue, reservation, redemption and restoration |
-| backend/billing | Monthly invoices, payment allocations, refunds and receipts |
-| backend/notifications | Invitation/reminder/cancellation delivery and retries |
-| backend/bookkeeping | Authorized finance exports and later integrations |
-| database/migrations | Versioned database schema, when provider is selected |
-| database/access-policies | Server/database authorization rules |
-| tests/access | Cross-family isolation, roles, invitation/token handling |
-| tests/scheduling | Occurrences, holidays, daylight saving and capacity |
-| tests/makeups | Duplicate prevention, reservations and cancellations |
-| tests/billing | Payment allocation, refunds and export totals |
+| Area | Status | Purpose |
+| --- | --- | --- |
+| `index.html`, `index.css`, `index.js`, `Pay-Now.html`, `Assets/` | Existing | Public website and assets; retain their exact filenames and capitalization |
+| `package.json`, `package-lock.json` | Active | Website build command and local Supabase CLI dependency |
+| `netlify.toml` | Active | Builds the site and publishes `dist/` |
+| `scripts/build-site.mjs` | Active | Copies approved public files into `dist/` |
+| `coach/` | Planned | Today’s roster, groups, families, makeups, and payments |
+| `parent/` | Planned | Family sessions, makeups, and payment history |
+| `auth/` | Planned | Parent sign-in and authentication callback pages |
+| `styles/` | Planned | Shared mobile portal, coach, and parent styles |
+| `scripts/api.js`, `scripts/auth.js` | Planned | Portal API calls and session handling |
+| `scripts/coach/` | Planned | Attendance, groups, families, makeups, and payments |
+| `scripts/parent/` | Planned | Sessions, makeups, and payments |
+| `backend/auth/` | Planned | Identity verification, roles, and guardian invitations |
+| `backend/families/` | Planned | Family and athlete management and reviewed imports |
+| `backend/scheduling/` | Planned | Standing schedules, dated classes, enrollment, and capacity |
+| `backend/attendance/` | Planned | Attendance and audited corrections |
+| `backend/cancellations/` | Planned | Dated cancellations and coach review |
+| `backend/makeups/` | Planned | Credits, reservations, redemption, and restoration |
+| `backend/billing/` | Planned | Monthly invoices, payments, refunds, and receipts |
+| `backend/notifications/` | Planned | Invitations, reminders, and cancellation notices |
+| `backend/bookkeeping/` | Planned | Authorized financial exports |
+| `supabase/config.toml` | Active | Supabase CLI project configuration |
+| `supabase/migrations/` | Active | Versioned family, athlete, guardian, group, and access-policy SQL |
+| `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
+| `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 
-Backend directories describe responsibilities. They are not Netlify Functions automatically. Choose the backend runtime and publish boundary before adding executable server code. No netlify.toml or redirects are changed in this milestone.
+The first two Supabase migrations have been applied to the linked project.
+Row-level security was checked with temporary SQL transactions for family
+isolation and blocked guardian writes. Those manual checks are not yet an
+automated test suite.
+
+Backend directories describe responsibilities; they are not executable
+Netlify Functions. Parent sign-in, invitations, scheduling, cancellations,
+notifications, and billing still need implementation. Future database changes
+should go into new timestamped migration files rather than editing migrations
+that have already been applied.

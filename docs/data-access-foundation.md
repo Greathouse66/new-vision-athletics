@@ -5,8 +5,8 @@ a Supabase project, send invitations, connect Netlify to a database or publish
 family records. Apply the numbered SQL files in order through a reviewed database
 migration as the database owner, first in a separate development project:
 
-1. `database/migrations/0001_family_group_foundation.sql`
-2. `database/access-policies/0001_family_group_access.sql`
+1. `supabase/migrations/20260929151300_family_group_foundation.sql`
+2. `supabase/migrations/20260929151400_family_group_access.sql`
 
 Do not run these files against production before the access tests below pass.
 The `private` schema must not be exposed by the Supabase Data API. The security
