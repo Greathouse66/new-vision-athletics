@@ -49,5 +49,12 @@ opened `/parent/`. Before a guardian grant, the page showed no family access.
 Temporary dummy family and athlete rows plus a guardian link appeared in the
 browser after insertion. Deleting the exact dummy rows and refreshing removed
 access immediately; a follow-up SQL count returned zero for all three records.
-No real family records were used. Hosted preview, second-guardian isolation,
-custom SMTP, and the invitation/provisioning workflow still need verification.
+No real family records were used. Second-guardian isolation, custom SMTP, and
+the invitation/provisioning workflow still need verification.
+
+## Hosted preview verification (2026-09-29)
+
+After the Netlify Deploy Preview build succeeded with the publishable key,
+the existing test user requested and received a magic link. The hosted callback
+opened the parent portal, which displayed "This account has no family access
+yet" as expected after the temporary test family records were removed.
