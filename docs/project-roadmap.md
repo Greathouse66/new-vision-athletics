@@ -12,12 +12,15 @@
 - [ ] Confirm monthly tuition, due dates, discounts and partial-month handling.
 - [ ] Approve cancellation/makeup rules and how families acknowledge them.
 - [ ] Obtain bookkeeper's required format and software.
-- [ ] Select database, managed authentication and transactional email providers.
+- [x] Select Supabase Postgres/Auth for the proposed data and identity foundation;
+      transactional email service remains to be selected.
 - [ ] Define backend deployment, public asset output and secret configuration.
 Acceptance: written decisions; no invented pricing, policy or credentials.
 
 ## M3 — Data and secure access
 - [ ] Implement migrations, roles, guardian-family links and audit records.
+- [x] Draft family/athlete/group migrations and guardian/coach read boundaries;
+      deployment, access verification and audit records remain open.
 - [ ] Implement invitations and expiring email sign-in links.
 - [ ] Enforce family isolation server-side; coach role assigned administratively.
 - [ ] Support revoking access and a second authorized guardian.
