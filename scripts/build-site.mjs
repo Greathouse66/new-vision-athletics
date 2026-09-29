@@ -1,6 +1,7 @@
 import { cp, mkdir, rm, access } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { build } from "esbuild";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const output = resolve(root, "dist");
@@ -12,6 +13,10 @@ const publicFiles = [
   "Pay-Now.html",
   "favicon-32x32.png",
   "Assets/Images",
+  "auth/sign-in.html",
+  "auth/callback.html",
+  "parent/index.html",
+  "styles/portal.css",
 ];
 
 // Check required sources before replacing the generated output.
@@ -27,5 +32,30 @@ for (const file of publicFiles) {
   await mkdir(dirname(destination), { recursive: true });
   await cp(resolve(root, file), destination, { recursive: true });
 }
+
+const publishableKey = process.env.NVA_SUPABASE_PUBLISHABLE_KEY ?? "";
+if (publishableKey && !publishableKey.startsWith("sb_publishable_")) {
+  throw new Error("NVA_SUPABASE_PUBLISHABLE_KEY must be a Supabase publishable key.");
+}
+
+await build({
+  entryPoints: {
+    "auth/sign-in": resolve(root, "scripts/auth/sign-in.js"),
+    "auth/callback": resolve(root, "scripts/auth/callback.js"),
+    "parent/index": resolve(root, "scripts/parent/index.js"),
+  },
+  outdir: output,
+  bundle: true,
+  splitting: true,
+  chunkNames: "scripts/chunks/[name]-[hash]",
+  minify: true,
+  format: "esm",
+  platform: "browser",
+  target: "es2022",
+  define: {
+    __NVA_SUPABASE_URL__: JSON.stringify("https://mmxvfsuxvodcqhiksxzr.supabase.co"),
+    __NVA_SUPABASE_PUBLISHABLE_KEY__: JSON.stringify(publishableKey),
+  },
+});
 
 console.log("Website built successfully in dist/");
