@@ -8,7 +8,8 @@ record for membership changes. It does **not** send email or create an Auth user
 ## Deploy order
 
 1. Review and apply `supabase/migrations/20260929213200_guardian_invitations.sql`
-   after the two existing migrations. Run `npx.cmd supabase db push --dry-run`
+   and `20260929215600_guardian_email_return_type.sql` after the two existing
+   migrations. Run `npx.cmd supabase db push --dry-run`
    before `npx.cmd supabase db push` on Windows. The migration creates no family
    data or invitations. Apply it before using the new coach screen.
 2. Build/publish the site with the existing Supabase publishable key. The new

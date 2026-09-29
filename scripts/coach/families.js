@@ -41,7 +41,10 @@ async function loadFamilyAccess() {
       .eq("family_id", familyId).order("created_at", { ascending: false }),
     supabase.rpc("list_family_guardians", { p_family_id: familyId }),
   ]);
-  if (invites.error || guardians.error) throw invites.error ?? guardians.error;
+  if (invites.error || guardians.error) {
+    console.info("Family access loading failed:", invites.error?.code ?? "", guardians.error?.code ?? "");
+    throw invites.error ?? guardians.error;
+  }
   if (familySelect.value !== familyId) return;
 
   const pending = invites.data.filter((invite) =>
@@ -97,8 +100,8 @@ async function start() {
     option.textContent = family.display_name;
     familySelect.append(option);
   }
-  content.hidden = false;
   await loadFamilyAccess();
+  content.hidden = false;
   setStatus("");
 }
 
