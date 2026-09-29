@@ -18,9 +18,9 @@ families and athletes only; sessions and balances do not exist in the schema yet
 3. In Supabase **Authentication → URL Configuration**, set **Site URL** to the
    site's actual production origin, and allow its exact callback URL, such as
    `https://newvision-athletics.com/auth/callback.html`. If testing a Netlify
-   preview, add that preview's exact callback URL too. For local testing on port
-   3001, allow `http://localhost:3001/auth/callback.html`. The local port must
-   match the address serving `dist/`.
+   preview, add that preview's exact callback URL too. For local testing, use
+   the same origin serving `dist/`, for example
+   `http://127.0.0.1:8765/auth/callback.html`. The host and port must match.
 4. Supabase's standard Magic Link email template must use its usual
    `{{ .ConfirmationURL }}` link so the `emailRedirectTo` option reaches our
    callback. If the template was customized, inspect and correct its destination.
@@ -41,3 +41,13 @@ Before onboarding, test a guardian with a reviewed family link, a second
 unrelated guardian, and revocation in the browser in addition to the SQL RLS
 checks already performed. The static HTML is public, but the family data is
 requested only after authentication and filtered again by database RLS.
+
+## Local verification (2026-09-29)
+
+With an existing test Auth identity, the magic link reached the callback and
+opened `/parent/`. Before a guardian grant, the page showed no family access.
+Temporary dummy family and athlete rows plus a guardian link appeared in the
+browser after insertion. Deleting the exact dummy rows and refreshing removed
+access immediately; a follow-up SQL count returned zero for all three records.
+No real family records were used. Hosted preview, second-guardian isolation,
+custom SMTP, and the invitation/provisioning workflow still need verification.
