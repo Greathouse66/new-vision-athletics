@@ -37,6 +37,9 @@ const publishableKey = process.env.NVA_SUPABASE_PUBLISHABLE_KEY ?? "";
 if (publishableKey && !publishableKey.startsWith("sb_publishable_")) {
   throw new Error("NVA_SUPABASE_PUBLISHABLE_KEY must be a Supabase publishable key.");
 }
+if (process.env.CONTEXT === "deploy-preview" && !publishableKey) {
+  throw new Error("Deploy Preview is missing NVA_SUPABASE_PUBLISHABLE_KEY in its build environment.");
+}
 
 await build({
   entryPoints: {
