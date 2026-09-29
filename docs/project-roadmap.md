@@ -19,10 +19,10 @@ Acceptance: written decisions; no invented pricing, policy or credentials.
 
 ## M3 — Data and secure access
 - [ ] Implement migrations, roles, guardian-family links and audit records.
-- [x] Draft family/athlete/group migrations and guardian/coach read boundaries;
-      deployment, access verification and audit records remain open.
-- [ ] Deploy and verify coach-approved guardian invitations and acceptance;
-      the email sign-in link works, but invitation delivery needs custom SMTP.
+- [x] Apply family/athlete/group migrations and guardian/coach read boundaries;
+      initial family isolation and denied writes were checked manually.
+- [x] Deploy and verify coach-approved guardian invitation, acceptance, and
+      revocation with one test identity; delivery to real parents needs SMTP.
 - [ ] Enforce family isolation server-side; coach role assigned administratively.
 - [ ] Support revoking access and a second authorized guardian.
 Acceptance: unauthorized and cross-family reads/writes fail at the API/database layer.

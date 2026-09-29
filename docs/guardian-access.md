@@ -63,5 +63,19 @@ Use only temporary test families and accounts; remove them afterward.
 - Confirm no secret key, Auth user list, or private database table appears in
   the generated `dist/` files.
 
-Automatic invitation email, Auth account creation, custom SMTP, and a complete
-second-guardian browser test remain before real parent rollout.
+## Hosted test (2026-09-30)
+
+The guardian migration and the follow-up email return-type fix were applied to
+the linked project. A read-only SQL check returned true for eight access gates,
+including RLS, revoked direct membership writes, RPC grants, and the audit
+trigger. With a temporary coach role and dummy family, the coach screen created
+an invitation for the existing test identity. After removing the coach role,
+that identity accepted the invitation and saw the family on the hosted parent
+page. Coach revocation removed access; the temporary coach role was removed
+again. The dummy family's invitation, audit rows, and family record were deleted;
+post-cleanup counts for those three tables were all zero. The pre-cleanup audit
+event counts were not recorded, so event contents still need a direct check.
+
+Automatic invitation email, Auth account creation, custom SMTP, wrong-email
+acceptance, expiry, and a complete second-guardian browser test remain before
+real parent rollout.

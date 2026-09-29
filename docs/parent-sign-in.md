@@ -50,8 +50,8 @@ Temporary dummy family and athlete rows plus a guardian link appeared in the
 browser after insertion. Deleting the exact dummy rows and refreshing removed
 access immediately; a follow-up SQL count returned zero for all three records.
 No real family records were used. Second-guardian isolation and custom SMTP
-still need verification; the invitation workflow was added afterward and has
-not yet been tested against the remote database.
+still need verification. The later invitation and revocation browser test is
+recorded in `guardian-access.md`.
 
 ## Hosted preview verification (2026-09-29)
 
