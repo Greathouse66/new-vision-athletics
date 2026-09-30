@@ -17,6 +17,7 @@ const publicFiles = [
   "auth/callback.html",
   "parent/index.html",
   "coach/families.html",
+  "coach/groups.html",
   "styles/portal.css",
 ];
 
@@ -48,6 +49,7 @@ await build({
     "auth/callback": resolve(root, "scripts/auth/callback.js"),
     "parent/index": resolve(root, "scripts/parent/index.js"),
     "coach/families": resolve(root, "scripts/coach/families.js"),
+    "coach/groups": resolve(root, "scripts/coach/groups.js"),
   },
   outdir: output,
   bundle: true,

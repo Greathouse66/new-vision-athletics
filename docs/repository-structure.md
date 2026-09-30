@@ -1,7 +1,7 @@
 # Repository structure
 
 The existing public website remains at the repository root. Netlify runs the build
-script and publishes only `dist/`. A coach family access screen and parent sign-in
+script and publishes only `dist/`. Coach family access and skill group screens, plus parent sign-in
 and family summary are implemented. No real family data is stored in
 the repository.
 
@@ -10,13 +10,13 @@ the repository.
 | `index.html`, `index.css`, `index.js`, `Pay-Now.html`, `Assets/` | Existing | Public website and assets; retain their exact filenames and capitalization |
 | `package.json`, `package-lock.json` | Active | Website build command, Supabase browser client, bundler, and local CLI |
 | `netlify.toml` | Active | Builds the site and publishes `dist/` |
-| `scripts/build-site.mjs` | Active | Copies approved public files and bundles parent browser scripts into `dist/` |
-| `coach/` | Partial | Family guardian access screen; roster, groups, makeups, and payments later |
+| `scripts/build-site.mjs` | Active | Copies approved public files and bundles portal browser scripts into `dist/` |
+| `coach/` | Partial | Family guardian access and skill group screens; roster, makeups, and payments later |
 | `parent/` | Partial | Private family and athlete summary; sessions, makeups, and payments later |
 | `auth/` | Active | Guardian email link sign-in and callback pages |
 | `styles/` | Partial | Shared mobile portal styling |
 | `scripts/api.js`, `scripts/auth.js` | Planned | Portal API calls and session handling |
-| `scripts/coach/` | Partial | Family access UI; attendance, groups, makeups, and payments later |
+| `scripts/coach/` | Partial | Family access and group list UI; attendance, makeups, and payments later |
 | `scripts/parent/` | Partial | RLS-scoped family summary; sessions, makeups, and payments later |
 | `backend/auth/` | Planned | Identity verification, roles, and guardian invitations |
 | `backend/families/` | Planned | Family and athlete management and reviewed imports |
