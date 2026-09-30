@@ -18,6 +18,7 @@ const publicFiles = [
   "parent/index.html",
   "coach/families.html",
   "coach/groups.html",
+  "coach/records.html",
   "styles/portal.css",
 ];
 
@@ -50,6 +51,7 @@ await build({
     "parent/index": resolve(root, "scripts/parent/index.js"),
     "coach/families": resolve(root, "scripts/coach/families.js"),
     "coach/groups": resolve(root, "scripts/coach/groups.js"),
+    "coach/records": resolve(root, "scripts/coach/records.js"),
   },
   outdir: output,
   bundle: true,
