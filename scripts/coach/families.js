@@ -93,7 +93,7 @@ async function start() {
   signOut.hidden = false;
   const families = await supabase.from("families").select("id, display_name").order("display_name");
   if (families.error) throw families.error;
-  if (!families.data.length) { setStatus("No families have been added yet."); return; }
+  if (!families.data.length) { setStatus("No parent accounts have been added yet."); return; }
   for (const family of families.data) {
     const option = document.createElement("option");
     option.value = family.id;

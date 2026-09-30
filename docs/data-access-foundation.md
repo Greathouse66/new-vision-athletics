@@ -19,9 +19,9 @@ Supabase project), with a fixed empty search path.
 | --- | --- |
 | `auth.users` | Supabase verified sign-in identities; never created by a browser insert into an application table |
 | `coach_users` | Accounts authorized as coaches; provision or revoke administratively |
-| `families` | Household record, with no billing or contact fields yet |
+| `families` | Parent account: one athlete for most accounts, siblings together for a few households; no billing or contact fields yet |
 | `family_guardians` | An authorized account's membership in a family; multiple guardians per family are supported |
-| `athletes` | Child linked to exactly one family for this first version |
+| `athletes` | Child linked to exactly one parent account for this first version; parents manage access |
 | `skill_groups` | Coach-managed skill levels, named after Emery confirms his actual groups |
 | `group_enrollments` | Dated athlete-to-group assignments; end date is exclusive |
 

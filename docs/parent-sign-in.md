@@ -2,8 +2,8 @@
 
 This slice adds `/auth/sign-in.html`, `/auth/callback.html`, and `/parent/`.
 Only the listed HTML, CSS, and bundled browser JS enter Netlify's `dist/`.
-No database migration or server credential is needed. The family page lists
-families and athletes only; sessions and balances do not exist in the schema yet.
+The sign-in screen needs no server credential. The parent page lists athletes
+in approved accounts; sessions and balances do not exist in the schema yet.
 
 ## Configuration
 

@@ -35,7 +35,7 @@ async function loadInvitations() {
         status.textContent = "Could not accept this invitation. It may have expired; contact New Vision Athletics.";
         return;
       }
-      status.textContent = "Family access accepted.";
+      status.textContent = "Parent account access accepted.";
       await loadFamily().catch(() => showError("Could not refresh family access. Please try again."));
     });
     li.append(label, button);
@@ -67,8 +67,8 @@ async function loadFamily() {
   if (grantError) throw grantError;
   if (!grants.length) {
     showError(hasInvitations
-      ? "Review your family invitation below."
-      : "This account has no family access yet. Please contact New Vision Athletics.");
+      ? "Review your parent account invitation below."
+      : "This account has no athlete access yet. Please contact New Vision Athletics.");
     return;
   }
 
@@ -85,9 +85,10 @@ async function loadFamily() {
   for (const family of families) {
     const section = document.createElement("section");
     const heading = document.createElement("h2");
-    heading.textContent = family.display_name;
-    section.append(heading);
     const children = athletes.filter((athlete) => athlete.family_id === family.id);
+    heading.textContent = families.length === 1 && children.length === 1
+      ? "Athlete" : family.display_name;
+    section.append(heading);
     if (children.length) {
       const ul = document.createElement("ul");
       for (const athlete of children) {

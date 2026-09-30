@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Family access | New Vision Athletics</title>
+  <title>Parent account access | New Vision Athletics</title>
   <link rel="icon" href="/favicon-32x32.png" type="image/png">
   <link rel="stylesheet" href="/styles/portal.css">
   <script type="module" src="/coach/families.js"></script>
@@ -15,15 +15,15 @@
       <a href="/" class="brand">New Vision Athletics</a>
       <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
     </header>
-    <h1>Family access</h1>
+    <h1>Parent account access</h1>
     <p id="status" role="status" aria-live="polite">Checking coach access…</p>
     <div id="coach-content" hidden>
-      <p><a href="/coach/records.html">Manage family and athlete records</a> · <a href="/coach/groups.html">Skill groups</a></p>
-      <label for="family">Family</label>
+      <p><a href="/coach/records.html">Athlete roster</a> · <a href="/coach/groups.html">Skill groups</a></p>
+      <label for="family">Parent account</label>
       <select id="family"></select>
       <section>
         <h2>Approve guardian email</h2>
-        <p>The guardian must sign in with this exact email and accept the invitation.
+        <p>The parent must sign in with this exact email and accept the invitation.
           This screen does not send an email or create a sign-in account.</p>
         <form id="invite-form">
           <label for="email">Guardian email</label>
@@ -39,7 +39,7 @@
         <h2>Guardians with access</h2>
         <ul id="guardians"></ul>
       </section>
-      <p class="note">Review the family's records and verify each guardian's authority before approval.
+      <p class="note">Review the athlete records and verify each parent's authority before approval.
         To onboard a new address, an administrator must invite that email in Supabase Auth.
         Email delivery to parents needs custom SMTP.</p>
     </div>

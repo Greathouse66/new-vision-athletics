@@ -1,7 +1,7 @@
 # Repository structure
 
 The existing public website remains at the repository root. Netlify runs the build
-script and publishes only `dist/`. Coach family access, family records and skill group screens, plus parent sign-in
+script and publishes only `dist/`. Coach parent access, athlete roster and skill group screens, plus parent sign-in
 and family summary are implemented. No real family data is stored in
 the repository.
 
@@ -11,12 +11,12 @@ the repository.
 | `package.json`, `package-lock.json` | Active | Website build command, Supabase browser client, bundler, and local CLI |
 | `netlify.toml` | Active | Builds the site and publishes `dist/` |
 | `scripts/build-site.mjs` | Active | Copies approved public files and bundles portal browser scripts into `dist/` |
-| `coach/` | Partial | Family and athlete records, guardian access, and skill group screens; roster, makeups, and payments later |
+| `coach/` | Partial | Athlete and parent account records, guardian access, and skill group screens; attendance, makeups, and payments later |
 | `parent/` | Partial | Private family and athlete summary; sessions, makeups, and payments later |
 | `auth/` | Active | Guardian email link sign-in and callback pages |
 | `styles/` | Partial | Shared mobile portal styling |
 | `scripts/api.js`, `scripts/auth.js` | Planned | Portal API calls and session handling |
-| `scripts/coach/` | Partial | Family and athlete records, guardian access, and group list UI; attendance, makeups, and payments later |
+| `scripts/coach/` | Partial | Athlete roster, guardian access, and group list UI; attendance, makeups, and payments later |
 | `scripts/parent/` | Partial | RLS-scoped family summary; sessions, makeups, and payments later |
 | `backend/auth/` | Planned | Identity verification, roles, and guardian invitations |
 | `backend/families/` | Planned | Family and athlete management and reviewed imports |
@@ -32,7 +32,8 @@ the repository.
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 
-All four Supabase migrations have been applied to the linked project. Row-level
+The first four Supabase migrations have been applied to the linked project;
+the individual athlete creation function is pending. Row-level
 security was checked with temporary SQL transactions for family isolation and
 blocked guardian writes. An invitation, acceptance, and revocation were also
 tested in the hosted preview with temporary records, then cleaned up. Those
