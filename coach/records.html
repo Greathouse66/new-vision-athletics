@@ -24,6 +24,10 @@
         <form id="add-individual-form">
           <label for="individual-name">Athlete display name</label>
           <input id="individual-name" name="name" required maxlength="160" autocomplete="off">
+          <label for="individual-group">Skill group</label>
+          <select id="individual-group" name="group" required></select>
+          <label for="individual-date">Group start date</label>
+          <input id="individual-date" name="date" type="date" required>
           <button type="submit">Add athlete</button>
         </form>
         <p>The account is created automatically. Parent access is approved separately.</p>
@@ -56,6 +60,10 @@
           <form id="add-athlete-form">
             <label for="new-athlete-name">Athlete display name</label>
             <input id="new-athlete-name" name="name" required maxlength="160" autocomplete="off">
+            <label for="new-athlete-group">Skill group</label>
+            <select id="new-athlete-group" name="group" required></select>
+            <label for="new-athlete-date">Group start date</label>
+            <input id="new-athlete-date" name="date" type="date" required>
             <button type="submit">Add athlete to this account</button>
           </form>
           <form id="rename-athlete-form" hidden>
@@ -65,6 +73,20 @@
             <input id="athlete-name" name="name" required maxlength="160" autocomplete="off">
             <button type="submit" class="secondary">Save athlete name</button>
           </form>
+          <section id="assignment-section" hidden>
+            <h2>Skill group assignment</h2>
+            <label for="group-athlete">Athlete</label>
+            <select id="group-athlete"></select>
+            <p>Group history (end dates are the first day in the next group):</p>
+            <ul id="group-history"></ul>
+            <form id="assign-group-form">
+              <label for="assignment-group">New skill group</label>
+              <select id="assignment-group" name="group" required></select>
+              <label for="assignment-date">Effective date</label>
+              <input id="assignment-date" name="date" type="date" required>
+              <button type="submit" class="secondary">Change group</button>
+            </form>
+          </section>
         </div>
       </section>
       <p class="note">Parent access is managed separately on the <a href="/coach/families.html">access page</a>.

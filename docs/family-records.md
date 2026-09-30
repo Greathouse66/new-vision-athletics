@@ -2,20 +2,24 @@
 
 `/coach/records.html` is a coach-only preview screen centered on athletes.
 Most athletes have their own account managed by a parent. The coach's
-"Add individual athlete" action creates one `families` row and one `athletes`
-row in a single database function call. The account starts with no parent
-access; the coach approves that separately. For siblings, the coach creates
-one shared account and adds each athlete to it. The page lists all athletes
-and lets the coach correct display names. It does not create an Auth user,
-send an invitation, set a skill group, or assign a schedule. No sample or
-real records are inserted by the build.
+"Add individual athlete" action creates one `families` row, one `athletes` row,
+and one group enrollment in a single database function call. The account
+starts with no parent access; the coach approves that separately. For siblings, the coach creates
+one shared account and adds each athlete to it. Both creation paths require an
+active skill group and start date, and roll back if assignment fails. The page
+lists all athletes, lets the coach correct display names, and shows dated group
+history. A coach can change an athlete's group with a later effective date.
+It does not create an Auth user, send an invitation, or assign a class
+schedule. No sample or real records are inserted by the build.
 
 The page checks the signed-in account against `coach_users` before displaying
-controls. Existing row-level security independently restricts account and
-athlete inserts and updates to coaches. The individual creation function is
-`security invoker`, explicitly checks the coach role, and inherits the same
-RLS checks. Neither the client nor this page may assign itself a coach role.
-Apply the new migration before testing the individual athlete action.
+controls. Existing row-level security restricts account and athlete updates
+to coaches. After the group assignment migration, direct athlete inserts and
+enrollment writes are revoked from authenticated clients. The creation and
+transfer functions check the coach role; they run as the migration owner to
+write required rows in one transaction. Neither the client nor this page may
+assign itself a coach role. Apply the group assignment migration before testing
+creation or transfers on the updated page.
 
 Names are display labels, not unique identity keys. Coaches should review
 possible duplicates and confirm the parent account before linking an athlete.
@@ -34,5 +38,5 @@ account. Confirm both creation paths and name corrections as coach; verify
 that the parent sees only approved athletes. Remove the coach role and confirm
 the page blocks access. Verify direct parent Data API inserts and updates
 remain denied by RLS. Clean up disposable rows after confirming they have no
-guardian or enrollment links. This screen does not require the custom domain
-or SMTP.
+guardian links; remove group enrollments first. This screen does not
+require the custom domain or SMTP.

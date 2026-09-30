@@ -22,14 +22,15 @@ Supabase project), with a fixed empty search path.
 | `families` | Parent account: one athlete for most accounts, siblings together for a few households; no billing or contact fields yet |
 | `family_guardians` | An authorized account's membership in a family; multiple guardians per family are supported |
 | `athletes` | Child linked to exactly one parent account for this first version; parents manage access |
-| `skill_groups` | Coach-managed skill levels, named after Emery confirms his actual groups |
+| `skill_groups` | Coach-managed skill levels: Foundational, Post-Bigs, Advanced |
 | `group_enrollments` | Dated athlete-to-group assignments; end date is exclusive |
 
 An invitation is not a guardian grant. Confirm the intended recipient and their
 authority before a coach links the verified identity to the family. Never infer
-membership from a shared surname or an email typed into a public form. Changing
-an athlete's level should close the old enrollment and create a new one; overlap
-prevention, transfer transactions and audit events are required before live use.
+membership from a shared surname or an email typed into a public form. A group
+transfer closes the previous row and creates a new dated row in one transaction.
+The exclusion constraint rejects overlaps. Import review and audit events are
+still needed before adding real families.
 
 ## Access matrix
 
@@ -38,7 +39,7 @@ prevention, transfer transactions and audit events are required before live use.
 | Families and athletes | None | Read linked family only | Read/create/update |
 | Guardian memberships | None | Read own links only | Read/create/update/revoke |
 | Skill groups | None | Read groups with a linked athlete enrollment | Read/create/update |
-| Group enrollments | None | Read linked athletes' rows | Read/create/update |
+| Group enrollments | None | Read linked athletes' rows | Read; create/transfer through checked functions |
 | Coach role assignments | None | Read own role only, if any | Read roles; changes require administration |
 
 No parent-facing writes are enabled yet. Session cancellation and makeup actions
@@ -60,7 +61,8 @@ verified test identities. Keep fixtures and credentials outside the repository.
 - Guardian B: has the symmetric access restrictions.
 - A second authorized guardian sees the same family's children but not the
   first guardian's membership row or another family's records.
-- Coach: can manage families, memberships, athletes, groups and enrollments;
+- Coach: can manage families, memberships, athletes and groups; creates
+  athletes with a group and changes group history through checked functions;
   cannot self-create a coach role through the client API.
 - Revoking a guardian link immediately removes that family's visibility;
   removing a coach role immediately removes coach access.

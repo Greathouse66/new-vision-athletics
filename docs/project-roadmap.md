@@ -8,7 +8,8 @@
 - [ ] Review and merge foundation pull request.
 
 ## M2 — Confirm requirements and hosting boundaries
-- [ ] Obtain actual skill groups, schedules, locations, capacity and timezone.
+- [x] Confirm skill groups: Foundational, Post-Bigs, Advanced.
+- [ ] Obtain schedules, location, capacity and confirm America/Chicago timezone.
 - [ ] Confirm monthly tuition, due dates, discounts and partial-month handling.
 - [ ] Approve cancellation/makeup rules and how families acknowledge them.
 - [ ] Obtain bookkeeper's required format and software.
@@ -30,7 +31,8 @@ Acceptance: unauthorized and cross-family reads/writes fail at the API/database 
 ## M4 — Groups, enrollment and mobile attendance
 - [ ] Review/import family records; resolve ambiguous matches.
 - [ ] Generate dated classes from standing schedules with holiday exceptions.
-- [ ] Implement effective-dated enrollment and skill-group transfers.
+- [x] Implement one active group per athlete on any date and dated coach transfers.
+- [ ] Define class enrollment after schedules and capacity are confirmed.
 - [ ] Build Today roster with accessible Present/Absent controls and Undo.
 Acceptance: past rosters remain accurate; extra calendar occurrences are not silently billed.
 
