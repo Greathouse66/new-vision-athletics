@@ -30,6 +30,7 @@ Acceptance: unauthorized and cross-family reads/writes fail at the API/database 
 
 ## M4 — Groups, enrollment and mobile attendance
 - [ ] Review/import family records; resolve ambiguous matches.
+- [ ] Apply and verify the empty location, weekly slot, and dated class schema.
 - [ ] Generate dated classes from standing schedules with holiday exceptions.
 - [x] Implement one active group per athlete on any date and dated coach transfers.
 - [ ] Define class enrollment after schedules and capacity are confirmed.

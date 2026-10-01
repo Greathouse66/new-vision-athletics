@@ -14,8 +14,10 @@ Auth email delivery, server runtime, timezone, actual class capacity,
 notification channel, holiday rules, tuition amounts and full cancellation policy.
 Do not infer the venue timezone from the developer's device.
 
-Supabase Postgres/Auth is the proposed data/identity provider for the M2
-foundation. SQL is drafted but not deployed; see `data-access-foundation.md`.
+Supabase Postgres/Auth is the data and identity provider. Family, guardian,
+athlete and group foundations are deployed; the empty class scheduling schema
+is the next migration. See `data-access-foundation.md` and
+`scheduling-foundation.md`.
 
 ## Data model to implement
 Identity users and roles; families; guardian-family grants; athletes; skill groups;

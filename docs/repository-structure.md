@@ -28,16 +28,18 @@ the repository.
 | `backend/notifications/` | Planned | Invitations, reminders, and cancellation notices |
 | `backend/bookkeeping/` | Planned | Authorized financial exports |
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
-| `supabase/migrations/` | Active | Versioned family, athlete, guardian, group, and access-policy SQL |
+| `supabase/migrations/` | Active | Versioned family, athlete, guardian, group, and scheduling SQL |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 
-The first four Supabase migrations have been applied to the linked project;
-the individual athlete creation function is pending. Row-level
-security was checked with temporary SQL transactions for family isolation and
+The family, guardian, athlete, and group migrations through
+`20260930230000_athlete_group_assignments.sql` have been applied to the linked
+project. The empty scheduling schema is pending. Row-level security was
+checked with temporary SQL transactions for family isolation and
 blocked guardian writes. An invitation, acceptance, and revocation were also
 tested in the hosted preview with temporary records, then cleaned up. Those
-manual checks are not yet an automated test suite.
+manual checks are not yet an automated test suite. A temporary athlete's group
+transfer and history were also verified in the hosted preview and cleaned up.
 
 Backend directories describe responsibilities; they are not executable
 Netlify Functions. Email delivery, Auth account creation, scheduling,

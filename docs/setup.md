@@ -7,8 +7,9 @@
 4. For a local preview, run `npx.cmd --yes http-server .\dist -p 8765 -c-1`
    and open the URL that the server prints. Visit `/` and `/Pay-Now.html`.
 
-The parent sign-in and family summary are working routes; the coach portal is
-still planned. The browser build reads `NVA_SUPABASE_PUBLISHABLE_KEY` from its
+The parent sign-in and family summary, coach parent access, athlete roster,
+and group management are working preview routes. The browser build reads
+`NVA_SUPABASE_PUBLISHABLE_KEY` from its
 environment. See `parent-sign-in.md` for configuration and access boundaries.
 
 ## Netlify
