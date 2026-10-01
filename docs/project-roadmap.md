@@ -62,7 +62,9 @@ Acceptance: repeated taps create one cancellation; failed email does not lose th
 Acceptance: simultaneous requests cannot overbook; existing standing bookings cannot be duplicated.
 
 ## M7 — Monthly billing and bookkeeping
-- [ ] Apply and verify the empty athlete monthly charge, receipt, and allocation schema.
+- [x] Apply and verify the empty athlete monthly charge, receipt, and allocation schema.
+- [ ] Apply and verify checked coach charge assignment and Venmo confirmation
+      functions; database migration prepared, live test pending.
 - [ ] Let the coach set each athlete's monthly tuition and generate dated charges.
 - [ ] Add coach roster Mark paid action that records a verified Venmo payment,
       allocates it to athlete charges, and derives paid status.
