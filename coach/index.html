@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Coach workspace | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/index.js"></script>
+</head>
+<body>
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Coach workspace</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <nav aria-label="Coach tools">
+        <ul>
+          <li><a href="/coach/records.html">Athlete roster and group assignments</a></li>
+          <li><a href="/coach/groups.html">Skill groups</a></li>
+          <li><a href="/coach/families.html">Parent account access</a></li>
+        </ul>
+      </nav>
+      <section aria-labelledby="overview-heading">
+        <h2 id="overview-heading">Records at a glance</h2>
+        <ul>
+          <li>Athletes: <strong id="athlete-count">—</strong></li>
+          <li>Parent accounts: <strong id="family-count">—</strong></li>
+          <li>Active skill groups: <strong id="group-count">—</strong></li>
+          <li>Dated classes: <strong id="class-count">—</strong></li>
+        </ul>
+      </section>
+      <p class="note">Class days, times, venue, and capacity still need confirmation.
+        The Today roster and attendance controls will follow scheduling.</p>
+    </div>
+  </main>
+</body>
+</html>
