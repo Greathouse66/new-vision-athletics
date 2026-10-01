@@ -25,3 +25,8 @@ records and a test charge, then remove the records and role; do not assign
 tuition to real athletes until Emery confirms the amount. The
 page requires the billing action migration already applied to the project and
 the new USD-only billing migration.
+
+An internal export section is prepared after the export snapshot migration and
+function deployment. It offers separate charge, payment and allocation CSVs
+plus a control-total manifest for a selected month; see
+`internal-billing-export.md`. It does not send records to a bookkeeper.

@@ -31,6 +31,7 @@ the repository.
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
 | `supabase/migrations/` | Active | Versioned access, roster, scheduling, audit, per-athlete billing, unpaid charge corrections, private receipt events, and approved receipt contacts |
 | `supabase/functions/coach-gateway/` | Active | Deployed signed-in coach access check for the private HTTP runtime |
+| `supabase/functions/billing-export/` | Prepared | Coach-only internal billing CSV generation; deploy after its snapshot migration |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 

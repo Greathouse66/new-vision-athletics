@@ -385,6 +385,9 @@ deno_version = 2
 [functions.coach-gateway]
 verify_jwt = true
 
+[functions.billing-export]
+verify_jwt = true
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

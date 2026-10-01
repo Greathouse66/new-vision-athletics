@@ -2,7 +2,11 @@
 
 Initial delivery: coach-authorized download for secure sharing with the bookkeeper.
 No automatic email, integration or bookkeeper login is implemented.
+The confirmed tuition and Venmo payment currency is USD; retain the currency
+column in exports so amounts remain explicit.
 Confirm final columns, reporting basis, period boundaries and file format with the bookkeeper.
+An internal reconciliation export is prepared in `internal-billing-export.md`;
+it is not a bookkeeper-specific import and does not include refunds or fees.
 
 ## Proposed export tables
 - athlete_monthly_charges: charge_id, family_account_id, athlete_id,

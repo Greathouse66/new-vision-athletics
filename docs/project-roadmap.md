@@ -81,9 +81,12 @@ Acceptance: simultaneous requests cannot overbook; existing standing bookings ca
 - [x] Apply and verify guardian-scoped tuition and payment history. A private
       page and limited summary functions passed a rollback-only isolation and
       revocation test; preview verification with a linked parent remains.
-- [ ] Apply and verify audited correction of an unpaid tuition amount; migration
-      and coach form are prepared. Paid-charge adjustments still need a policy.
+- [x] Apply and verify audited correction of an unpaid tuition amount; the
+      rollback-only check passed. Paid-charge adjustments still need a policy.
 - [ ] Export financial records in the agreed bookkeeper format.
+- [ ] Deploy and verify an internal coach reconciliation export; its migration,
+      server function, and page controls are prepared. Final bookkeeper format
+      still needs confirmation.
 - [ ] Reconcile against payment-provider/bank statements without counting transfers twice.
 Acceptance: paid tuition is not billed again for an approved makeup; export totals match records.
 

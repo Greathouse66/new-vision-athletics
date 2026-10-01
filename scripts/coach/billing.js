@@ -11,6 +11,17 @@ const chargeList = document.querySelector("#charges");
 const correctionForm = document.querySelector("#correction-form");
 const correctionCharge = document.querySelector("#correction-charge");
 const correctionList = document.querySelector("#corrections");
+const exportButton = document.querySelector("#prepare-export");
+const exportStatus = document.querySelector("#export-status");
+const exportFiles = document.querySelector("#export-files");
+let exportUrls = [];
+
+function clearExport() {
+  for (const url of exportUrls) URL.revokeObjectURL(url);
+  exportUrls = [];
+  exportFiles.replaceChildren();
+  exportStatus.textContent = "";
+}
 
 let athletes = [];
 let families = [];
@@ -178,7 +189,49 @@ async function start() {
 }
 
 monthInput.addEventListener("change", () => {
+  clearExport();
   loadMonth().catch(() => setStatus("Could not load balances. Refresh before assigning tuition."));
+});
+
+exportButton.addEventListener("click", async () => {
+  const month = monthInput.value;
+  clearExport();
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
+    exportStatus.textContent = "Choose a reporting month first.";
+    return;
+  }
+  exportButton.disabled = true;
+  monthInput.disabled = true;
+  exportStatus.textContent = "Preparing private export…";
+  try {
+    const { data, error } = await supabase.functions.invoke("billing-export", { body: { month } });
+    if (error || !data || data.manifest?.month !== month || !data.files) {
+      throw new Error("Export unavailable");
+    }
+    for (const name of ["charges.csv", "payments.csv", "allocations.csv", "manifest.json"]) {
+      if (typeof data.files[name] !== "string") throw new Error("Incomplete export");
+    }
+    if (monthInput.value !== month) throw new Error("Reporting month changed");
+    for (const name of ["charges.csv", "payments.csv", "allocations.csv", "manifest.json"]) {
+      const type = name.endsWith(".csv") ? "text/csv;charset=utf-8" : "application/json";
+      const url = URL.createObjectURL(new Blob([data.files[name]], { type }));
+      exportUrls.push(url);
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `nva-${month}-${name}`;
+      link.textContent = `Download ${name}`;
+      item.append(link);
+      exportFiles.append(item);
+    }
+    exportStatus.textContent = "Files prepared. Download all four files and keep them together.";
+  } catch {
+    clearExport();
+    exportStatus.textContent = "Could not prepare a complete export. Try again or contact support.";
+  } finally {
+    exportButton.disabled = false;
+    monthInput.disabled = false;
+  }
 });
 
 correctionForm.addEventListener("submit", async (event) => {
@@ -216,6 +269,7 @@ correctionForm.addEventListener("submit", async (event) => {
       return;
     }
     correctionForm.reset();
+    clearExport();
     await loadMonth();
     setStatus(`Tuition correction saved for ${athlete.display_name} in ${month}.`);
   } catch {
@@ -263,6 +317,7 @@ chargeForm.addEventListener("submit", async (event) => {
       return;
     }
     chargeForm.reset();
+    clearExport();
     await loadMonth();
     setStatus(`Tuition assigned to ${athlete.display_name} for ${month}.`);
   } catch {
@@ -277,6 +332,7 @@ chargeForm.addEventListener("submit", async (event) => {
 
 signOut.addEventListener("click", async () => {
   signOut.disabled = true;
+  clearExport();
   const { error } = await supabase.auth.signOut();
   if (error) { signOut.disabled = false; setStatus("Could not sign out."); return; }
   location.replace("/auth/sign-in.html");
