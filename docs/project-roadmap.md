@@ -11,6 +11,7 @@
 - [x] Confirm skill groups: Foundational, Post-Bigs, Advanced.
 - [ ] Obtain schedules, location, capacity and confirm America/Chicago timezone.
 - [x] Confirm tuition varies by athlete and the coach assigns the monthly amount.
+- [x] Confirm tuition and Venmo payments are USD-only.
 - [x] Confirm parents pay via Venmo; Emery verifies payment and uses Mark paid
       in the coach roster. The action must also record the Venmo payment.
 - [ ] Confirm due dates, discounts and partial-month handling.
@@ -66,13 +67,19 @@ Acceptance: simultaneous requests cannot overbook; existing standing bookings ca
 - [ ] Apply and verify checked coach charge assignment and Venmo confirmation
       functions; database migration prepared, live test pending.
 - [ ] Let the coach set each athlete's monthly tuition and generate dated charges.
+- [ ] Publish and test the coach monthly tuition view; page prepared for the
+      signed-in preview, with payment confirmation withheld pending delivery.
 - [ ] Add coach roster Mark paid action that records a verified Venmo payment,
       allocates it to athlete charges, and derives paid status.
 - [ ] Queue and deliver a receipt email to an authorized billing contact when
       payment is approved. A private event migration is prepared; recipient
       management, worker and delivery verification are still pending.
+- [ ] Apply and verify coach-approved parent account receipt contacts. The
+      schema and coach controls are prepared; email delivery is still pending.
 - [ ] Allocate payments; support corrections/refunds with an audit trail.
 - [ ] Show receipts and balances to the correct family.
+- [ ] Apply and verify guardian-scoped tuition and payment history. A private
+      page and limited summary functions are prepared; isolation tests pending.
 - [ ] Export financial records in the agreed bookkeeper format.
 - [ ] Reconcile against payment-provider/bank statements without counting transfers twice.
 Acceptance: paid tuition is not billed again for an approved makeup; export totals match records.

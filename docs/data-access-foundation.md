@@ -19,7 +19,7 @@ Supabase project), with a fixed empty search path.
 | --- | --- |
 | `auth.users` | Supabase verified sign-in identities; never created by a browser insert into an application table |
 | `coach_users` | Accounts authorized as coaches; provision or revoke administratively |
-| `families` | Parent account: one athlete for most accounts, siblings together for a few households; no billing or contact fields yet |
+| `families` | Parent account: one athlete for most accounts, siblings together for a few households; separate billing and contact tables link by account ID |
 | `family_guardians` | An authorized account's membership in a family; multiple guardians per family are supported |
 | `athletes` | Child linked to exactly one parent account for this first version; parents manage access |
 | `skill_groups` | Coach-managed skill levels: Foundational, Post-Bigs, Advanced |
@@ -42,6 +42,8 @@ still needed before adding real families.
 | Skill groups | None | Read groups with a linked athlete enrollment | Read/create/update |
 | Group enrollments | None | Read linked athletes' rows | Read; create/transfer through checked functions |
 | Name corrections | None | None | Read; database triggers write events |
+| Monthly tuition and payments | None | Read own account through limited summary functions | Read raw ledger; checked write functions |
+| Receipt contact emails | None | None | Read and change through checked functions |
 | Coach role assignments | None | Read own role only, if any | Read roles; changes require administration |
 
 No parent-facing writes are enabled yet. Session cancellation and makeup actions
@@ -73,5 +75,5 @@ verified test identities. Keep fixtures and credentials outside the repository.
 
 Never put a Supabase secret/service key into browser code or Netlify's static
 publish directory. The browser may eventually use a publishable key with RLS.
-Real contact fields, attendance, billing, other audit events and cancellation
-tokens require their own reviewed migrations and policies.
+Attendance, parent session controls, financial corrections, receipt delivery
+and cancellation tokens still require reviewed migrations and policies.
