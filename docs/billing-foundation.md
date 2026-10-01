@@ -24,9 +24,9 @@ Portal can later display balances and receipts; it is not needed to pay Venmo.
 `20261001162000_billing_actions.sql` adds coach-only functions to assign a
 monthly charge and confirm one full Venmo payment against one or more charges.
 The latter records its amount, received date, actor and allocations in one
-transaction. A later change must enqueue the receipt notification in the same
-transaction. An email worker then sends to an authorized
-guardian email on file, retrying failures without losing the payment. The
+transaction. `20261001162500_payment_receipt_outbox.sql` queues a private
+receipt event in that transaction. A future email worker sends to an authorized
+billing contact on file, retrying failures without losing the payment. The
 database ledger is the source of truth; a coach-authorized spreadsheet export
 is generated from it on demand. Do not maintain a separate editable spreadsheet
 copy. The export should show one athlete per month plus a distinct payments

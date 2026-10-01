@@ -27,8 +27,10 @@ still have no direct insert, update, or delete privileges on the ledger tables.
 The paid state is calculated by comparing the charge to its allocations; no
 independent paid switch is stored.
 
-The functions **do not send email or queue a receipt**. The operational coach
-screen must wait for a durable receipt outbox and delivery worker, plus a
+After `20261001162500_payment_receipt_outbox.sql`, a trigger queues a private
+receipt event in the same transaction as each new payment. The functions
+**do not send email**. The operational coach screen must wait for a delivery
+worker and verified billing contacts, plus a
 confirmation step that shows the correct account, athlete, month, currency,
 amount, and optional reference. Do not use these functions to record real
 payments until that workflow is complete. Email to an authorized guardian on

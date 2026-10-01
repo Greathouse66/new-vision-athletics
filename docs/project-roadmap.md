@@ -68,7 +68,9 @@ Acceptance: simultaneous requests cannot overbook; existing standing bookings ca
 - [ ] Let the coach set each athlete's monthly tuition and generate dated charges.
 - [ ] Add coach roster Mark paid action that records a verified Venmo payment,
       allocates it to athlete charges, and derives paid status.
-- [ ] Queue a receipt email to the authorized guardian when payment is approved.
+- [ ] Queue and deliver a receipt email to an authorized billing contact when
+      payment is approved. A private event migration is prepared; recipient
+      management, worker and delivery verification are still pending.
 - [ ] Allocate payments; support corrections/refunds with an audit trail.
 - [ ] Show receipts and balances to the correct family.
 - [ ] Export financial records in the agreed bookkeeper format.
