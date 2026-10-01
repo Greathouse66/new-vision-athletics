@@ -12,7 +12,7 @@ the repository.
 | `netlify.toml` | Active | Builds the site and publishes `dist/` |
 | `scripts/build-site.mjs` | Active | Copies approved public files and bundles portal browser scripts into `dist/` |
 | `scripts/validate-roster.mjs` | Active | Offline preflight for private roster CSVs in Git-ignored `imports/`; no database writes |
-| `coach/` | Partial | Coach workspace, athlete and parent account records, guardian access, receipt contacts, skill groups, and monthly tuition view; attendance and payment confirmation later |
+| `coach/` | Partial | Coach workspace, athlete and parent account records, guardian access, receipt contacts, skill groups, monthly tuition and unpaid charge correction; attendance and payment confirmation later |
 | `parent/` | Partial | Private family, athlete, and read-only tuition summary; sessions and makeups later |
 | `auth/` | Active | Guardian email link sign-in and callback pages |
 | `styles/` | Partial | Shared mobile portal styling |
@@ -29,7 +29,7 @@ the repository.
 | `backend/notifications/` | Planned | Invitations, reminders, and cancellation notices |
 | `backend/bookkeeping/` | Planned | Authorized financial exports |
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
-| `supabase/migrations/` | Active | Versioned access, roster, scheduling, audit, per-athlete billing, private receipt events, and approved receipt contacts |
+| `supabase/migrations/` | Active | Versioned access, roster, scheduling, audit, per-athlete billing, unpaid charge corrections, private receipt events, and approved receipt contacts |
 | `supabase/functions/coach-gateway/` | Active | Deployed signed-in coach access check for the private HTTP runtime |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |

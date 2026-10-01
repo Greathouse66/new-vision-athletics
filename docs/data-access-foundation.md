@@ -25,6 +25,7 @@ Supabase project), with a fixed empty search path.
 | `skill_groups` | Coach-managed skill levels: Foundational, Post-Bigs, Advanced |
 | `group_enrollments` | Dated athlete-to-group assignments; end date is exclusive |
 | `record_name_corrections` | Coach-readable history of parent account and athlete name changes |
+| `monthly_charge_corrections` | Coach-readable reasons and amounts for unpaid tuition corrections |
 
 An invitation is not a guardian grant. Confirm the intended recipient and their
 authority before a coach links the verified identity to the family. Never infer
@@ -43,6 +44,7 @@ still needed before adding real families.
 | Group enrollments | None | Read linked athletes' rows | Read; create/transfer through checked functions |
 | Name corrections | None | None | Read; database triggers write events |
 | Monthly tuition and payments | None | Read own account through limited summary functions | Read raw ledger; checked write functions |
+| Tuition correction reasons | None | None | Read; correct unpaid charges through a checked function |
 | Receipt contact emails | None | None | Read and change through checked functions |
 | Coach role assignments | None | Read own role only, if any | Read roles; changes require administration |
 
@@ -75,5 +77,5 @@ verified test identities. Keep fixtures and credentials outside the repository.
 
 Never put a Supabase secret/service key into browser code or Netlify's static
 publish directory. The browser may eventually use a publishable key with RLS.
-Attendance, parent session controls, financial corrections, receipt delivery
+Attendance, parent session controls, paid-charge adjustments, receipt delivery
 and cancellation tokens still require reviewed migrations and policies.

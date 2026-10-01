@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Monthly tuition | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/billing.js"></script>
+</head>
+<body>
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Monthly tuition</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <p><a href="/coach/index.html">Coach workspace</a></p>
+      <label for="service-month">Tuition month</label>
+      <input id="service-month" type="month" required>
+      <section aria-labelledby="charges-heading">
+        <h2 id="charges-heading">Athlete balances</h2>
+        <ul id="charges"></ul>
+      </section>
+      <section aria-labelledby="assign-heading">
+        <h2 id="assign-heading">Assign monthly tuition</h2>
+        <form id="charge-form">
+          <label for="athlete">Athlete</label>
+          <select id="athlete" required></select>
+          <label for="amount">Tuition amount (USD)</label>
+          <input id="amount" name="amount" type="text" inputmode="decimal"
+            autocomplete="off" placeholder="125.00" required>
+          <button type="submit">Assign tuition for selected month</button>
+        </form>
+        <p>A different amount can be assigned each month.</p>
+      </section>
+      <section aria-labelledby="correction-heading">
+        <h2 id="correction-heading">Correct an unpaid tuition amount</h2>
+        <p>Use this for an entry mistake before any payment is applied. Every
+          change records the old amount, new amount, reason, and coach.</p>
+        <form id="correction-form">
+          <label for="correction-charge">Athlete and current tuition</label>
+          <select id="correction-charge" required></select>
+          <label for="correction-amount">Corrected amount (USD)</label>
+          <input id="correction-amount" name="amount" type="text" inputmode="decimal"
+            autocomplete="off" placeholder="125.00" required>
+          <label for="correction-reason">Reason for correction</label>
+          <textarea id="correction-reason" name="reason" minlength="10" maxlength="500"
+            required></textarea>
+          <button type="submit" disabled>Save correction</button>
+        </form>
+        <h3>Recent corrections for this month</h3>
+        <ul id="corrections"></ul>
+      </section>
+      <p class="note">Emery still checks Venmo before confirming payment.
+        Payment confirmation and email receipts are being finished; this page
+        does not mark athletes paid or send emails.</p>
+    </div>
+  </main>
+</body>
+</html>
