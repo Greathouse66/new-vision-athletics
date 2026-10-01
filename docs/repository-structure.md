@@ -29,6 +29,7 @@ the repository.
 | `backend/bookkeeping/` | Planned | Authorized financial exports |
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
 | `supabase/migrations/` | Active | Versioned family, athlete, guardian, group, scheduling, and audit SQL |
+| `supabase/functions/coach-gateway/` | Ready to deploy | Signed-in coach access check for the private HTTP runtime |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 
@@ -44,6 +45,6 @@ transfer and history were also verified in the hosted preview and cleaned up.
 Backend directories describe responsibilities; they are not executable
 Netlify Functions. Email delivery, Auth account creation, scheduling,
 cancellations, notifications, and billing still need implementation. See
-`parent-sign-in.md` and `guardian-access.md`. Future database changes
+`backend-runtime.md`, `parent-sign-in.md` and `guardian-access.md`. Future database changes
 should go into new timestamped migration files rather than editing migrations
 that have already been applied.

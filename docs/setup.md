@@ -19,9 +19,11 @@ Review pull requests before merging into main, which may trigger production depl
 Check homepage, responsive images, navigation and payment page after deploys.
 A deploy ZIP is a published snapshot, not a replacement for source history.
 
-## Before adding server features
-Complete the open M2 decisions in the roadmap. The current public-only build
-does not make `backend/` executable. Choose a runtime before adding server code.
+## Private backend
+Supabase Edge Functions are the server runtime. The current public-only build
+does not make `backend/` executable. See `backend-runtime.md` for the first
+function deployment and its access check. Complete the remaining M2 business
+decisions before implementing the class and payment workflows.
 The build does not automatically load `.env`; set the public key in the shell
 locally or in Netlify's build environment. Keep server credentials out of client
 bundles. Use separate test and production services when adding server features.

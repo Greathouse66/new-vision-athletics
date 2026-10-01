@@ -15,7 +15,10 @@
 - [ ] Obtain bookkeeper's required format and software.
 - [x] Select Supabase Postgres/Auth for the proposed data and identity foundation;
       transactional email service remains to be selected.
-- [ ] Define backend deployment, public asset output and secret configuration.
+- [x] Select Supabase Edge Functions for private HTTP operations; keep Netlify
+      restricted to the public `dist/` build.
+- [ ] Deploy and test the initial authenticated coach function.
+- [ ] Configure provider secrets when a notification/payment provider is chosen.
 Acceptance: written decisions; no invented pricing, policy or credentials.
 
 ## M3 — Data and secure access

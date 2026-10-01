@@ -10,13 +10,15 @@
 - Financial records must be exportable for the external bookkeeper.
 
 ## Decisions still open
-Auth email delivery, server runtime, timezone, actual class capacity,
+Auth email delivery, timezone, actual class capacity,
 notification channel, holiday rules, tuition amounts and full cancellation policy.
 Do not infer the venue timezone from the developer's device.
 
 Supabase Postgres/Auth is the data and identity provider. Family, guardian,
 athlete, group, and empty class scheduling foundations are deployed. See
 `data-access-foundation.md` and `scheduling-foundation.md`.
+Supabase Edge Functions are the private HTTP runtime; the initial
+`coach-gateway` function is ready to deploy. See `backend-runtime.md`.
 
 ## Data model to implement
 Identity users and roles; families; guardian-family grants; athletes; skill groups;
@@ -56,9 +58,9 @@ deduplication, retries and failure visibility. Parents receive confirmation of r
 cancellation even if email delivery is delayed. Reminder links identify a booking but
 still require authorized access. Do not send child or financial details in URL parameters.
 
-## Netlify deployment boundary
-The current site has root-level public files. Adding directories does not make backend
-code executable or private. Before implementation, define a public-only publish output
-and a separate server runtime/function directory. Never place secrets, imports, exports,
-database files or live records in the static publish tree. Git ignore rules do not prevent
-static publishing. No deploy configuration is changed in this skeleton milestone.
+## Deployment boundary
+Netlify publishes only the explicit public files and browser bundles in `dist/`.
+Private HTTP code runs in `supabase/functions/` after a separate function
+deployment; SQL migrations deploy separately. Never place secrets, imports,
+exports, database files or live records in the static publish tree. Git ignore
+rules do not prevent static publishing.
