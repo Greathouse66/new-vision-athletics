@@ -29,7 +29,7 @@ the repository.
 | `backend/notifications/` | Planned | Invitations, reminders, and cancellation notices |
 | `backend/bookkeeping/` | Planned | Authorized financial exports |
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
-| `supabase/migrations/` | Active | Versioned family, athlete, guardian, group, scheduling, and audit SQL |
+| `supabase/migrations/` | Active | Versioned access, roster, scheduling, audit, and empty per-athlete billing SQL |
 | `supabase/functions/coach-gateway/` | Active | Deployed signed-in coach access check for the private HTTP runtime |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |

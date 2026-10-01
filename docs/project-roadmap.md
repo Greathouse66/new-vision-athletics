@@ -10,7 +10,10 @@
 ## M2 — Confirm requirements and hosting boundaries
 - [x] Confirm skill groups: Foundational, Post-Bigs, Advanced.
 - [ ] Obtain schedules, location, capacity and confirm America/Chicago timezone.
-- [ ] Confirm monthly tuition, due dates, discounts and partial-month handling.
+- [x] Confirm tuition varies by athlete and the coach assigns the monthly amount.
+- [x] Confirm parents pay via Venmo; Emery verifies payment and uses Mark paid
+      in the coach roster. The action must also record the Venmo payment.
+- [ ] Confirm due dates, discounts and partial-month handling.
 - [ ] Approve cancellation/makeup rules and how families acknowledge them.
 - [ ] Obtain bookkeeper's required format and software.
 - [x] Select Supabase Postgres/Auth for the proposed data and identity foundation;
@@ -19,7 +22,7 @@
       restricted to the public `dist/` build.
 - [x] Deploy and test the initial authenticated coach function (401 unsigned,
       403 signed-in non-coach, 200 temporary coach; role removed afterward).
-- [ ] Configure provider secrets when a notification/payment provider is chosen.
+- [ ] Configure email delivery secrets when a notification provider is chosen.
 Acceptance: written decisions; no invented pricing, policy or credentials.
 
 ## M3 — Data and secure access
@@ -59,7 +62,11 @@ Acceptance: repeated taps create one cancellation; failed email does not lose th
 Acceptance: simultaneous requests cannot overbook; existing standing bookings cannot be duplicated.
 
 ## M7 — Monthly billing and bookkeeping
-- [ ] Create monthly tuition invoices and record manual Venmo/cash/bank payments.
+- [ ] Apply and verify the empty athlete monthly charge, receipt, and allocation schema.
+- [ ] Let the coach set each athlete's monthly tuition and generate dated charges.
+- [ ] Add coach roster Mark paid action that records a verified Venmo payment,
+      allocates it to athlete charges, and derives paid status.
+- [ ] Queue a receipt email to the authorized guardian when payment is approved.
 - [ ] Allocate payments; support corrections/refunds with an audit trail.
 - [ ] Show receipts and balances to the correct family.
 - [ ] Export financial records in the agreed bookkeeper format.

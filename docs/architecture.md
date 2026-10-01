@@ -4,10 +4,15 @@
 - Existing static website on Netlify; main source repository is Greathouse66/new-vision-athletics.
 - Coach works on a phone. Navigation: Today, Makeups, Families, Payments.
 - Families can have multiple athletes across skill groups and multiple authorized guardians.
-- Tuition is a fixed monthly price, usually prepaid. Scheduling and tuition are separate.
+- Tuition varies by athlete; a coach sets each monthly amount. It is usually
+  paid in advance. Scheduling and tuition are separate.
 - Standing rosters are generated from group enrollment.
 - Parents cancel a dated session; Emery is notified and reviews makeup eligibility.
 - Financial records must be exportable for the external bookkeeper.
+- Coach enters each athlete's monthly tuition. Parents pay through Venmo;
+  Emery verifies the payment and marks that athlete paid in the coach portal.
+  The action records the payment and drives the roster status. It triggers
+  receipt email to an authorized parent address when delivery is configured.
 
 ## Decisions still open
 Auth email delivery, timezone, actual class capacity,
@@ -18,13 +23,15 @@ Supabase Postgres/Auth is the data and identity provider. Family, guardian,
 athlete, group, and empty class scheduling foundations are deployed. See
 `data-access-foundation.md` and `scheduling-foundation.md`.
 Supabase Edge Functions are the private HTTP runtime; the initial
-`coach-gateway` function is ready to deploy. See `backend-runtime.md`.
+`coach-gateway` function is deployed and access-tested. See `backend-runtime.md`.
+An empty per-athlete billing ledger is prepared separately from scheduling. See
+`billing-foundation.md`; no billing writes or parent financial reads are enabled.
 
 ## Data model to implement
 Identity users and roles; families; guardian-family grants; athletes; skill groups;
 locations; recurring schedules; dated class occurrences; effective-dated enrollments;
 bookings; attendance; cancellations; makeup credits; makeup reservations;
-monthly invoices and lines; payments and allocations; refunds; audit events;
+athlete monthly charges; payments and allocations; refunds; audit events;
 notification outbox/delivery attempts; bookkeeping export runs.
 
 Use stable IDs. A parent account's family scope is resolved from verified identity,
@@ -47,9 +54,10 @@ outcome. Record cancellation, restoration and waiver decisions with actor and re
 Store timestamps consistently and compute local class times using the venue's IANA zone.
 
 ## Financial integrity
-Store money in integer minor units with currency. Separate invoices, payment receipts,
-allocations, refunds, fees and bank transfers. Invoice status follows allocations rather
-than a freely editable paid flag. Use stable transaction IDs and audited corrections.
+Store money in integer minor units with currency. Separate monthly charges,
+payment receipts, allocations, refunds, fees and bank transfers. Paid status
+follows allocations rather than a freely editable paid flag. Use stable
+transaction IDs and audited corrections.
 A makeup credit is not automatically a cash refund or a new invoice.
 
 ## Notifications
