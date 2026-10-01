@@ -24,3 +24,20 @@ Payments and opening makeup balances require separate reviewed imports with date
 source references and reconciliation status. Do not infer payment from enrollment.
 Invitations are a separate authorized action after records have been reviewed.
 Keep all source and exported files outside Git and static publish output.
+
+## Private preflight check
+
+Export the coach-provided spreadsheet as CSV and put it in the Git-ignored
+`imports/` directory (create that folder if needed). From the
+repository root, run `npm.cmd run validate:roster -- imports/roster.csv` on
+Windows. Use these exact field names as CSV headers. The validator checks
+required fields, basic email syntax, dates, the three confirmed group names,
+repeated athlete references and repeated guardian/athlete name pairs. It
+prints only line numbers and field names; it does not print names or emails,
+connect to Supabase, create users, grant access or change any records.
+
+An `ERROR` causes a nonzero exit status. A `REVIEW` flag means a coach must
+resolve a possible duplicate or source inconsistency; it is not an automatic
+merge. Email syntax alone does not verify ownership or guardian authority.
+The future reviewed import will need stable source references and explicit
+coach approval before any database writes or invitation delivery.

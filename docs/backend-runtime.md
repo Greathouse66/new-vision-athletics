@@ -5,6 +5,9 @@ Supabase Edge Functions host private HTTP operations. The first function,
 `coach_users` row under row-level security. It returns `{ "ok": true }` for a
 coach, HTTP 403 for a signed-in non-coach, and an authentication error for a
 request without a valid user JWT. It does not expose family records.
+The deployed function returned 401 without a session, 403 for the signed-in
+test account, and 200 after a temporary coach grant. That grant was removed
+and its remaining row count was verified as zero.
 
 Netlify publishes only `dist/`. Functions in `supabase/functions/` are deployed
 separately to the linked Supabase project. The `backend/` folders are a

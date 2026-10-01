@@ -11,6 +11,7 @@ the repository.
 | `package.json`, `package-lock.json` | Active | Website build command, Supabase browser client, bundler, and local CLI |
 | `netlify.toml` | Active | Builds the site and publishes `dist/` |
 | `scripts/build-site.mjs` | Active | Copies approved public files and bundles portal browser scripts into `dist/` |
+| `scripts/validate-roster.mjs` | Active | Offline preflight for private roster CSVs in Git-ignored `imports/`; no database writes |
 | `coach/` | Partial | Coach workspace, athlete and parent account records, guardian access, and skill group screens; attendance, makeups, and payments later |
 | `parent/` | Partial | Private family and athlete summary; sessions, makeups, and payments later |
 | `auth/` | Active | Guardian email link sign-in and callback pages |
@@ -29,7 +30,7 @@ the repository.
 | `backend/bookkeeping/` | Planned | Authorized financial exports |
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
 | `supabase/migrations/` | Active | Versioned family, athlete, guardian, group, scheduling, and audit SQL |
-| `supabase/functions/coach-gateway/` | Ready to deploy | Signed-in coach access check for the private HTTP runtime |
+| `supabase/functions/coach-gateway/` | Active | Deployed signed-in coach access check for the private HTTP runtime |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 

@@ -17,7 +17,8 @@
       transactional email service remains to be selected.
 - [x] Select Supabase Edge Functions for private HTTP operations; keep Netlify
       restricted to the public `dist/` build.
-- [ ] Deploy and test the initial authenticated coach function.
+- [x] Deploy and test the initial authenticated coach function (401 unsigned,
+      403 signed-in non-coach, 200 temporary coach; role removed afterward).
 - [ ] Configure provider secrets when a notification/payment provider is chosen.
 Acceptance: written decisions; no invented pricing, policy or credentials.
 
@@ -34,6 +35,8 @@ Acceptance: unauthorized and cross-family reads/writes fail at the API/database 
 
 ## M4 — Groups, enrollment and mobile attendance
 - [ ] Review/import family records; resolve ambiguous matches.
+- [x] Add an offline private CSV preflight for roster field and duplicate review;
+      it does not write records or grant parent access.
 - [x] Apply and verify the empty location, weekly slot, and dated class schema.
 - [ ] Generate dated classes from standing schedules with holiday exceptions.
 - [x] Implement one active group per athlete on any date and dated coach transfers.
