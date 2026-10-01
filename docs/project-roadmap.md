@@ -24,13 +24,14 @@ Acceptance: written decisions; no invented pricing, policy or credentials.
       initial family isolation and denied writes were checked manually.
 - [x] Deploy and verify coach-approved guardian invitation, acceptance, and
       revocation with one test identity; delivery to real parents needs SMTP.
+- [ ] Apply and verify coach name-correction audit events.
 - [ ] Enforce family isolation server-side; coach role assigned administratively.
 - [ ] Support revoking access and a second authorized guardian.
 Acceptance: unauthorized and cross-family reads/writes fail at the API/database layer.
 
 ## M4 — Groups, enrollment and mobile attendance
 - [ ] Review/import family records; resolve ambiguous matches.
-- [ ] Apply and verify the empty location, weekly slot, and dated class schema.
+- [x] Apply and verify the empty location, weekly slot, and dated class schema.
 - [ ] Generate dated classes from standing schedules with holiday exceptions.
 - [x] Implement one active group per athlete on any date and dated coach transfers.
 - [ ] Define class enrollment after schedules and capacity are confirmed.

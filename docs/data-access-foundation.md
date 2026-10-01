@@ -1,14 +1,14 @@
 # Family, athlete and group foundation
 
-This is a proposed Supabase Postgres schema and access policy. It does not create
-a Supabase project, send invitations, connect Netlify to a database or publish
-family records. Apply the numbered SQL files in order through a reviewed database
-migration as the database owner, first in a separate development project:
+These versioned Supabase Postgres migrations define the data and access
+foundation. They do not send invitations, publish family records, or create
+real athlete data. The first two files were the initial foundation, followed
+by dated migrations for invitations, athletes, groups, and scheduling:
 
 1. `supabase/migrations/20260929151300_family_group_foundation.sql`
 2. `supabase/migrations/20260929151400_family_group_access.sql`
 
-Do not run these files against production before the access tests below pass.
+Review new migrations and their access tests before live use.
 The `private` schema must not be exposed by the Supabase Data API. The security
 definer functions must remain owned by the migration role (`postgres` in a hosted
 Supabase project), with a fixed empty search path.
@@ -24,6 +24,7 @@ Supabase project), with a fixed empty search path.
 | `athletes` | Child linked to exactly one parent account for this first version; parents manage access |
 | `skill_groups` | Coach-managed skill levels: Foundational, Post-Bigs, Advanced |
 | `group_enrollments` | Dated athlete-to-group assignments; end date is exclusive |
+| `record_name_corrections` | Coach-readable history of parent account and athlete name changes |
 
 An invitation is not a guardian grant. Confirm the intended recipient and their
 authority before a coach links the verified identity to the family. Never infer
@@ -40,6 +41,7 @@ still needed before adding real families.
 | Guardian memberships | None | Read own links only | Read/create/update/revoke |
 | Skill groups | None | Read groups with a linked athlete enrollment | Read/create/update |
 | Group enrollments | None | Read linked athletes' rows | Read; create/transfer through checked functions |
+| Name corrections | None | None | Read; database triggers write events |
 | Coach role assignments | None | Read own role only, if any | Read roles; changes require administration |
 
 No parent-facing writes are enabled yet. Session cancellation and makeup actions
@@ -71,5 +73,5 @@ verified test identities. Keep fixtures and credentials outside the repository.
 
 Never put a Supabase secret/service key into browser code or Netlify's static
 publish directory. The browser may eventually use a publishable key with RLS.
-Real contact fields, schedules, billing, audit events and cancellation tokens
-require their own reviewed migrations and policies.
+Real contact fields, attendance, billing, other audit events and cancellation
+tokens require their own reviewed migrations and policies.

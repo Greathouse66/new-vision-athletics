@@ -15,9 +15,8 @@ notification channel, holiday rules, tuition amounts and full cancellation polic
 Do not infer the venue timezone from the developer's device.
 
 Supabase Postgres/Auth is the data and identity provider. Family, guardian,
-athlete and group foundations are deployed; the empty class scheduling schema
-is the next migration. See `data-access-foundation.md` and
-`scheduling-foundation.md`.
+athlete, group, and empty class scheduling foundations are deployed. See
+`data-access-foundation.md` and `scheduling-foundation.md`.
 
 ## Data model to implement
 Identity users and roles; families; guardian-family grants; athletes; skill groups;

@@ -28,9 +28,10 @@ who gain access to an account see every athlete in that account. Athletes do
 not sign in themselves in this version. The page does not delete records,
 because links and past enrollments must remain consistent. Changing an
 individual athlete's name does not automatically rename the account label;
-the coach can correct that separately. Name corrections do not yet have their
-own audit history, so avoid importing actual families until the review process
-for duplicates and guardian authority is agreed.
+the coach can correct that separately. Once the name-correction migration is
+applied, both corrections create coach-readable audit events. See
+`name-correction-audit.md`. Avoid importing actual families until the review
+process for duplicates and guardian authority is agreed.
 
 Test in the Deploy Preview with a disposable solo athlete and a shared
 account with two disposable siblings, a temporary coach role, and a parent-only

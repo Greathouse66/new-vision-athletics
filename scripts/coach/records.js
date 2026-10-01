@@ -11,6 +11,7 @@ const athleteSelect = document.querySelector("#athlete");
 const athleteName = document.querySelector("#athlete-name");
 const groupAthleteSelect = document.querySelector("#group-athlete");
 const groupHistory = document.querySelector("#group-history");
+const nameCorrections = document.querySelector("#name-corrections");
 const assignmentSection = document.querySelector("#assignment-section");
 const rosterList = document.querySelector("#roster");
 const renameAthleteForm = document.querySelector("#rename-athlete-form");
@@ -167,6 +168,33 @@ async function loadGroupHistory() {
   }
 }
 
+async function loadNameCorrections(familyId, request) {
+  nameCorrections.replaceChildren();
+  const { data, count, error } = await supabase.from("record_name_corrections")
+    .select("record_type, old_name, new_name, changed_by, changed_at", { count: "exact" })
+    .eq("family_id", familyId).order("changed_at", { ascending: false })
+    .order("id", { ascending: false }).limit(30);
+  if (error) throw error;
+  if (request !== requestNumber || familySelect.value !== familyId) return;
+  for (const entry of data) {
+    const item = document.createElement("li");
+    const date = new Date(entry.changed_at).toISOString().replace("T", " ").slice(0, 19);
+    const actor = entry.changed_by ? `coach ID ${entry.changed_by}` : "database action (no coach ID)";
+    item.textContent = `${entry.record_type === "athlete" ? "Athlete" : "Parent account"}: ` +
+      `${entry.old_name} → ${entry.new_name} · ${date} UTC · ${actor}`;
+    nameCorrections.append(item);
+  }
+  if (!data.length) {
+    const item = document.createElement("li");
+    item.textContent = "No name corrections recorded for this account.";
+    nameCorrections.append(item);
+  } else if (count > data.length) {
+    const item = document.createElement("li");
+    item.textContent = "Showing the 30 most recent corrections.";
+    nameCorrections.append(item);
+  }
+}
+
 async function loadAthletes(preferredId) {
   const familyId = familySelect.value;
   const request = ++requestNumber;
@@ -185,7 +213,7 @@ async function loadAthletes(preferredId) {
   familyName.value = family.display_name;
   renderAthletes(preferredId);
   familyDetails.hidden = false;
-  await loadGroupHistory();
+  await Promise.all([loadGroupHistory(), loadNameCorrections(familyId, request)]);
 }
 
 async function save(action) {
