@@ -388,6 +388,9 @@ verify_jwt = true
 [functions.billing-export]
 verify_jwt = true
 
+[functions.receipt-worker]
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

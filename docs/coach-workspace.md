@@ -1,7 +1,7 @@
 # Coach workspace
 
 `/coach/index.html` is the private starting page for the existing roster, skill
-group, and parent access tools. It displays exact counts of athletes, parent
+group, parent access and monthly tuition tools. It displays exact counts of athletes, parent
 accounts, active skill groups, and dated classes. Each count comes from the
 signed-in coach's Supabase session and existing row-level security policies;
 the page never embeds a server key or lists family details in public HTML.

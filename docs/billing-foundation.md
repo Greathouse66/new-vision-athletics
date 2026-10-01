@@ -44,7 +44,7 @@ cash refund.
 All three tables have RLS and coach-only select access. Browser roles cannot
 insert, update, or delete. Do not enter real payments through the SQL Editor
 or use the function for live confirmations before receipt delivery and the
-coach confirmation UI are ready. Confirm currency, partial-payment handling,
+coach confirmation UI are ready. Confirm partial-payment handling,
 refunds, due dates, and bookkeeper columns before enabling the working coach UI.
 
 After `supabase db push --dry-run` and `supabase db push`, verify that the

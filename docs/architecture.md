@@ -54,7 +54,7 @@ outcome. Record cancellation, restoration and waiver decisions with actor and re
 Store timestamps consistently and compute local class times using the venue's IANA zone.
 
 ## Financial integrity
-Store money in integer minor units with currency. Separate monthly charges,
+Store USD money in integer cents with an explicit currency field. Separate monthly charges,
 payment receipts, allocations, refunds, fees and bank transfers. Paid status
 follows allocations rather than a freely editable paid flag. Use stable
 transaction IDs and audited corrections.

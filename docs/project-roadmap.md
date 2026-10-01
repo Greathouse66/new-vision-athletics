@@ -64,16 +64,19 @@ Acceptance: simultaneous requests cannot overbook; existing standing bookings ca
 
 ## M7 — Monthly billing and bookkeeping
 - [x] Apply and verify the empty athlete monthly charge, receipt, and allocation schema.
-- [ ] Apply and verify checked coach charge assignment and Venmo confirmation
-      functions; database migration prepared, live test pending.
-- [ ] Let the coach set each athlete's monthly tuition and generate dated charges.
-- [ ] Publish and test the coach monthly tuition view; page prepared for the
-      signed-in preview, with payment confirmation withheld pending delivery.
+- [x] Apply and verify checked coach charge assignment and Venmo confirmation
+      functions with rollback-only test data. Live payment use remains gated.
+- [x] Let the coach set each athlete's monthly tuition and create monthly charges.
+- [x] Publish and test the coach monthly tuition view; payment confirmation
+      remains disabled until delivery is verified.
 - [ ] Add coach roster Mark paid action that records a verified Venmo payment,
-      allocates it to athlete charges, and derives paid status.
+      allocates it to athlete charges, and derives paid status. The page and
+      database gate are prepared; live confirmation waits for verified delivery.
 - [ ] Queue and deliver a receipt email to an authorized billing contact when
       payment is approved. A private event migration is prepared; recipient
-      management, worker and delivery verification are still pending.
+      management exists, and a message template is prepared. Worker, provider
+      and delivery verification are still pending. A Resend worker is prepared
+      but has no sender secrets, schedule, or live enablement yet.
 - [ ] Apply and verify coach-approved parent account receipt contacts. The
       schema and coach controls are prepared; email delivery is still pending.
 - [ ] Allocate payments; support corrections/refunds with an audit trail.
@@ -84,9 +87,9 @@ Acceptance: simultaneous requests cannot overbook; existing standing bookings ca
 - [x] Apply and verify audited correction of an unpaid tuition amount; the
       rollback-only check passed. Paid-charge adjustments still need a policy.
 - [ ] Export financial records in the agreed bookkeeper format.
-- [ ] Deploy and verify an internal coach reconciliation export; its migration,
-      server function, and page controls are prepared. Final bookkeeper format
-      still needs confirmation.
+- [x] Deploy and verify an internal coach reconciliation export, including a
+      rollback-only sibling payment check. Final bookkeeper format still needs
+      confirmation.
 - [ ] Reconcile against payment-provider/bank statements without counting transfers twice.
 Acceptance: paid tuition is not billed again for an approved makeup; export totals match records.
 

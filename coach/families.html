@@ -21,6 +21,19 @@
       <p><a href="/coach/index.html">Coach workspace</a> · <a href="/coach/records.html">Athlete roster</a> · <a href="/coach/groups.html">Skill groups</a></p>
       <label for="family">Parent account</label>
       <select id="family"></select>
+      <section aria-labelledby="receipt-heading">
+        <h2 id="receipt-heading">Receipt email</h2>
+        <p>Approve one email address on file for this account's future payment
+          receipts. This does not send an email or grant Parent Portal access.
+          Review the address with the parent before saving it.</p>
+        <ul id="billing-contacts"></ul>
+        <form id="billing-contact-form">
+          <label for="billing-email">Parent email for receipts</label>
+          <input id="billing-email" name="email" type="email" autocomplete="off"
+            required maxlength="254">
+          <button type="submit">Save receipt email</button>
+        </form>
+      </section>
       <section>
         <h2>Approve guardian email</h2>
         <p>The parent must sign in with this exact email and accept the invitation.

@@ -55,6 +55,30 @@
         <h3>Recent corrections for this month</h3>
         <ul id="corrections"></ul>
       </section>
+      <section aria-labelledby="payment-heading">
+        <h2 id="payment-heading">Record verified Venmo payment</h2>
+        <p id="payment-readiness" class="note"></p>
+        <form id="payment-form" hidden>
+          <label for="payment-family">Parent account</label>
+          <select id="payment-family" required></select>
+          <p>Approved receipt email: <strong id="payment-contact">—</strong></p>
+          <fieldset>
+            <legend>Tuition charges this payment covers</legend>
+            <div id="payment-charges"></div>
+          </fieldset>
+          <p>Full outstanding balance: <strong id="payment-total">$0.00</strong></p>
+          <label for="payment-received">Venmo received at (your device's local time)</label>
+          <input id="payment-received" type="datetime-local" required>
+          <label for="payment-reference">Venmo reference (optional)</label>
+          <input id="payment-reference" type="text" maxlength="160" autocomplete="off">
+          <label><input id="payment-verified" type="checkbox" required>
+            I checked Venmo and verified this payment was received.</label>
+          <button type="submit">Review and record payment</button>
+        </form>
+        <p id="payment-status" role="status" aria-live="polite"></p>
+        <h3>Receipt delivery for payments received this UTC month</h3>
+        <ul id="delivery-list"></ul>
+      </section>
       <section aria-labelledby="export-heading">
         <h2 id="export-heading">Internal billing export</h2>
         <p>Download the selected month's tuition charges and UTC-received Venmo
@@ -64,9 +88,9 @@
         <p id="export-status" role="status" aria-live="polite"></p>
         <ul id="export-files"></ul>
       </section>
-      <p class="note">Emery still checks Venmo before confirming payment.
-        Payment confirmation and email receipts are being finished; this page
-        does not mark athletes paid or send emails.</p>
+      <p class="note">Paid status comes from recorded Venmo payments. The
+        receipt email is queued for delivery after payment is recorded;
+        confirm its delivery separately.</p>
     </div>
   </main>
 </body>

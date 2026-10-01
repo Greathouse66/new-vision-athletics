@@ -7,6 +7,9 @@ const inviteForm = document.querySelector("#invite-form");
 const inviteButton = inviteForm.querySelector("button");
 const invitationList = document.querySelector("#invitations");
 const guardianList = document.querySelector("#guardians");
+const contactList = document.querySelector("#billing-contacts");
+const contactForm = document.querySelector("#billing-contact-form");
+const contactButton = contactForm.querySelector("button");
 const signOut = document.querySelector("#sign-out");
 
 function setStatus(message) {
@@ -33,19 +36,38 @@ async function loadFamilyAccess() {
   const familyId = familySelect.value;
   invitationList.replaceChildren();
   guardianList.replaceChildren();
+  contactList.replaceChildren();
   if (!familyId) return;
 
-  const [invites, guardians] = await Promise.all([
+  const [invites, guardians, contact] = await Promise.all([
     supabase.from("guardian_invitations")
       .select("id, email, expires_at, accepted_at, revoked_at")
       .eq("family_id", familyId).order("created_at", { ascending: false }),
     supabase.rpc("list_family_guardians", { p_family_id: familyId }),
+    supabase.from("family_billing_contacts")
+      .select("id, email, approved_at").eq("family_id", familyId)
+      .is("revoked_at", null).maybeSingle(),
   ]);
-  if (invites.error || guardians.error) {
-    console.info("Family access loading failed:", invites.error?.code ?? "", guardians.error?.code ?? "");
-    throw invites.error ?? guardians.error;
+  if (invites.error || guardians.error || contact.error) {
+    console.info("Family access loading failed:",
+      invites.error?.code ?? "", guardians.error?.code ?? "", contact.error?.code ?? "");
+    throw invites.error ?? guardians.error ?? contact.error;
   }
   if (familySelect.value !== familyId) return;
+
+  if (contact.data) {
+    contactList.append(item(contact.data.email, "Remove receipt email", async () => {
+      if (!confirm("Remove " + contact.data.email + " as the receipt email for this account?")) return;
+      const { error } = await supabase.rpc("remove_family_billing_contact", {
+        p_family_id: familyId,
+      });
+      if (error) { setStatus("Could not remove the receipt email."); return; }
+      setStatus("Receipt email removed. Future payments will need a reviewed contact.");
+      await loadFamilyAccess().catch(() => setStatus("Could not refresh the receipt email."));
+    }));
+  } else {
+    contactList.append(item("No receipt email approved for this account."));
+  }
 
   const pending = invites.data.filter((invite) =>
     !invite.accepted_at && !invite.revoked_at && new Date(invite.expires_at) > new Date()
@@ -108,6 +130,35 @@ async function start() {
 familySelect.addEventListener("change", () => {
   loadFamilyAccess().then(() => setStatus(""))
     .catch(() => setStatus("Could not load family access."));
+});
+
+contactForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!familySelect.value) { setStatus("Choose a parent account."); return; }
+  const familyId = familySelect.value;
+  const email = contactForm.elements.email.value.trim();
+  if (!confirm("Approve " + email + " for future receipt emails to this parent account? This does not grant portal access.")) return;
+  contactButton.disabled = true;
+  familySelect.disabled = true;
+  try {
+    const { error } = await supabase.rpc("set_family_billing_contact", {
+      p_family_id: familyId, p_email: email,
+    });
+    if (error) {
+      setStatus(error.code === "PGRST202"
+        ? "The billing contact database migration has not been applied."
+        : "Could not save the receipt email. Review the address and try again.");
+      return;
+    }
+    contactForm.reset();
+    await loadFamilyAccess();
+    setStatus("Receipt email saved. No email was sent and portal access was not changed.");
+  } catch {
+    setStatus("Could not save the receipt email. Please try again.");
+  } finally {
+    contactButton.disabled = false;
+    familySelect.disabled = false;
+  }
 });
 
 inviteForm.addEventListener("submit", async (event) => {

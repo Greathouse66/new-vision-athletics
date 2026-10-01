@@ -13,11 +13,13 @@ is applied, a coach can correct an unpaid amount with a recorded reason and
 review its recent correction history. A charge with any allocated payment
 cannot be changed by that action; see `monthly-charge-corrections.md`.
 
-There is no operational **Mark paid** control on this page yet. Emery verifies
-Venmo separately, but a live confirmation should wait for reviewed billing
-contact emails, delivery worker, and coach confirmation UI. The private
-outbox stores payment events but does not send messages. No tuition is inferred
-from group or class scheduling.
+The **Record verified Venmo payment** form supports one account's selected
+outstanding charges and requires Emery to verify Venmo separately. It remains
+hidden until the owner enables the receipt delivery gate after sender and
+worker verification. Paid status derives from allocations; the private outbox
+queues a separate email attempt. No tuition is inferred from group or class
+scheduling. See `coach-venmo-confirmation.md` and
+`receipt-delivery-worker.md`.
 
 The local build includes the page. Test the no-coach-access state using the
 existing test login. For a temporary coach test, create only synthetic athlete

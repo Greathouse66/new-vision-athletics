@@ -26,12 +26,13 @@ the repository.
 | `backend/cancellations/` | Planned | Dated cancellations and coach review |
 | `backend/makeups/` | Planned | Credits, reservations, redemption, and restoration |
 | `backend/billing/` | Planned | Monthly invoices, payments, refunds, and receipts |
-| `backend/notifications/` | Planned | Invitations, reminders, and cancellation notices |
+| `backend/notifications/` | Planned | Invitation, reminder, and cancellation responsibilities; the payment renderer and worker live under `supabase/functions/` |
 | `backend/bookkeeping/` | Planned | Authorized financial exports |
 | `supabase/config.toml` | Active | Supabase CLI project configuration |
 | `supabase/migrations/` | Active | Versioned access, roster, scheduling, audit, per-athlete billing, unpaid charge corrections, private receipt events, and approved receipt contacts |
 | `supabase/functions/coach-gateway/` | Active | Deployed signed-in coach access check for the private HTTP runtime |
-| `supabase/functions/billing-export/` | Prepared | Coach-only internal billing CSV generation; deploy after its snapshot migration |
+| `supabase/functions/billing-export/` | Active | Coach-only internal billing CSV generation |
+| `supabase/functions/receipt-worker/` | Prepared | Secret-key Resend delivery worker; no live sender or schedule yet |
 | `tests/` | Planned | Automated access, scheduling, makeup, and billing tests |
 | `docs/` | Active | Roadmap, requirements, setup, and data-access guidance |
 
