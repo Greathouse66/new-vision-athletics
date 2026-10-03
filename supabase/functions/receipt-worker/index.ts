@@ -18,7 +18,7 @@ function settings() {
 }
 
 export default {
-  fetch: withSupabase({ auth: 'secret' }, async (request, ctx) => {
+  fetch: withSupabase({ auth: 'secret:receipt_worker_test' }, async (request, ctx) => {
     if (request.method !== 'POST') {
       return Response.json({ error: 'Method not allowed' }, { status: 405 })
     }
