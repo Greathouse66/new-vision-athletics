@@ -17,3 +17,13 @@ export function isMondayDate(value) {
   return date.getUTCFullYear() === year && date.getUTCMonth() + 1 === month &&
     date.getUTCDate() === day && date.getUTCDay() === 1;
 }
+
+export function classDatesForWeek(monday) {
+  if (!isMondayDate(monday)) return [];
+  const start = new Date(`${monday}T00:00:00Z`);
+  return Array.from({ length: 5 }, (_, offset) => {
+    const date = new Date(start);
+    date.setUTCDate(start.getUTCDate() + offset);
+    return date.toISOString().slice(0, 10);
+  });
+}
