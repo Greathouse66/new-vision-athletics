@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Class places | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/classes.js"></script>
+</head>
+<body>
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Class places</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <p><a href="/coach/index.html">Coach workspace</a> · <a href="/coach/schedule.html">Plan class dates</a></p>
+      <section aria-labelledby="regular-heading">
+        <h2 id="regular-heading">Regular class roster</h2>
+        <p>Assign an athlete only after Emery confirms their regular class. This reserves a place in existing and future dated classes within the effective dates.</p>
+        <form id="regular-form">
+          <label for="regular-slot">Weekly class</label>
+          <select id="regular-slot" required></select>
+          <label for="regular-athlete">Athlete</label>
+          <select id="regular-athlete" required></select>
+          <label for="regular-start">Effective from</label>
+          <input id="regular-start" type="date" required>
+          <label for="regular-end">Effective until (optional, first day outside this roster)</label>
+          <input id="regular-end" type="date">
+          <button type="submit">Assign regular place</button>
+        </form>
+        <h2>Recorded regular places</h2>
+        <ul id="regular-list"></ul>
+      </section>
+      <section aria-labelledby="dated-heading">
+        <h2 id="dated-heading">Dated class seats</h2>
+        <label for="week-start">Week starting Monday</label>
+        <input id="week-start" type="date" required>
+        <ul id="week-classes"></ul>
+        <form id="drop-in-form">
+          <h2>Coach-confirmed drop-in</h2>
+          <p>Use this only after speaking with a parent. A confirmed drop-in takes one seat in one dated class.</p>
+          <label for="drop-in-class">Dated class</label>
+          <select id="drop-in-class" required></select>
+          <label for="drop-in-athlete">Athlete already on the roster</label>
+          <select id="drop-in-athlete" required></select>
+          <button type="submit">Confirm drop-in seat</button>
+        </form>
+        <h2>Seats in selected class</h2>
+        <ul id="seat-list"></ul>
+      </section>
+      <p class="note">Parent drop-in requests and messages are not enabled here. Cancelling a dated seat keeps its history and does not end a regular weekly assignment. Coach changes should be checked with the family directly.</p>
+    </div>
+  </main>
+</body>
+</html>
