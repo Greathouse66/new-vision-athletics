@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Weekly venue | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/schedule.js"></script>
+</head>
+<body>
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Choose the weekly venue</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <p><a href="/coach/index.html">Coach workspace</a></p>
+      <p>Choose a location for the week starting Monday. All times below are in Minot local time. You can change the choice until dated classes are created for that week.</p>
+      <form id="venue-form">
+        <label for="week-start">Monday of class week</label>
+        <input id="week-start" name="weekStart" type="date" required>
+        <label for="venue">Venue</label>
+        <select id="venue" name="venue" required>
+          <option value="">Choose a venue</option>
+        </select>
+        <button id="save-venue" type="submit">Save weekly venue</button>
+      </form>
+      <p id="current-venue" role="status" aria-live="polite"></p>
+      <h2>Weekly classes</h2>
+      <ul>
+        <li>Monday: Post-Bigs 6–7 pm; Advanced 7–8 pm</li>
+        <li>Tuesday: Foundational 6–7 pm</li>
+        <li>Wednesday: Post-Bigs 6–7 pm; Advanced 7–8 pm</li>
+        <li>Thursday: Foundational 6–7 pm</li>
+        <li>Friday: Intro 6–7 pm; Advanced 7–8 pm</li>
+      </ul>
+      <p class="note">Capacity is 10 per class. Saving a venue does not create dated classes, reserve seats, or notify parents. Review any midweek venue change with families before publishing.</p>
+    </div>
+  </main>
+</body>
+</html>

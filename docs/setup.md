@@ -2,12 +2,15 @@
 
 ## Existing public site
 1. Clone the GitHub repository.
-2. Use a feature branch for changes.
-3. Serve the root with `python -m http.server 8000`.
-4. Visit the homepage and `/Pay-Now.html`.
+2. Use a feature branch for changes and run `npm.cmd install` on Windows.
+3. Run `npm.cmd run build`; Netlify serves only `dist/`.
+4. For a local preview, run `npx.cmd --yes http-server .\dist -p 8765 -c-1`
+   and open the URL that the server prints. Visit `/` and `/Pay-Now.html`.
 
-No package manager, backend server or application test command is configured yet.
-Portal folders contain only placeholders. Opening /coach/ or /parent/ is not a working portal.
+The parent sign-in and family summary, coach workspace, parent access, athlete
+roster, and group management are working preview routes. The browser build reads
+`NVA_SUPABASE_PUBLISHABLE_KEY` from its
+environment. See `parent-sign-in.md` for configuration and access boundaries.
 
 ## Netlify
 Use the existing connected Netlify project and preserve its current production branch,
@@ -16,11 +19,14 @@ Review pull requests before merging into main, which may trigger production depl
 Check homepage, responsive images, navigation and payment page after deploys.
 A deploy ZIP is a published snapshot, not a replacement for source history.
 
-## Before building portals
-Complete M2 in the roadmap. Define a public-only publish boundary before adding backend
-implementation, then document real runtime commands and provider configuration here.
-The .env.example contains proposed names only and is not loaded by the current website.
-Keep server credentials out of client bundles. Use separate test and production services.
+## Private backend
+Supabase Edge Functions are the server runtime. The current public-only build
+does not make `backend/` executable. See `backend-runtime.md` for the first
+function deployment and its access check. Complete the remaining M2 business
+decisions before implementing the class and payment workflows.
+The build does not automatically load `.env`; set the public key in the shell
+locally or in Netlify's build environment. Keep server credentials out of client
+bundles. Use separate test and production services when adding server features.
 
 ## Before real family data
 Implement verified access and family isolation; policy review; tested backups/recovery;
