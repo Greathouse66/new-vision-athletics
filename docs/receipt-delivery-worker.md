@@ -43,11 +43,13 @@ not offer an automatic resend button.
    tests before a domain is verified; it is not a production parent sender.
 3. Deploy `receipt-worker` with `npx.cmd supabase functions deploy receipt-worker --use-api`.
    Its `verify_jwt = false` setting is required for secret-key calls; the
-   `withSupabase({ auth: 'secret' })` wrapper still rejects unsigned requests.
+   `withSupabase({ auth: 'secret:receipt_worker_test' })` wrapper accepts only
+   that named secret key and rejects unauthenticated requests.
    Never call it from browser code or embed the Supabase secret key in `dist/`.
-4. Schedule a five-minute secret-key invocation using Supabase Vault,
-   `pg_cron`, and `pg_net` after the sender is configured. Keep that secret
-   out of SQL query history, source files and browser code. Monitor the job
+4. The five-minute invocation is configured in the hosted database using
+   Supabase Vault, `pg_cron`, and `pg_net`. See the operations notes below
+   to inspect or recreate the job after a database rebuild. Keep the secret
+   out of SQL query history, source files, and browser code. Monitor the job
    and `private.payment_receipt_outbox` for `review` and `retry` rows.
 5. With a synthetic coach-approved account and your own verified mailbox,
    temporarily enable delivery as database owner, confirm one test Venmo
@@ -61,8 +63,71 @@ not offer an automatic resend button.
    `private.billing_delivery_settings`. The ready flag can be set false to
    pause new confirmations and worker claims without deleting ledger rows.
 
-This setup has not been completed while the domain is inactive. The worker
-is prepared for Resend's HTTP API; no provider account, keys, scheduled job,
-or real email is created by this code. Automatic retries cannot guarantee
-exactly-once email delivery after the provider's idempotency window. Keep
-older uncertain events for human review instead of automatically resending.
+The named secret-key worker was deployed, a synthetic one-cent receipt reached
+the account owner's mailbox through Resend's development sender, and the
+five-minute job was verified returning HTTP 200 with `{"status":"idle"}`
+while delivery remained disabled. The domain is inactive; a verified sender
+and Supabase Auth custom SMTP are still needed before parent delivery.
+Automatic retries cannot guarantee exactly-once email delivery after the
+provider's idempotency window. Keep older uncertain events for human review
+instead of automatically resending.
+
+## Hosted receipt scheduler operations
+
+`20261003163000_receipt_scheduler_extensions.sql` installs `pg_net` and
+`pg_cron`. It does **not** create a scheduled job: the hosted job references
+a project URL and a Vault secret that should not be used in local databases.
+The hosted job is named `nva_receipt_worker_5m` (job ID 1 when created).
+Vault secret `nva_receipt_worker_key` stores the value of the named Supabase
+secret key `receipt_worker_test`. Never paste its decrypted value into SQL.
+
+Inspect the job and its recent database runs in Supabase SQL Editor:
+
+```sql
+select jobid, jobname, schedule, active
+from cron.job
+where jobname = 'nva_receipt_worker_5m';
+
+select jobid, status, return_message, start_time
+from cron.job_run_details
+where jobid = 1
+order by start_time desc
+limit 3;
+
+select id, status_code, content, error_msg
+from net._http_response
+order by id desc
+limit 3;
+```
+
+A `succeeded` cron run confirms that SQL queued the HTTP call; check the
+newer `net._http_response` rows separately for HTTP 200 and `idle` while
+delivery is disabled. HTTP responses are short-lived. If the database is
+rebuilt, first restore the Vault secret and verify its name, then recreate
+the job in the **hosted** SQL Editor:
+
+```sql
+select cron.schedule(
+  'nva_receipt_worker_5m',
+  '*/5 * * * *',
+  $job$
+  select net.http_post(
+    url := 'https://mmxvfsuxvodcqhiksxzr.supabase.co/functions/v1/receipt-worker',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'apikey', (
+        select decrypted_secret
+        from vault.decrypted_secrets
+        where name = 'nva_receipt_worker_key'
+      )
+    ),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 30000
+  );
+  $job$
+);
+```
+
+Check the returned job ID rather than assuming it will be 1 after a rebuild.
+Keep `private.billing_delivery_settings.enabled = false` until a verified
+sender, parent login email setup, and live delivery review are complete.
