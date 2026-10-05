@@ -7,6 +7,7 @@ const signOut = document.querySelector("#sign-out");
 const classDate = document.querySelector("#class-date");
 const roster = document.querySelector("#roster");
 let requestNumber = 0;
+let busy = false;
 
 function isRealDate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -17,6 +18,12 @@ function isRealDate(value) {
 function classTime(instant, timeZone) {
   return new Intl.DateTimeFormat("en-US", {
     timeZone, hour: "numeric", minute: "2-digit",
+  }).format(new Date(instant));
+}
+
+function markedTime(instant) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", dateStyle: "medium", timeStyle: "short",
   }).format(new Date(instant));
 }
 
@@ -31,6 +38,43 @@ function emptyMessage(message) {
   const paragraph = document.createElement("p");
   paragraph.textContent = message;
   roster.replaceChildren(paragraph);
+}
+
+async function saveAttendance(seat, nextStatus, currentMark) {
+  if (busy || currentMark?.status === nextStatus) return;
+  let reason = null;
+  if (currentMark) {
+    const answer = window.prompt(
+      `Why change ${nextStatus === "present" ? "to present" : "to absent"} for this athlete? (3–500 characters)`
+    );
+    if (answer === null) return;
+    reason = answer.trim();
+    if (reason.length < 3 || reason.length > 500) {
+      status.textContent = "Enter a correction reason of 3 to 500 characters.";
+      return;
+    }
+  }
+  busy = true;
+  classDate.disabled = true;
+  for (const button of roster.querySelectorAll("button")) button.disabled = true;
+  let message;
+  try {
+    const { error } = await supabase.rpc("record_class_attendance", {
+      p_seat_id: seat.id, p_status: nextStatus, p_reason: reason,
+    });
+    message = error
+      ? error.code === "55000" ? "Attendance opens when this class starts."
+        : error.code === "42501" ? "Coach access is no longer available."
+        : "Could not save attendance. Refresh the roster and try again."
+      : `${nextStatus === "present" ? "Present" : "Absent"} recorded${currentMark ? " as an audited correction" : ""}.`;
+  } catch {
+    message = "Could not save attendance. Refresh the roster and try again.";
+  } finally {
+    busy = false;
+    classDate.disabled = false;
+    try { await loadRoster(); status.textContent = message; }
+    catch { status.textContent = "Attendance may have saved, but the roster could not refresh. Reload before another change."; }
+  }
 }
 
 async function loadRoster() {
@@ -70,11 +114,16 @@ async function loadRoster() {
   ]);
   if (request !== requestNumber) return;
   const athleteIds = [...new Set(seats.map((seat) => seat.athlete_id))];
-  const athletes = athleteIds.length ? await checkedList(
-    supabase.from("athletes")
-      .select("id, display_name", { count: "exact" }).in("id", athleteIds),
-    "Athlete list"
-  ) : [];
+  const seatIds = seats.map((seat) => seat.id);
+  const [athletes, attendance, audit] = seatIds.length ? await Promise.all([
+    checkedList(supabase.from("athletes")
+      .select("id, display_name", { count: "exact" }).in("id", athleteIds), "Athlete list"),
+    checkedList(supabase.from("class_attendance")
+      .select("seat_id, status", { count: "exact" }).in("seat_id", seatIds), "Attendance list"),
+    checkedList(supabase.from("class_attendance_audit")
+      .select("id, seat_id, old_status, new_status, reason, changed_at", { count: "exact" })
+      .in("seat_id", seatIds).order("changed_at").order("id"), "Attendance history"),
+  ]) : [[], [], []];
   if (request !== requestNumber) return;
 
   const sections = [];
@@ -94,8 +143,38 @@ async function loadRoster() {
     for (const seat of confirmed) {
       const item = document.createElement("li");
       const athlete = athletes.find((entry) => entry.id === seat.athlete_id);
-      item.textContent = `${athlete?.display_name ?? "Athlete needs review"} · ` +
-        (seat.seat_kind === "regular" ? "Regular" : "Drop-in");
+      const mark = attendance.find((entry) => entry.seat_id === seat.id);
+      const label = document.createElement("span");
+      label.textContent = `${athlete?.display_name ?? "Athlete needs review"} · ` +
+        `${seat.seat_kind === "regular" ? "Regular" : "Drop-in"} · ` +
+        (mark?.status ?? "Not marked");
+      item.append(label);
+      if (new Date(occurrence.starts_at).getTime() <= Date.now()) {
+        for (const nextStatus of ["present", "absent"]) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "secondary";
+          button.textContent = nextStatus === "present" ? "Present" : "Absent";
+          button.disabled = busy || mark?.status === nextStatus;
+          button.addEventListener("click", () => saveAttendance(seat, nextStatus, mark));
+          item.append(button);
+        }
+      }
+      const history = audit.filter((entry) => entry.seat_id === seat.id);
+      if (history.length) {
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = "Attendance history (Minot time)";
+        const historyList = document.createElement("ul");
+        for (const event of history) {
+          const entry = document.createElement("li");
+          entry.textContent = `${event.old_status ?? "Unmarked"} → ${event.new_status} · ` +
+            `${markedTime(event.changed_at)}${event.reason ? ` · ${event.reason}` : ""}`;
+          historyList.append(entry);
+        }
+        details.append(summary, historyList);
+        item.append(details);
+      }
       list.append(item);
     }
     if (!confirmed.length) {

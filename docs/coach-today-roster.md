@@ -11,8 +11,10 @@ Supabase row policies separately restrict these source tables to a coach.
 The page includes no names in its static build and does not publish a public
 link to the coach route.
 
-This screen is read-only. It does not infer attendance from a confirmed seat,
-mark an athlete absent or present, change a class venue, or contact a parent.
-Attendance and audited corrections need their own checked database workflow.
+The roster does not infer attendance from a confirmed seat. Once a class starts,
+a coach can mark an active seat present or absent through the checked database
+function. Corrections require a reason and remain visible in the history.
+See `docs/coach-attendance.md` for the attendance rules.
+The page does not change a venue or contact a parent.
 Until a venue and open dates are saved and the coach assigns actual seats, the
 page correctly shows an empty day.
