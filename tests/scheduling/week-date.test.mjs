@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { currentOrNextMondayChicago, isMondayDate, classDatesForWeek } from "../../scripts/coach/week-date.mjs";
+import { currentOrNextMondayChicago, isMondayDate, classDatesForWeek, todayChicago } from "../../scripts/coach/week-date.mjs";
 
 test("the week picker follows Minot time rather than browser UTC", () => {
   assert.equal(currentOrNextMondayChicago(new Date("2026-10-03T19:00:00Z")), "2026-10-05");
@@ -20,4 +20,10 @@ test("class dates stay within the chosen Monday through Friday", () => {
     "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09",
   ]);
   assert.deepEqual(classDatesForWeek("2026-10-06"), []);
+});
+
+test("today follows Minot calendar at UTC midnight and at daylight saving change", () => {
+  assert.equal(todayChicago(new Date("2026-10-05T03:00:00Z")), "2026-10-04");
+  assert.equal(todayChicago(new Date("2026-10-05T06:00:00Z")), "2026-10-05");
+  assert.equal(todayChicago(new Date("2026-11-01T06:00:00Z")), "2026-11-01");
 });

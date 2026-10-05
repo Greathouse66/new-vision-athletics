@@ -1,10 +1,14 @@
 // Use Minot's named zone rather than the coach's browser zone or a fixed GMT offset.
-export function currentOrNextMondayChicago(now = new Date()) {
+export function todayChicago(now = new Date()) {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit",
   }).formatToParts(now);
   const local = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
-  const date = new Date(Date.UTC(Number(local.year), Number(local.month) - 1, Number(local.day)));
+  return `${local.year}-${local.month}-${local.day}`;
+}
+
+export function currentOrNextMondayChicago(now = new Date()) {
+  const date = new Date(`${todayChicago(now)}T00:00:00Z`);
   const isoWeekday = date.getUTCDay() || 7;
   date.setUTCDate(date.getUTCDate() + ((8 - isoWeekday) % 7));
   return date.toISOString().slice(0, 10);
