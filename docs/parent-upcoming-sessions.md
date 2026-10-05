@@ -16,8 +16,9 @@ Times use each dated venue's `America/Chicago` IANA zone. The page shows at
 most 200 upcoming sessions and labels that limit. A coach's confirmed manual
 drop-in and a regular reservation appear the same way for the parent.
 
-The page cannot request a new drop-in, cancel a place, change the venue, or
-send a message. Those actions need checked links or a verified parent request
-flow. A parent without accepted athlete access is directed back to the
+The page links to a checked drop-in request flow. A pending request does not
+appear as a confirmed session until a coach approves it. The page cannot
+cancel a place, change the venue, or send a message. A parent without accepted
+athlete access is directed back to the
 invitation list on My athletes. The SQL rollback test covers two families and
 immediate revocation without retaining synthetic records.
