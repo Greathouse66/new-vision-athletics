@@ -1,35 +1,31 @@
 # Reviewed guardian access
 
-This slice prepares a guardian invitation for an existing family. It adds a
-coach-only family access screen, an email-bound invitation record, an explicit
-acceptance step on the parent portal, a coach revocation action, and an audit
-record for membership changes. It does **not** send email or create an Auth user.
+Coach → Families → Invite parent sends a one-time sign-in link for the selected
+athlete's family account. New addresses are provisioned through Supabase Auth;
+existing confirmed accounts receive a magic link. The parent explicitly accepts
+the email-bound family invitation before accessing athletes, sessions or balances.
+The public sign-in form continues to use `shouldCreateUser: false`.
 
 ## Deploy order
 
-1. Review and apply `supabase/migrations/20260929213200_guardian_invitations.sql`
-   and `20260929215600_guardian_email_return_type.sql` after the two existing
-   migrations. Run `npx.cmd supabase db push --dry-run`
-   before `npx.cmd supabase db push` on Windows. The migration creates no family
-   data or invitations. Apply it before using the new coach screen.
-2. Build/publish the site with the existing Supabase publishable key. The new
-   coach URL is `/coach/families.html`; it is not linked from the public site.
-3. Sign in with a coach account already provisioned in `coach_users`. The
-   browser checks that role for navigation, while database functions check it
-   again on every privileged call.
+Follow [parent-invitations-deployment.md](parent-invitations-deployment.md).
+Apply the delivery migration, deploy `coach-invite-parent` with JWT verification
+enabled, then publish the frontend. SMTP and the canonical callback URL must
+already be configured. No additional email provider key is needed by this flow.
 
 ## Coach workflow
 
-1. Review the family's records and verify the guardian's authority and exact
-   email through an appropriate private channel. Select the family on the
-   coach screen and approve that email. Approval expires after seven days.
-2. For a new email, an authorized administrator must create/invite that user
-   through Supabase Auth. The public sign-in form does not create users.
-   Configure custom SMTP and test delivery before onboarding parents outside
-   the Supabase project team. No message is sent by the coach screen.
-3. The guardian opens the normal sign-in page with that email, then explicitly
-   accepts the family invitation on `/parent/`. The database checks the current
-   confirmed Auth email and atomically creates the family membership.
+1. Select the athlete's family account; the dropdown includes linked athlete
+   names. Verify the parent's exact email and choose **Invite parent**.
+2. The server checks the current coach role, saves or reuses the pending family
+   approval, and sends the Auth email through the configured SMTP service.
+   The family approval expires after seven days. The one-time Auth link has its
+   own shorter expiry; **Resend email** provides a fresh link without extending
+   the family approval. Use the latest email's link.
+3. The parent opens the email link and chooses **Accept access** on `/parent/`.
+   The database checks the current confirmed Auth email and atomically creates
+   the family membership. A coach role routes to `/coach/` after sign-in;
+   an account with both roles may open `/parent/` to accept a family invitation.
 4. A coach can cancel a pending invitation or revoke an accepted membership.
    A revoked membership cannot be restored by its already-accepted invitation;
    a new approval is required. A coach may review membership changes in
@@ -58,7 +54,7 @@ Use only temporary test families and accounts; remove them afterward.
   the guardian remains signed in. The old invitation cannot restore access.
 - The audit table records each grant and revocation with family, account,
   action, time, and actor when a signed-in actor exists. Administrative SQL
-  changes can have a null actor. Neither parent nor anonymous API access can
+changes can have a null actor. Neither parent nor anonymous API access can
   read it.
 - Confirm no secret key, Auth user list, or private database table appears in
   the generated `dist/` files.
@@ -76,6 +72,7 @@ again. The dummy family's invitation, audit rows, and family record were deleted
 post-cleanup counts for those three tables were all zero. The pre-cleanup audit
 event counts were not recorded, so event contents still need a direct check.
 
-Automatic invitation email, Auth account creation, custom SMTP, wrong-email
-acceptance, expiry, and a complete second-guardian browser test remain before
-real parent rollout.
+This historical hosted test predates automatic email delivery. The delivery
+implementation has automated PostgreSQL permission tests and server email-flow
+tests; run `npm.cmd run test:access`. A hosted browser test with a new parent,
+an existing parent, and an unrelated family remains part of deployment.

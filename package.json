@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test:access": "node --test tests/access/*.test.mjs",
     "build": "node scripts/build-site.mjs",
     "validate:roster": "node scripts/validate-roster.mjs",
     "preview:design": "node scripts/build-design-preview.mjs"
@@ -11,6 +12,7 @@
     "node": "22.x"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "esbuild": "^0.28.2",
     "supabase": "^2.118.0"
   },

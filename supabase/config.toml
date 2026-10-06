@@ -385,6 +385,9 @@ deno_version = 2
 [functions.coach-gateway]
 verify_jwt = true
 
+[functions.coach-invite-parent]
+verify_jwt = true
+
 [functions.billing-export]
 verify_jwt = true
 
