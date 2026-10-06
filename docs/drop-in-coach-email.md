@@ -9,7 +9,9 @@ requests remain visible in the dashboard but are not emailed retroactively.
 The email shows the athlete, group, class date and time in the venue's time zone,
 venue, and a link to `/coach/drop-ins.html`. The link requires coach sign-in.
 The request remains pending and does not reserve a place until approved. The
-coach still contacts the parent directly after approving or declining.
+requesting parent receives an automatic confirmation after approval once the
+[parent approval update](drop-in-parent-email.md) is deployed. Declines still
+require direct parent contact.
 
 ## Deploy in this order
 
@@ -65,7 +67,8 @@ access earlier, invite them again and have them accept before testing.
    schedule template alone will not appear in the parent's picker.
 2. As the linked parent, submit a **new** eligible drop-in request.
 3. Leave it pending while checking the coach's inbox and spam folder. The worker
-   handles one queued recipient per minute, so allow several minutes if there
+   handles one coach notification and one parent approval per minute after the
+   parent approval update, so allow several minutes if there
    are other queued messages. Resend should show a new message.
 4. Confirm the athlete, class time, venue, and link. Open the link and verify it
    leads to the coach's pending requests (or asks for coach sign-in first).

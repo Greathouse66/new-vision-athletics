@@ -16,22 +16,41 @@ export function notificationSettings(env) {
   }
   return { apiKey, from, reviewUrl: new URL("/coach/drop-ins.html", origin).href };
 }
-export function renderDropInNotification(payload) {
-  if (!UUID.test(payload.requestId) || !UUID.test(payload.coachId) ||
+function notificationDetails(payload, recipientId, link, path) {
+  if (!UUID.test(payload.requestId) || !UUID.test(recipientId) ||
       !EMAIL.test(payload.to ?? "") || !EMAIL.test(payload.from ?? "") ||
       typeof payload.startsAt !== "string" || !/(Z|[+-]\d{2}:\d{2})$/.test(payload.startsAt) ||
       !Number.isFinite(Date.parse(payload.startsAt))) throw new Error("Invalid notification record");
-  const review = new URL(payload.reviewUrl);
+  const review = new URL(link);
   if (review.protocol !== "https:" || review.username || review.password || review.port ||
-      review.pathname !== "/coach/drop-ins.html" || review.search || review.hash) throw new Error("Invalid review link");
+      review.pathname !== path || review.search || review.hash) throw new Error("Invalid portal link");
   const athlete = label(payload.athleteName);
   const group = label(payload.classLabel);
   const location = label(payload.locationName);
-  const when = new Intl.DateTimeFormat("en-US", { timeZone: payload.timeZone,
+  const when = new Intl.DateTimeFormat("en-US", { timeZone: label(payload.timeZone),
     weekday: "long", month: "long", day: "numeric", year: "numeric",
     hour: "numeric", minute: "2-digit", timeZoneName: "short" }).format(new Date(payload.startsAt));
+  return { athlete, group, location, when, review };
+}
+export function renderDropInNotification(payload) {
+  const { athlete, group, location, when, review } = notificationDetails(
+    payload, payload.coachId, payload.reviewUrl, "/coach/drop-ins.html");
   const subject = "New drop-in request | New Vision Athletics";
   const text = `A parent requested a drop-in.\n\nAthlete: ${athlete}\nClass: ${group}\nWhen: ${when}\nVenue: ${location}\n\nReview the request: ${review.href}\nSign in with your coach email if prompted.\n\nThis request does not reserve a place. Approve or decline it in the Coach Dashboard.`;
   const html = `<h1>New drop-in request</h1><p>A parent requested a drop-in.</p><p><strong>Athlete:</strong> ${escape(athlete)}<br><strong>Class:</strong> ${escape(group)}<br><strong>When:</strong> ${escape(when)}<br><strong>Venue:</strong> ${escape(location)}</p><p><a href="${escape(review.href)}">Review drop-in requests</a></p><p>Sign in with your coach email if prompted. This request does not reserve a place. Approve or decline it in the Coach Dashboard.</p>`;
+  return { subject, text, html };
+}
+
+export function approvalNotificationSettings(env) {
+  const { apiKey, from, reviewUrl } = notificationSettings(env);
+  return { apiKey, from, portalUrl: new URL("/parent/sessions.html", reviewUrl).href };
+}
+export function renderDropInApprovalNotification(payload) {
+  if (!UUID.test(payload.seatId)) throw new Error("Confirmed place required");
+  const { athlete, group, location, when, review } = notificationDetails(
+    payload, payload.parentId, payload.portalUrl, "/parent/sessions.html");
+  const subject = "Your drop-in is approved | New Vision Athletics";
+  const text = `Your drop-in request has been approved. A place is reserved for your athlete.\n\nAthlete: ${athlete}\nClass: ${group}\nWhen: ${when}\nVenue: ${location}\n\nView upcoming sessions: ${review.href}\nSign in with the parent email you used to request this drop-in if prompted.`;
+  const html = `<h1>Your drop-in is approved</h1><p>Your drop-in request has been approved. A place is reserved for your athlete.</p><p><strong>Athlete:</strong> ${escape(athlete)}<br><strong>Class:</strong> ${escape(group)}<br><strong>When:</strong> ${escape(when)}<br><strong>Venue:</strong> ${escape(location)}</p><p><a href="${escape(review.href)}">View upcoming sessions</a></p><p>Sign in with the parent email you used to request this drop-in if prompted.</p>`;
   return { subject, text, html };
 }
