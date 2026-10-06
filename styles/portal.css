@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+:root { font-family: system-ui, sans-serif; color: #303636; background: #f3f8f8; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; padding: 1.25rem; display: grid; place-items: center; }
+.card { width: min(100%, 36rem); padding: clamp(1.5rem, 5vw, 2.5rem); background: white; border-radius: 1rem; box-shadow: 0 1rem 3rem #18363816; }
+.brand { color: #146b72; font-weight: 800; text-decoration: none; }
+h1 { margin: 1.5rem 0 .5rem; font-size: 2rem; }
+h2 { margin: 1.25rem 0 .25rem; font-size: 1.25rem; }
+p { line-height: 1.55; }
+label { display: block; margin: 1.5rem 0 .4rem; font-weight: 700; }
+input, select { width: 100%; padding: .85rem; border: 1px solid #7a9699; border-radius: .5rem; font: inherit; background: white; }
+button { margin-top: 1rem; padding: .85rem 1.2rem; border: 0; border-radius: .5rem; background: #146b72; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: .55; cursor: wait; }
+button.secondary { margin: 0; padding: .55rem .8rem; background: #e8f5f5; color: #17484d; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #0b606a; outline-offset: 3px; }
+.portal-header { display: flex; gap: 1rem; align-items: center; justify-content: space-between; }
+.card li { margin: .75rem 0; line-height: 1.5; }
+.card li button { margin: .4rem 0 .4rem .75rem; }
+.note { margin-top: 2rem; color: #4b6265; }
+[hidden] { display: none !important; }
+
+/* Parent home: Stitch-inspired mobile layout, scoped to the parent dashboard. */
+.parent-dashboard {
+  --parent-ink: #303636;
+  --parent-aqua: #27f5f5;
+  --parent-muted: #434847;
+  display: block;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #f7faf9;
+  color: #181c1c;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+.parent-dashboard h1,
+.parent-dashboard h2,
+.parent-dashboard h3,
+.parent-dashboard .parent-brand,
+.parent-dashboard .parent-kicker,
+.parent-dashboard .parent-count,
+.parent-dashboard .parent-group-chip,
+.parent-dashboard .parent-section-link,
+.parent-dashboard .parent-bottom-nav {
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .035em;
+}
+.parent-dashboard a { color: inherit; }
+.parent-dashboard h2 { margin: 0; font-size: 1.5rem; line-height: 1.1; }
+.parent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  min-height: 4.4rem;
+  padding: max(.55rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) .55rem max(1rem, env(safe-area-inset-left));
+  background: var(--parent-ink);
+  color: white;
+  box-shadow: 0 2px 12px #1b212122;
+}
+.parent-brand { display: block; min-width: 0; font-size: 1.28rem; line-height: 1; font-weight: 800; text-decoration: none; }
+.parent-brand span { color: var(--parent-aqua); }
+.parent-brand small { display: block; width: fit-content; margin-top: .3rem; padding: .17rem .42rem; border-radius: 99px; background: #002525; color: var(--parent-aqua); font-size: .69rem; letter-spacing: .1em; }
+.parent-dashboard .parent-sign-out { margin: 0; min-height: 2.75rem; padding: .5rem .7rem; border: 1px solid #b5c3c3; background: transparent; color: white; font-size: .8rem; white-space: nowrap; }
+.parent-main { width: min(calc(100% - 2rem), 64rem); margin: 0 auto; padding: 1.3rem 0 calc(6.5rem + env(safe-area-inset-bottom)); }
+.parent-dashboard .parent-main > h1 { margin: .2rem 0 .7rem; font-size: clamp(1.9rem, 6vw, 2.7rem); line-height: 1; }
+.parent-main > #status:not(:empty) { margin: .4rem 0 1rem; color: #17484d; }
+.parent-invitations { margin: .75rem 0 1.2rem; }
+.parent-invitations h2 { margin-bottom: .65rem; }
+.parent-invitations ul, .parent-sessions ul { margin: 0; padding: 0; list-style: none; }
+.parent-invitation-card { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; padding: 1rem; border-radius: .85rem; border-top: 4px solid var(--parent-aqua); background: white; box-shadow: 0 4px 16px #18363812; }
+.parent-invitation-card > span { overflow-wrap: anywhere; font-size: .86rem; font-weight: 600; }
+.parent-dashboard .parent-invitation-card button { margin: 0; min-height: 2.75rem; background: var(--parent-aqua); color: #002020; }
+.parent-empty { padding: 1.35rem; border-radius: .85rem; background: white; box-shadow: 0 4px 16px #18363812; }
+.parent-empty p { color: var(--parent-muted); font-size: .9rem; }
+.parent-switcher { margin: 0 0 1.1rem; }
+.parent-switcher label { margin: 0 0 .35rem; font-size: .75rem; }
+.parent-switcher select { min-height: 2.9rem; }
+.parent-section-heading { display: flex; gap: .5rem; align-items: center; justify-content: space-between; margin-bottom: .7rem; }
+.parent-count { flex: 0 0 auto; padding: .25rem .55rem; border-radius: 99px; background: #e6e9e8; font-size: .79rem; font-weight: 700; }
+.parent-athlete-grid { display: grid; gap: .7rem; }
+.parent-family-heading { grid-column: 1 / -1; margin: .8rem 0 -.3rem; font-size: 1.05rem; color: var(--parent-muted); }
+.parent-athlete-card { display: flex; align-items: center; gap: .9rem; min-width: 0; padding: 1rem; border-radius: .85rem; background: white; box-shadow: 0 4px 16px #18363812; }
+.parent-athlete-initial { display: grid; place-items: center; flex: 0 0 3.5rem; width: 3.5rem; height: 3.5rem; border-radius: .7rem; background: var(--parent-ink); color: var(--parent-aqua); font-family: "Barlow Condensed", Impact, sans-serif; font-size: 2rem; font-weight: 800; }
+.parent-athlete-card > div { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .6rem; min-width: 0; }
+.parent-athlete-card h3 { margin: 0; font-size: 1.35rem; line-height: 1; overflow-wrap: anywhere; }
+.parent-group-chip { display: inline-block; padding: .22rem .55rem; border-radius: 99px; background: #e0fafa; color: #004f50; font-size: .78rem; font-weight: 700; }
+.parent-tuition { overflow: hidden; margin: 1.3rem 0; border-radius: .85rem; background: white; box-shadow: 0 4px 16px #18363812; }
+.parent-tuition-head { padding: 1.15rem; background: var(--parent-ink); color: white; }
+.parent-kicker { color: var(--parent-aqua); font-size: .85rem; font-weight: 700; }
+.parent-tuition-head h2 { margin: .35rem 0; }
+.parent-tuition-head p { margin: .5rem 0 0; color: #eef5f4; font-size: 1rem; font-weight: 600; }
+.parent-tuition-foot { padding: .9rem 1.15rem; }
+.parent-tuition-foot p { margin: 0 0 .7rem; color: var(--parent-muted); font-size: .8rem; }
+.parent-tuition-foot a, .parent-section-link { display: flex; justify-content: space-between; gap: .7rem; align-items: center; min-height: 2.75rem; padding: .65rem .8rem; border-radius: .55rem; background: #ebeeee; color: var(--parent-ink); font-size: .94rem; font-weight: 700; text-decoration: none; }
+.parent-sessions { padding: 1.1rem; border-radius: .85rem; background: white; box-shadow: 0 4px 16px #18363812; }
+.parent-sessions li { margin: .5rem 0; padding: .7rem .8rem; border-radius: .5rem; background: #f1f4f3; color: var(--parent-muted); font-size: .85rem; }
+.parent-section-link { margin-top: .55rem; }
+.parent-bottom-nav { position: fixed; z-index: 10; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-around; min-height: calc(4rem + env(safe-area-inset-bottom)); padding: 0 max(.35rem, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(.35rem, env(safe-area-inset-left)); border-top: 1px solid #d9e2e1; background: #f7faf9f5; backdrop-filter: blur(12px); }
+.parent-bottom-nav a { display: grid; place-items: center; flex: 1; min-width: 0; min-height: 3.5rem; border-top: 3px solid transparent; color: var(--parent-muted); font-size: .9rem; font-weight: 700; text-align: center; text-decoration: none; }
+.parent-bottom-nav a[aria-current="page"] { border-color: var(--parent-aqua); color: #005757; }
+.parent-dashboard a:focus-visible, .parent-dashboard button:focus-visible, .parent-dashboard select:focus-visible { outline: 3px solid #005757; outline-offset: 3px; }
+.parent-header a:focus-visible, .parent-header button:focus-visible { outline-color: var(--parent-aqua); }
+@media (min-width: 700px) {
+  .parent-main { padding-top: 2rem; }
+  .parent-athlete-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .parent-bottom-nav { position: static; max-width: 64rem; margin: 2rem auto 0; border: 0; background: transparent; }
+}
+
+/* Shared Stitch design system for the remaining private portal pages. */
+.portal-coach, .portal-parent, .portal-auth {
+  --portal-ink: #303636;
+  --portal-aqua: #27f5f5;
+  --portal-muted: #434847;
+  color: #181c1c;
+  background: #f7faf9;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+.portal-coach, .portal-parent { display: block; min-height: 100vh; padding: 0; }
+.portal-coach .card, .portal-parent .card { width: 100%; max-width: none; padding: 0 0 calc(6rem + env(safe-area-inset-bottom)); background: transparent; border-radius: 0; box-shadow: none; }
+.portal-coach .portal-header, .portal-parent .portal-header {
+  min-height: 4.35rem; padding: max(.65rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) .65rem max(1rem, env(safe-area-inset-left));
+  background: var(--portal-ink); color: white; box-shadow: 0 2px 12px #1b212122;
+}
+.portal-coach .portal-header .brand, .portal-parent .portal-header .brand {
+  max-width: 66%; color: white; font-family: "Barlow Condensed", Impact, sans-serif; font-size: 1.25rem;
+  font-weight: 800; text-transform: uppercase; letter-spacing: .05em; line-height: 1.1;
+}
+.portal-coach .portal-header .brand::after { content: "Coach workspace"; }
+.portal-parent .portal-header .brand::after { content: "Parent portal"; }
+.portal-coach .portal-header .brand::after, .portal-parent .portal-header .brand::after { display: block; margin-top: .3rem; color: var(--portal-aqua); font-size: .78rem; letter-spacing: .12em; }
+.portal-coach .portal-header button, .portal-parent .portal-header button { min-height: 2.75rem; padding: .5rem .7rem; color: white; background: transparent; border: 1px solid #b5c3c3; white-space: nowrap; }
+.portal-coach .card > h1, .portal-parent .card > h1,
+.portal-coach .card > #status, .portal-parent .card > #status,
+.portal-coach .card > #coach-content, .portal-parent .card > #family-content {
+  width: min(calc(100% - 2rem), 64rem); margin-left: auto; margin-right: auto;
+}
+.portal-coach .card > h1, .portal-parent .card > h1 { margin-top: 1.4rem; margin-bottom: .65rem; }
+.portal-coach h1, .portal-parent h1, .portal-auth h1,
+.portal-coach h2, .portal-parent h2, .portal-auth h2,
+.portal-coach h3, .portal-parent h3 {
+  font-family: "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; letter-spacing: .035em; line-height: 1.1;
+}
+.portal-coach h1, .portal-parent h1 { font-size: clamp(2rem, 6vw, 3rem); }
+.portal-coach h2, .portal-parent h2 { font-size: 1.55rem; }
+.portal-coach h3, .portal-parent h3 { font-size: 1.25rem; }
+.portal-coach .card > #status:not(:empty), .portal-parent .card > #status:not(:empty) { color: #17484d; margin-bottom: 1rem; }
+.portal-coach .card > #coach-content > section, .portal-parent .card > #family-content > section {
+  margin: 1rem 0; padding: clamp(1rem, 4vw, 1.5rem); border-radius: .85rem;
+  background: white; box-shadow: 0 4px 16px #18363812;
+}
+.portal-coach .card > #coach-content > p:first-child, .portal-parent .card > #family-content > p:first-child { color: var(--portal-muted); font-size: .86rem; }
+.portal-coach .card a, .portal-parent .card a, .portal-auth .card a { color: #005757; font-weight: 700; text-underline-offset: .18em; }
+.portal-coach .card .portal-header .brand, .portal-parent .card .portal-header .brand { color: white; text-decoration: none; }
+.portal-coach .card ul, .portal-parent .card ul { list-style: none; padding: 0; }
+.portal-coach .card li, .portal-parent .card li { margin: .6rem 0; padding: .85rem 1rem; border-radius: .65rem; background: #f1f4f3; overflow-wrap: anywhere; }
+.portal-coach .card li button, .portal-parent .card li button { min-height: 2.75rem; margin-top: .45rem; }
+.portal-coach .card form, .portal-parent .card form { margin: .8rem 0; }
+.portal-coach .card label, .portal-parent .card label, .portal-auth .card label { margin: 1rem 0 .35rem; font-size: .87rem; }
+.portal-coach .card input, .portal-coach .card select, .portal-coach .card textarea,
+.portal-parent .card input, .portal-parent .card select, .portal-parent .card textarea,
+.portal-auth .card input { min-height: 2.85rem; padding: .7rem .85rem; border-color: #7a9699; border-radius: .55rem; font: inherit; background: white; }
+.portal-coach .card textarea, .portal-parent .card textarea { display: block; width: 100%; min-height: 5rem; }
+.portal-coach .card input[type="checkbox"], .portal-parent .card input[type="checkbox"] { width: 1.2rem; min-height: 1.2rem; padding: 0; margin: 0 .45rem 0 0; vertical-align: middle; }
+.portal-coach .card fieldset, .portal-parent .card fieldset { min-width: 0; padding: 1rem; margin: 1rem 0; border: 1px solid #c3c7c7; border-radius: .6rem; }
+.portal-coach .card button:not(.secondary), .portal-parent .card button:not(.secondary), .portal-auth .card button:not(.secondary) { min-height: 2.85rem; background: var(--portal-ink); color: white; }
+.portal-coach .card .portal-header button.secondary, .portal-parent .card .portal-header button.secondary { color: white; background: transparent; }
+.portal-coach .card button.secondary, .portal-parent .card button.secondary { min-height: 2.75rem; background: #e0fafa; color: #004f50; }
+.portal-coach .card .note, .portal-parent .card .note { padding: .9rem 1rem; border-radius: .6rem; background: #e6e9e8; color: var(--portal-muted); font-size: .83rem; }
+.portal-mobile-nav { position: fixed; z-index: 10; left: 0; right: 0; bottom: 0; display: flex; min-height: calc(4rem + env(safe-area-inset-bottom)); padding: 0 max(.35rem, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(.35rem, env(safe-area-inset-left)); border-top: 1px solid #d9e2e1; background: #f7faf9f5; backdrop-filter: blur(12px); }
+.portal-coach .card .portal-mobile-nav a, .portal-parent .card .portal-mobile-nav a { display: grid; place-items: center; flex: 1; min-width: 0; min-height: 3.5rem; border-top: 3px solid transparent; color: var(--portal-muted); font-family: "Barlow Condensed", Impact, sans-serif; font-size: .91rem; font-weight: 700; text-transform: uppercase; text-align: center; text-decoration: none; }
+.portal-coach .card .portal-mobile-nav a[aria-current="page"], .portal-parent .card .portal-mobile-nav a[aria-current="page"] { border-color: var(--portal-aqua); color: #005757; }
+.portal-coach :focus-visible, .portal-parent :focus-visible, .portal-auth :focus-visible { outline: 3px solid #005757; outline-offset: 3px; }
+.portal-coach .portal-header :focus-visible, .portal-parent .portal-header :focus-visible { outline-color: var(--portal-aqua); }
+.portal-auth { min-height: 100dvh; padding: 1rem; }
+.portal-auth .card { width: min(100%, 33rem); padding: 0 1.4rem 1.5rem; overflow: hidden; box-shadow: 0 12px 30px #18363816; }
+.portal-auth .card > .brand { display: block; margin: 0 -1.4rem; padding: 1.1rem 1.4rem; background: var(--portal-ink); color: var(--portal-aqua); font-family: "Barlow Condensed", Impact, sans-serif; font-size: 1.35rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: .05em; }
+.portal-auth h1 { font-size: 2.5rem; }
+.portal-auth .card > p { font-size: .9rem; }
+.portal-auth .card form button { width: 100%; }
+@media (min-width: 700px) {
+  .portal-coach .card > #coach-content > section, .portal-parent .card > #family-content > section { padding: 1.7rem; }
+  .portal-mobile-nav { position: static; max-width: 64rem; margin: 1.5rem auto 0; border: 0; background: transparent; }
+  .portal-coach .card, .portal-parent .card { padding-bottom: 2rem; }
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Weekly venue | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/schedule.js"></script>
+</head>
+<body class="portal-coach">
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Plan the class week</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <p><a href="/coach/index.html">Coach workspace</a></p>
+      <p>Choose a location for the week starting Monday. All times below are in Minot local time. You can change the choice until dated classes are created for that week.</p>
+      <form id="venue-form">
+        <label for="week-start">Monday of class week</label>
+        <input id="week-start" name="weekStart" type="date" required>
+        <label for="venue">Venue</label>
+        <select id="venue" name="venue" required>
+          <option value="">Choose a venue</option>
+        </select>
+        <button id="save-venue" type="submit">Save weekly venue</button>
+      </form>
+      <p id="current-venue" role="status" aria-live="polite"></p>
+      <form id="dates-form">
+        <h2>Create dated classes</h2>
+        <p>After saving the venue, select only dates confirmed open. Each selected date creates its scheduled classes at the weekly venue. Leave holidays and closures unchecked.</p>
+        <div id="open-dates"></div>
+        <button id="create-dates" type="submit" disabled>Create classes on selected dates</button>
+      </form>
+      <p id="dated-status" role="status" aria-live="polite"></p>
+      <h2>Weekly classes</h2>
+      <ul>
+        <li>Monday: Post-Bigs 6–7 pm; Advanced 7–8 pm</li>
+        <li>Tuesday: Foundational 6–7 pm</li>
+        <li>Wednesday: Post-Bigs 6–7 pm; Advanced 7–8 pm</li>
+        <li>Thursday: Foundational 6–7 pm</li>
+        <li>Friday: Intro 6–7 pm; Advanced 7–8 pm</li>
+      </ul>
+      <p class="note">Capacity is 10 per class. Dated classes do not reserve seats or notify parents. Review the venue and open dates before creating them; correcting a created class requires a separate reviewed process.</p>
+      <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
+        <a href="/coach/index.html">Dashboard</a>
+        <a href="/coach/records.html">Athletes</a>
+        <a href="/coach/groups.html">Groups</a>
+        <a href="/coach/billing.html">Tuition</a>
+      </nav>
+    </div>
+  </main>
+</body>
+</html>

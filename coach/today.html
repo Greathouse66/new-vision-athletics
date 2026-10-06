@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Today roster | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css">
+  <script type="module" src="/coach/today.js"></script>
+</head>
+<body class="portal-coach">
+  <main class="card">
+    <header class="portal-header">
+      <a href="/" class="brand">New Vision Athletics</a>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </header>
+    <h1>Today roster</h1>
+    <p id="status" role="status" aria-live="polite">Checking coach access…</p>
+    <div id="coach-content" hidden>
+      <p><a href="/coach/index.html">Coach workspace</a> · <a href="/coach/schedule.html">Plan class dates</a> · <a href="/coach/classes.html">Class places</a></p>
+      <label for="class-date">Class date in Minot</label>
+      <input id="class-date" type="date" required>
+      <div id="roster" aria-live="polite"></div>
+      <p class="note">Only a coach can mark a confirmed seat after class starts. Changing a mark requires a reason and keeps the prior mark in the audit history. Attendance does not decide makeup credit, billing, or cancellation policy.</p>
+      <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
+        <a href="/coach/index.html">Dashboard</a>
+        <a href="/coach/records.html">Athletes</a>
+        <a href="/coach/groups.html">Groups</a>
+        <a href="/coach/billing.html">Tuition</a>
+      </nav>
+    </div>
+  </main>
+</body>
+</html>
