@@ -57,7 +57,8 @@ async function decide(entry, approve) {
         : error.code === "23505" ? "This athlete already has a confirmed place. Review class places."
         : error.code === "42501" ? "Access changed. Reload and review the request."
         : "Could not review the request. Reload before trying again."
-      : `${approve ? "Approved and reserved" : "Declined"}. Contact the parent directly.`;
+      : approve ? "Approved and reserved. Parent email confirmation is handled automatically."
+        : "Declined. Contact the parent directly.";
   } catch {
     message = "The decision may have saved. Reload before trying again.";
   }
