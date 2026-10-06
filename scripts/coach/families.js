@@ -4,13 +4,53 @@ const status = document.querySelector("#status");
 const content = document.querySelector("#coach-content");
 const familySelect = document.querySelector("#family");
 const inviteForm = document.querySelector("#invite-form");
-const inviteButton = inviteForm.querySelector("button");
 const invitationList = document.querySelector("#invitations");
 const guardianList = document.querySelector("#guardians");
 const contactList = document.querySelector("#billing-contacts");
 const contactForm = document.querySelector("#billing-contact-form");
-const contactButton = contactForm.querySelector("button");
 const signOut = document.querySelector("#sign-out");
+let savingAccess = false;
+
+function setAccessBusy(busy) {
+  savingAccess = busy;
+  familySelect.disabled = busy;
+  for (const button of content.querySelectorAll("button")) button.disabled = busy;
+}
+
+async function sendInvitation(familyId, email) {
+  if (savingAccess || !familyId) return;
+  setAccessBusy(true);
+  setStatus("Sending invitation…");
+  try {
+    const { data, error } = await supabase.functions.invoke("coach-invite-parent", {
+      body: { family_id: familyId, email },
+    });
+    let code = data?.code;
+    if (error?.context instanceof Response) {
+      try { code = (await error.context.json()).code; } catch { /* Use the generic retry message. */ }
+    }
+    const messages = {
+      send_in_progress: "An invitation email is still being sent. Please wait a few minutes before resending.",
+      wait_before_resending: "Please wait two minutes before sending another link to this email.",
+      already_linked: "That email already has access to this family.",
+      family_not_found: "This family account is unavailable. Refresh the page and try again.",
+      coach_required: "Coach access is required to send invitations.",
+      sign_in_required: "Please sign in again before sending an invitation.",
+      email_setup_required: "Invitation email is being set up. Please try again later.",
+      email_failed: "The invitation is saved, but we could not send the email. Wait two minutes, then choose Resend email.",
+      invalid_request: "Choose a family account and check the parent’s email.",
+    };
+    if (!error && code === "email_sent") {
+      inviteForm.reset();
+      setStatus("Invitation email sent. The parent can open the link and choose Accept access.");
+    } else {
+      setStatus(messages[code] ?? "Could not confirm the email was sent. Refresh invitations and try resending after two minutes.");
+    }
+    await loadFamilyAccess().catch(() => setStatus(status.textContent + " Refresh the page to see the latest invitations."));
+  } catch {
+    setStatus("Could not confirm the email was sent. Refresh invitations and try resending after two minutes.");
+  } finally { setAccessBusy(false); }
+}
 
 function setStatus(message) {
   status.textContent = message;
@@ -26,6 +66,7 @@ function item(label, action, callback) {
     button.type = "button";
     button.className = "secondary";
     button.textContent = action;
+    button.disabled = savingAccess;
     button.addEventListener("click", callback);
     li.append(button);
   }
@@ -74,7 +115,9 @@ async function loadFamilyAccess() {
   );
   for (const invite of pending) {
     const expires = new Date(invite.expires_at).toLocaleDateString();
-    invitationList.append(item(`${invite.email} · expires ${expires}`, "Cancel", async () => {
+    const invitation = item(`${invite.email} · pending acceptance · expires ${expires}`, "Resend email",
+      () => sendInvitation(familyId, invite.email));
+    const cancel = item("", "Cancel", async () => {
       if (!confirm(`Cancel the invitation for ${invite.email}?`)) return;
       const { error } = await supabase.rpc("revoke_guardian_invitation", {
         p_invitation_id: invite.id,
@@ -82,7 +125,9 @@ async function loadFamilyAccess() {
       if (error) { setStatus("Could not cancel this invitation."); return; }
       setStatus("Invitation cancelled.");
       await loadFamilyAccess().catch(() => setStatus("Could not refresh family access."));
-    }));
+    }).querySelector("button");
+    invitation.append(cancel);
+    invitationList.append(invitation);
   }
   if (!pending.length) invitationList.append(item("No pending invitations."));
 
@@ -113,13 +158,19 @@ async function start() {
   if (!coach) { setStatus("This account does not have coach access."); return; }
 
   signOut.hidden = false;
-  const families = await supabase.from("families").select("id, display_name").order("display_name");
+  const [families, athletes] = await Promise.all([
+    supabase.from("families").select("id, display_name").order("display_name"),
+    supabase.from("athletes").select("family_id, display_name").order("display_name"),
+  ]);
   if (families.error) throw families.error;
+  if (athletes.error) throw athletes.error;
   if (!families.data.length) { setStatus("No parent accounts have been added yet."); return; }
   for (const family of families.data) {
     const option = document.createElement("option");
     option.value = family.id;
-    option.textContent = family.display_name;
+    const names = athletes.data.filter((athlete) => athlete.family_id === family.id)
+      .map((athlete) => athlete.display_name);
+    option.textContent = names.length ? `${family.display_name} — ${names.join(", ")}` : family.display_name;
     familySelect.append(option);
   }
   await loadFamilyAccess();
@@ -134,12 +185,12 @@ familySelect.addEventListener("change", () => {
 
 contactForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (savingAccess) return;
   if (!familySelect.value) { setStatus("Choose a parent account."); return; }
   const familyId = familySelect.value;
   const email = contactForm.elements.email.value.trim();
   if (!confirm("Approve " + email + " for future receipt emails to this parent account? This does not grant portal access.")) return;
-  contactButton.disabled = true;
-  familySelect.disabled = true;
+  setAccessBusy(true);
   try {
     const { error } = await supabase.rpc("set_family_billing_contact", {
       p_family_id: familyId, p_email: email,
@@ -156,35 +207,14 @@ contactForm.addEventListener("submit", async (event) => {
   } catch {
     setStatus("Could not save the receipt email. Please try again.");
   } finally {
-    contactButton.disabled = false;
-    familySelect.disabled = false;
+    setAccessBusy(false);
   }
 });
 
 inviteForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  inviteButton.disabled = true;
   const email = inviteForm.elements.email.value.trim();
-  try {
-    const { error } = await supabase.rpc("create_guardian_invitation", {
-      p_family_id: familySelect.value, p_email: email,
-    });
-    if (error) {
-      setStatus(error.message.includes("already pending")
-        ? "An invitation for that email is already pending."
-        : error.message.includes("already has family access")
-          ? "That email already has access to this family."
-          : "Could not approve the invitation. Check the email and try again.");
-      return;
-    }
-    inviteForm.reset();
-    setStatus("Invitation approved. No email was sent. If this is a new account, an administrator must set it up in Auth.");
-    await loadFamilyAccess().catch(() => setStatus("Approved, but could not refresh invitations."));
-  } catch {
-    setStatus("Could not approve the invitation. Please try again.");
-  } finally {
-    inviteButton.disabled = false;
-  }
+  await sendInvitation(familySelect.value, email);
 });
 
 signOut.addEventListener("click", async () => {
