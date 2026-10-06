@@ -2,45 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>Coach workspace | New Vision Athletics</title>
   <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/portal.css">
+  <link rel="stylesheet" href="/styles/coach-dashboard.css">
   <script type="module" src="/coach/index.js"></script>
 </head>
-<body>
-  <main class="card">
-    <header class="portal-header">
-      <a href="/" class="brand">New Vision Athletics</a>
-      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
-    </header>
-    <h1>Coach workspace</h1>
+<body class="coach-dashboard">
+  <header class="dashboard-header">
+    <a class="dashboard-brand" href="/" aria-label="New Vision Athletics home">NEW VISION <span>ATHLETICS</span></a>
+    <span class="dashboard-role">Coach workspace</span>
+    <button id="sign-out" type="button" class="dashboard-sign-out" hidden>Sign out</button>
+  </header>
+  <main class="dashboard-main">
     <p id="status" role="status" aria-live="polite">Checking coach access…</p>
     <div id="coach-content" hidden>
-      <nav aria-label="Coach tools">
-        <ul>
-          <li><a href="/coach/today.html">Today roster</a></li>
-          <li><a href="/coach/records.html">Athlete roster and group assignments</a></li>
-          <li><a href="/coach/groups.html">Skill groups</a></li>
-          <li><a href="/coach/schedule.html">Weekly venue</a></li>
-          <li><a href="/coach/classes.html">Regular places and dated seats</a></li>
-          <li><a href="/coach/drop-ins.html">Parent drop-in requests</a></li>
-          <li><a href="/coach/cancellations.html">Parent cancellations</a></li>
-          <li><a href="/coach/families.html">Parent account access</a></li>
-          <li><a href="/coach/billing.html">Monthly tuition</a></li>
-        </ul>
-      </nav>
-      <section aria-labelledby="overview-heading">
-        <h2 id="overview-heading">Records at a glance</h2>
-        <ul>
-          <li>Athletes: <strong id="athlete-count">—</strong></li>
-          <li>Parent accounts: <strong id="family-count">—</strong></li>
-          <li>Active skill groups: <strong id="group-count">—</strong></li>
-          <li>Dated classes: <strong id="class-count">—</strong></li>
-        </ul>
+      <section class="dashboard-hero" aria-labelledby="dashboard-heading">
+        <span class="dashboard-eyebrow"><span class="dashboard-dot" aria-hidden="true"></span> Training operations</span>
+        <h1 id="dashboard-heading">Welcome, Coach</h1>
+        <p>Keep your athletes, sessions, parent access, and tuition in one place.</p>
+        <div class="dashboard-actions">
+          <a href="/coach/records.html">Add athlete <span aria-hidden="true">↗</span></a>
+          <a href="/coach/billing.html" class="dashboard-action-alt">Review tuition <span aria-hidden="true">↗</span></a>
+        </div>
       </section>
-      <p class="note">Choose the weekly venue before creating dated classes. Today lists confirmed seats and lets a coach mark attendance after class starts.</p>
+
+      <section class="dashboard-metrics" aria-label="Records at a glance">
+        <div class="metric-card"><span>Athletes enrolled</span><strong id="athlete-count">—</strong><small>Roster records</small></div>
+        <div class="metric-card"><span>Parent accounts</span><strong id="family-count">—</strong><small>Athlete accounts</small></div>
+        <div class="metric-card"><span>Active groups</span><strong id="group-count">—</strong><small>Skill groups</small></div>
+        <div class="metric-card"><span>Dated classes</span><strong id="class-count">—</strong><small>Created class dates</small></div>
+      </section>
+
+      <section class="dashboard-today" aria-labelledby="dashboard-today-heading">
+        <div>
+          <span class="dashboard-kicker">Your day</span>
+          <h2 id="dashboard-today-heading">Today &amp; attendance</h2>
+          <p>See confirmed class places and mark attendance after a class begins.</p>
+        </div>
+        <a href="/coach/today.html">Open Today <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="dashboard-tools" aria-labelledby="dashboard-tools-heading">
+        <h2 id="dashboard-tools-heading">Core management tools</h2>
+        <nav class="dashboard-tool-grid" aria-label="Core coach tools">
+          <a class="tool-card" href="/coach/records.html">
+            <span class="tool-tag">01 · Roster</span>
+            <strong>Athlete roster</strong>
+            <span>Manage athletes, group assignments, and parent accounts.</span>
+            <span class="tool-action">Open roster <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="tool-card" href="/coach/groups.html">
+            <span class="tool-tag">02 · Groups</span>
+            <strong>Skill groups</strong>
+            <span>Review Foundational, Post-Bigs, and Advanced groups.</span>
+            <span class="tool-action">Manage groups <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="tool-card" href="/coach/families.html">
+            <span class="tool-tag">03 · Access</span>
+            <strong>Parent account access</strong>
+            <span>Review guardian invitations and receipt contacts.</span>
+            <span class="tool-action">Guardian access <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="tool-card" href="/coach/billing.html">
+            <span class="tool-tag">04 · Tuition</span>
+            <strong>Monthly tuition</strong>
+            <span>Assign charges and review verified Venmo records.</span>
+            <span class="tool-action">Open tuition <span aria-hidden="true">→</span></span>
+          </a>
+        </nav>
+      </section>
+
+      <section class="dashboard-more" aria-labelledby="dashboard-more-heading">
+        <h2 id="dashboard-more-heading">Classes &amp; requests</h2>
+        <nav aria-label="More coach tools">
+          <a href="/coach/schedule.html">Weekly venue <span aria-hidden="true">→</span></a>
+          <a href="/coach/classes.html">Class places <span aria-hidden="true">→</span></a>
+          <a href="/coach/drop-ins.html">Drop-in requests <span aria-hidden="true">→</span></a>
+          <a href="/coach/cancellations.html">Parent cancellations <span aria-hidden="true">→</span></a>
+        </nav>
+      </section>
+      <nav class="dashboard-bottom-nav" aria-label="Coach shortcuts">
+        <a href="/coach/index.html" aria-current="page">Dashboard</a>
+        <a href="/coach/records.html">Athletes</a>
+        <a href="/coach/groups.html">Groups</a>
+        <a href="/coach/billing.html">Tuition</a>
+      </nav>
     </div>
   </main>
 </body>

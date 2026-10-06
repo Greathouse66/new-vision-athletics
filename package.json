@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "node scripts/build-site.mjs",
-    "validate:roster": "node scripts/validate-roster.mjs"
+    "validate:roster": "node scripts/validate-roster.mjs",
+    "preview:design": "node scripts/build-design-preview.mjs"
   },
   "engines": {
     "node": "22.x"

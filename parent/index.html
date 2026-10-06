@@ -2,30 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>My athletes | New Vision Athletics</title>
   <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/portal.css">
   <script type="module" src="/parent/index.js"></script>
 </head>
-<body>
-  <main class="card">
-    <header class="portal-header">
-      <a href="/" class="brand">New Vision Athletics</a>
-      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
-    </header>
-    <h1>My athletes</h1>
+<body class="parent-dashboard">
+  <header class="parent-header">
+    <a href="/" class="parent-brand" aria-label="New Vision Athletics home">New Vision <span>Athletics</span><small>Parent portal</small></a>
+    <button id="sign-out" type="button" class="parent-sign-out" hidden>Sign out</button>
+  </header>
+  <main class="parent-main">
+    <h1>Welcome to your portal</h1>
     <p id="status" role="status" aria-live="polite">Loading your athletes…</p>
-    <section id="invitations-section" hidden>
-      <h2>Parent account invitations</h2>
-      <ul id="invitations"></ul>
-    </section>
-    <div id="family-content" hidden>
-      <div id="families"></div>
-      <p><a href="/parent/payments.html">View my tuition and payments</a></p>
-      <p><a href="/parent/sessions.html">View upcoming sessions</a></p>
-      <p class="note">Sessions appear after a coach confirms your athlete's place in a dated class.</p>
+    <div id="parent-portal" hidden>
+      <section id="invitations-section" class="parent-invitations" aria-labelledby="invitations-heading" hidden>
+        <h2 id="invitations-heading">Parent account invitations</h2>
+        <ul id="invitations"></ul>
+      </section>
+      <section id="empty-state" class="parent-empty" hidden>
+        <h2>No athletes linked yet</h2>
+        <p>Your athlete account will appear here after you accept an invitation from New Vision Athletics. If you expected access, please contact the coach.</p>
+      </section>
+      <div id="family-content" hidden>
+        <div id="account-switcher" class="parent-switcher" hidden>
+          <label for="account-filter">Parent account</label>
+          <select id="account-filter"></select>
+        </div>
+        <section class="parent-athletes" aria-labelledby="athletes-heading">
+          <div class="parent-section-heading">
+            <h2 id="athletes-heading">My athletes</h2>
+            <span id="athlete-total" class="parent-count"></span>
+          </div>
+          <div id="families" class="parent-athlete-grid"></div>
+        </section>
+        <section class="parent-tuition" aria-labelledby="tuition-heading">
+          <div class="parent-tuition-head">
+            <span class="parent-kicker">Account summary</span>
+            <h2 id="tuition-heading">Tuition &amp; payments</h2>
+            <p id="balance-summary">Loading tuition summary…</p>
+          </div>
+          <div class="parent-tuition-foot">
+            <p id="payment-info">Venmo payments are confirmed by the coach.</p>
+            <a href="/parent/payments.html">View tuition and payment history <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+        <section class="parent-sessions" aria-labelledby="sessions-heading">
+          <div class="parent-section-heading"><h2 id="sessions-heading">Upcoming sessions</h2></div>
+          <ul id="upcoming-preview"></ul>
+          <a class="parent-section-link" href="/parent/sessions.html">View confirmed sessions <span aria-hidden="true">→</span></a>
+          <a class="parent-section-link" href="/parent/drop-ins.html">Request a drop-in <span aria-hidden="true">→</span></a>
+        </section>
+      </div>
+      <nav class="parent-bottom-nav" aria-label="Parent shortcuts">
+        <a href="/parent/index.html" aria-current="page">Athletes</a>
+        <a href="/parent/payments.html">Tuition</a>
+        <a href="/parent/sessions.html">Sessions</a>
+        <a href="/parent/drop-ins.html">Drop-ins</a>
+      </nav>
     </div>
   </main>
 </body>

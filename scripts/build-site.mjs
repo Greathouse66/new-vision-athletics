@@ -30,6 +30,7 @@ const publicFiles = [
   "coach/records.html",
   "coach/billing.html",
   "styles/portal.css",
+  "styles/coach-dashboard.css",
 ];
 
 // Check required sources before replacing the generated output.

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/styles/portal.css">
   <script type="module" src="/coach/billing.js"></script>
 </head>
-<body>
+<body class="portal-coach">
   <main class="card">
     <header class="portal-header">
       <a href="/" class="brand">New Vision Athletics</a>
@@ -91,6 +91,12 @@
       <p class="note">Paid status comes from recorded Venmo payments. The
         receipt email is queued for delivery after payment is recorded;
         confirm its delivery separately.</p>
+      <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
+        <a href="/coach/index.html">Dashboard</a>
+        <a href="/coach/records.html">Athletes</a>
+        <a href="/coach/groups.html">Groups</a>
+        <a href="/coach/billing.html" aria-current="page">Tuition</a>
+      </nav>
     </div>
   </main>
 </body>
