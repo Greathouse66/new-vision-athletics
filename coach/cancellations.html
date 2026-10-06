@@ -19,8 +19,19 @@
     <p id="status" role="status" aria-live="polite">Checking coach access…</p>
     <div id="coach-content" hidden>
       <p><a href="/coach/index.html">Coach workspace</a> · <a href="/coach/classes.html">Class places</a></p>
+      <section aria-labelledby="email-heading">
+        <h2 id="email-heading">Email notifications</h2>
+        <form id="notification-form">
+          <label><input id="email-enabled" type="checkbox" disabled> Email me parent cancellations</label>
+          <p id="notification-email"></p>
+          <button id="save-notifications" type="submit" class="secondary" disabled>Save email preference</button>
+        </form>
+        <p id="notification-status" role="status" aria-live="polite">Loading email preference…</p>
+        <p class="note">Emails go to your verified coach sign-in address for new parent cancellations of regular sessions and drop-ins.</p>
+      </section>
+      <h2>Parent cancellation history</h2>
       <ul id="cancellations"></ul>
-      <p class="note">These cancellations freed one dated class place. A regular weekly assignment remains active. Review makeup eligibility separately and contact the parent directly; this screen sends no email.</p>
+      <p class="note">These cancellations freed one dated class place. A regular weekly assignment remains active. Review makeup eligibility separately and contact the parent directly.</p>
       <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
         <a href="/coach/index.html">Dashboard</a>
         <a href="/coach/records.html">Athletes</a>

@@ -33,7 +33,7 @@ async function cancelSeat(row) {
       return;
     }
     await loadSessions();
-    status.textContent = "Place cancelled and recorded for the coach. Makeup eligibility is reviewed separately; no email was sent.";
+    status.textContent = "Place cancelled and recorded for the coach. Makeup eligibility is reviewed separately.";
   } catch {
     status.textContent = "The cancellation may have saved. Reload your sessions before trying again.";
   } finally {
