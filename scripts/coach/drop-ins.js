@@ -4,7 +4,37 @@ const status = document.querySelector("#status");
 const content = document.querySelector("#coach-content");
 const signOut = document.querySelector("#sign-out");
 const list = document.querySelector("#requests");
+const notificationForm = document.querySelector("#notification-form");
+const emailEnabled = document.querySelector("#email-enabled");
+const notificationStatus = document.querySelector("#notification-status");
+const saveNotifications = document.querySelector("#save-notifications");
 let busy = false;
+
+async function loadEmailPreference() {
+  const { data, error } = await supabase.rpc("my_drop_in_email_preference");
+  if (error || !data?.[0]?.email) {
+    notificationStatus.textContent = "Email notifications are unavailable. Your coach sign-in email must be verified.";
+    return;
+  }
+  document.querySelector("#notification-email").textContent = `Send to: ${data[0].email}`;
+  emailEnabled.checked = data[0].enabled;
+  emailEnabled.disabled = saveNotifications.disabled = false;
+  notificationStatus.textContent = data[0].enabled ? "Email notifications are on for new requests." : "Email notifications are off.";
+}
+
+notificationForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (saveNotifications.disabled) return;
+  emailEnabled.disabled = saveNotifications.disabled = true;
+  try {
+    const { error } = await supabase.rpc("set_my_drop_in_email_preference", { p_enabled: emailEnabled.checked });
+    if (error) throw error;
+    await loadEmailPreference();
+  } catch {
+    notificationStatus.textContent = "Could not confirm your email preference was saved. Reload before trying again.";
+    emailEnabled.disabled = saveNotifications.disabled = false;
+  }
+});
 
 function when(instant, zone) {
   return new Intl.DateTimeFormat("en-US", {
@@ -87,6 +117,7 @@ async function start() {
   if (!coach) { status.textContent = "This account does not have coach access."; return; }
   signOut.hidden = false;
   await loadRequests();
+  await loadEmailPreference().catch(() => { notificationStatus.textContent = "Could not load email preferences. Please reload."; });
   content.hidden = false;
   status.textContent = "";
 }
