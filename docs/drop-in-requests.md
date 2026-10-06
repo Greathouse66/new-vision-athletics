@@ -16,8 +16,10 @@ the reserved seat on the request. Declining changes only the request. Approval
 requires the class to remain in the future, the requesting guardian still to
 have athlete access, and a free seat. A coach's separate cancellation keeps
 the request history and shows the parent `cancelled` on their request list.
-No messages or payment actions are sent. The coach contacts the parent after
-review until notifications are available. A person without athlete access
+Coaches can enable email notifications for new requests using their own verified
+sign-in email. See [deployment and testing](drop-in-coach-email.md). Notifications
+link to the protected review page; they do not approve requests or take payment.
+The coach still contacts the parent after review. A person without athlete access
 still needs the invitation or enrollment path; this is not a public form.
 
 The request table has no direct browser grants. Narrow checked functions expose

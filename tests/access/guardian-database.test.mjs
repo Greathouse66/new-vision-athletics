@@ -1,8 +1,6 @@
 import { before, after, test } from "node:test";
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
-import { PGlite } from "@electric-sql/pglite";
-import { btree_gist } from "@electric-sql/pglite/contrib/btree_gist";
+import { testDatabase } from "../helpers/database.mjs";
 
 // Real PostgreSQL functions and RLS in an isolated, disposable WASM database.
 // Supabase Auth is represented only by its ID/email/confirmation columns.
@@ -16,28 +14,7 @@ const otherFamily = "22222222-2222-4222-8222-222222222222";
 const athlete = "33333333-3333-4333-8333-333333333333";
 const otherAthlete = "44444444-4444-4444-8444-444444444444";
 
-before(async () => {
-  db = new PGlite({ extensions: { btree_gist } });
-  await db.exec(`
-    create role anon; create role authenticated; create role service_role bypassrls;
-    grant usage on schema public to anon, authenticated, service_role;
-    create schema auth; create schema extensions;
-    grant usage on schema auth to anon, authenticated, service_role;
-    create table auth.users(id uuid primary key, email varchar(255), email_confirmed_at timestamptz);
-    create function auth.uid() returns uuid language sql stable as $$
-      select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
-    $$;
-  `);
-  const directory = new URL("../../supabase/migrations/", import.meta.url);
-  for (const file of (await readdir(directory)).filter((name) => name.endsWith(".sql")).sort()) {
-    // Network/cron extensions belong to the hosted scheduler, not family permissions.
-    if (file.includes("receipt_scheduler_extensions")) continue;
-    if (file.includes("weekly_slots_and_dated_classes")) {
-      await db.exec("insert into public.skill_groups(name) values ('Foundational'), ('Post-Bigs'), ('Advanced')");
-    }
-    await db.exec(await readFile(new URL(file, directory), "utf8"));
-  }
-});
+before(async () => { db = await testDatabase(); });
 after(async () => { await db?.close(); });
 
 async function as(role, user = "") {
