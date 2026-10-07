@@ -123,269 +123,86 @@
   }
 }
 </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="m-0 p-0 bg-black text-white scroll-smooth">
-<!-- Header -->
-<header id="site-header" class="sticky top-0 z-50 bg-[#303636] text-[#27f5f5] px-4 py-4 flex items-center justify-between shadow-md transition-all duration-300 ease-in-out backdrop-blur-none">
-  <div class="shrink-0 pl-4 md:pl-8">
-  <a href="#" id="logo-link">
-    <img src="https://assets.codepen.io/14601186/logo.svg" alt="New Vision Logo" class="h-10">
-  </a>
-  </div>
-
-  <nav class="hidden lg:flex flex-1 justify-center gap-4 xl:gap-8 px-4" aria-label="Main navigation">
-    <a href="#about" class="font-narrow-heavy tracking-[0.1em] hover:text-white">About</a>
-    <a href="#features" class="font-narrow-heavy tracking-[0.1em] whitespace-nowrap hover:text-white">Training Plans</a>
-    <a href="#testimonials" class="font-narrow-heavy tracking-[0.1em] hover:text-white">Testimonials</a>
-  </nav>
-
-  <div class="flex shrink-0 items-center justify-end gap-3 pr-4 md:pr-8">
-    <a href="/auth/sign-in.html" class="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-[#27f5f5] px-4 py-2 font-semibold text-[#27f5f5] hover:bg-[#27f5f5] hover:text-[#303636] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27f5f5]">Sign in</a>
-    <button class="lg:hidden p-2" onclick="toggleMenu()" aria-label="Toggle menu">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-   <a href="javascript:void(0)" id="headerContactBtn" class="hidden md:inline-block whitespace-nowrap uppercase px-[35.2px] py-[10px] border border-[#27f5f5] text-[#27f5f5] rounded-full shadow-[4px_6px_3.2px_rgba(39,245,245,0.6)] hover:bg-white hover:text-black hover:ring-2 hover:ring-[#27f5f5] fade-in-slow delay-2 pulse-button">
-  Contact Us
-</a>
-  </div>
-</header>
-  <!-- Mobile Nav (Right-Aligned Vertical List) -->
-<div id="mobileMenu" class="hidden flex flex-col absolute top-[64px] right-4 bg-[#303636] px-6 py-4 space-y-4 w-fit rounded-bl-lg shadow-lg z-50 lg:hidden">
-
-  <a href="#about" class="text-[#27f5f5] font-narrow-heavy hover:text-white">About</a>
-  <a href="#features" class="text-[#27f5f5] font-narrow-heavy hover:text-white">Training Plans</a>
-  <a href="#testimonials" class="text-[#27f5f5] font-narrow-heavy hover:text-white">Testimonials</a>
-  <a href="https://calendly.com/emerywilliams4/newvision-basketball-training" target="_blank" class="text-[#27f5f5] font-narrow-heavy hover:text-white">Book Now</a>
-  <a href="/Pay-Now.html" class="text-[#27f5f5] font-narrow-heavy hover:text-white">Pay Now</a>
-</div>
-<!-- Hero -->
-<section id="hero" class="bg-cover bg-top text-center md:text-left min-h-screen
-  bg-[url('Assets/Images/Mobile-hero2.jpg')]
-  sm:bg-[url('Assets/Images/Tablet-hero-IMG.jpg')]
-  md:bg-[url('Assets/Images/Desktop-hero.jpg')]">
-
-  <div class="flex flex-col justify-center items-center md:items-start text-[#ffffff] px-[32px] min-h-screen md:min-h-[700px]">
-    
-    <!-- Container for centered content -->
-    <div class="w-full max-w-[700px] mx-auto flex flex-col items-center md:items-start gap-6">
-      
-      <h1 class="font-narrow-heavy text-[52px] md:text-[96px] leading-tight fade-in-slow text-center md:text-left">
-        <span id="typed-hero"></span>
-      </h1>
-
-      <h3 class="font-semibold text-lg md:text-2xl fade-in-slow delay-1 text-center md:text-left">
-        Helping young athletes grow on and off the court.
-      </h3>
-
-      <div class="flex flex-col items-center md:items-start gap-3 fade-in-slow delay-2">
-        <a href="https://calendly.com/emerywilliams4/newvision-basketball-training" target="_blank"
-          class="uppercase font-narrow-heavy px-[45.76px] py-[10px]
-                 border border-[#27f5f5] text-[#27f5f5] rounded-full
-                 shadow-[4px_6px_3.2px_rgba(39,245,245,0.6)]
-                 hover:bg-white hover:text-black hover:ring-2 hover:ring-[#27f5f5]
-                 pulse-button">
-          Book Now
-        </a>
-
-        <a href="/Pay-Now.html"
-          class="text-xs ml-4 text-[#27f5f5] hover:text-white text-center">
-          Already booked? Pay Now
-        </a>
-      </div>
-
+<body class="stitch-concept m-0 p-0 text-white scroll-smooth">
+<!-- Experimental homepage presentation; original application hooks are retained. -->
+<header id="site-header" class="concept-header bg-[#303636] shadow-md">
+  <div class="page-shell header-inner">
+    <a href="#" id="logo-link" class="brand-link" aria-label="New Vision Athletics home"><img src="https://assets.codepen.io/14601186/logo.svg" alt="New Vision Logo"></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#about">About</a><a href="#features">Training Plans</a><a href="#testimonials">Testimonials</a>
+      <a href="javascript:void(0)" id="headerContactBtn" class="header-contact">Contact Us</a>
+    </nav>
+    <div class="header-actions">
+      <a href="/auth/sign-in.html" class="button button-outline sign-in">Sign in</a>
+      <a href="https://calendly.com/emerywilliams4/newvision-basketball-training" target="_blank" class="button button-primary header-book">Book Now <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu" aria-controls="mobileMenu"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
     </div>
   </div>
-</section>
-  <!-- ABOUT SECTION -->
-  <section id="about" class="bg-white w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 pt-[64px] sm:pt-[80px] md:pt-[96px] pb-[32px] sm:pb-[48px] md:pb-[64px]">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
-   <div class="flex flex-col md:flex-row justify-between items-start gap-12">
-      <div class="flex flex-col md:flex-row items-center gap-8 md:w-[60%]">
-        <div class="flex flex-col items-center">
-          <h4 class="font-semibold text-[#666666] text-[32px] leading-[1.2] tracking-[.12em] text-center mb-4">Coach Emery<br />Williams</h4>
-          <div class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] rounded-full border-[2px] border-[#4ab5b5] overflow-hidden shadow-lg">
-
-            <img src="./Assets/Images/Headshot-Em.png" alt="Headshot" class="w-full h-full object-cover object-center rounded-full">
-          </div>
-        </div>
-       <div class="max-w-xl text-left font-regular text-[#666666] text-[18px] leading-[1.5] flex items-center">
-          <div>
-            <p class="mb-4">Former collegiate athlete with over a decade of experience developing youth on and off the court.</p>
-            <p class="mb-4">His coaching blends discipline, skill-building, and mentorship to help athletes grow not just as players — but as leaders.</p>
-            <p>Every session is purpose-driven, built around individual progress and long-term confidence.</p>
-          </div>
-        </div>
+</header>
+<div id="mobileMenu" class="hidden mobile-nav">
+  <nav aria-label="Mobile navigation"><a href="#about">About</a><a href="#features">Training Plans</a><a href="#testimonials">Testimonials</a><a href="https://calendly.com/emerywilliams4/newvision-basketball-training" target="_blank">Book Now</a><a href="/Pay-Now.html">Pay Now</a></nav>
+</div>
+<main>
+  <section id="hero" class="hero-section">
+    <div class="page-shell hero-grid">
+      <div class="hero-copy">
+        <p class="region-badge"><span aria-hidden="true"></span>Serving North &amp; South Dakota youth athletes</p>
+        <h1><span id="typed-hero"></span></h1>
+        <h3 class="hero-tagline">Helping young athletes grow on and off the court.</h3>
+        <div class="hero-actions"><a href="https://calendly.com/emerywilliams4/newvision-basketball-training" target="_blank" class="button button-primary button-large">Book Now <span aria-hidden="true">↗</span></a><a href="/Pay-Now.html" class="button button-outline button-large">Already booked? Pay Now</a></div>
+        <div class="proof-grid"><div><strong>10+</strong><span>Years of experience</span></div>
+<div><strong>1 on 1</strong><span>Focused Attention for Every Athlete</span></div>
+<div><strong>100%</strong><span>Focused on Character &amp; Growth</span></div></div>
       </div>
-      <div class="flex flex-col gap-6 items-center md:items-start self-center md:self-auto md:mr-[80px]">
-        <div class="w-[287px] h-[95px] bg-[#f9f9f9] rounded-[8px] p-6 text-center flex flex-col justify-center">
-          <h5 class="text-[#27f5f5] font-bold text-lg">10+</h5>
-         <p class="text-black text-sm font-bold">Years of experience</p>
-        </div>
-        <div class="w-[287px] h-[95px] bg-[#f9f9f9] rounded-[8px] p-6 text-center flex flex-col justify-center">
-          <h5 class="text-[#27f5f5] font-bold text-lg">1 on 1</h5>
-          <p class="text-black text-sm font-bold">Focused Attention for Every Athlete</p>
-        </div>
-        <div class="w-[287px] h-[95px] bg-[#f9f9f9] rounded-[8px] p-6 text-center flex flex-col justify-center">
-          <h5 class="text-[#27f5f5] font-bold text-lg">100%</h5>
-          <p class="text-black text-sm font-bold">Focused on Character & Growth</p>
-        </div>
+      <figure class="hero-photo">
+        <picture><source media="(max-width: 600px)" srcset="Assets/Images/Desktop-hero.jpg"><source media="(max-width: 900px)" srcset="Assets/Images/Tablet-hero-IMG.jpg"><img src="Assets/Images/Desktop-hero.jpg" alt="Coach Emery guiding young basketball athletes on the court" width="1440" height="1000" fetchpriority="high"></picture>
+        <figcaption><span class="photo-label">New Vision Athletics</span><strong>Purpose on and off the court.</strong></figcaption>
+      </figure>
+    </div>
+  </section>
+  <div class="impact-strip"><div class="page-shell impact-inner"><p>Skill-building</p><span aria-hidden="true">/</span><p>Discipline</p><span aria-hidden="true">/</span><p>Mentorship</p><span aria-hidden="true">/</span><p>Character &amp; Growth</p></div></div>
+  <section id="about" class="section-space about-section">
+    <div class="page-shell about-grid">
+      <figure class="coach-photo"><img src="./Assets/Images/Headshot-Em.png" alt="Coach Emery Williams" width="800" height="800"><figcaption><span class="photo-label">Former collegiate athlete</span><strong>Coach Emery Williams</strong></figcaption></figure>
+      <div class="about-copy"><div class="coach-heading"><p class="eyebrow">Meet your coach</p><h2>Coach Emery<br> <span>Williams</span></h2></div>
+        <div class="coach-story"><p>Former collegiate athlete with over a decade of experience developing youth on and off the court.</p><p>His coaching blends discipline, skill-building, and mentorship to help athletes grow not just as players — but as leaders.</p><p>Every session is purpose-driven, built around individual progress and long-term confidence.</p></div>
+        <div class="about-stats"><div><strong>10+</strong><span>Years of experience</span></div>
+<div><strong>1 on 1</strong><span>Focused Attention for Every Athlete</span></div>
+<div><strong>100%</strong><span>Focused on Character &amp; Growth</span></div></div>
       </div>
     </div>
   </section>
-  <section id="features" class="w-full min-h-[500px] px-[16px] sm:px-[24px] md:px-[32px] lg:px-[100px] pt-[32px] sm:pt-[48px] md:pt-[64px] pb-[64px] sm:pb-[80px] md:pb-[96px] bg-[#f9f9f9] text-[#303636]">
-  <h2 class="font-semibold text-center text-[32px] font-bold mb-12">Why Choose Coach Emery?</h2>
-  <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 md:gap-8">
-
-    <!-- Feature 1 -->
-    <div class="p-6 rounded-lg w-[300px] h-[360px] flex flex-col text-center">
-      <div class="w-[80px] h-[80px] bg-[#d9d9d9]/80 rounded-md flex items-center justify-center mx-auto mb-4">
-        <!-- User Check Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+  <section id="features" class="section-space features-section">
+    <span id="plans" class="anchor-alias" aria-hidden="true"></span>
+    <div class="page-shell"><div class="section-heading"><p class="eyebrow">Built around your athlete</p><h2>Why Choose <span>Coach Emery?</span></h2></div><div class="card-grid"><article class="feature-card"><div class="feature-card-heading"><div class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M16 11l2 2 4-4" />
-        </svg>
-      </div>
-      <h4 class="text-[32px] leading-[1.2] tracking-[.12em] mb-2">Personalized Coaching</h4>
-      <p class="text-sm">Every athlete gets a training plan tailored to their goals, strengths, and position.</p>
-    </div>
-
-    <!-- Feature 2 -->
-    <div class="p-6 rounded-lg w-[300px] h-[360px] flex flex-col text-center">
-      <div class="w-[80px] h-[80px] bg-[#d9d9d9]/80 rounded-md flex items-center justify-center mx-auto mb-4">
-        <!-- Repeat Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        </svg></div><h3>Personalized Coaching</h3></div><p>Every athlete gets a training plan tailored to their goals, strengths, and position.</p></article>
+<article class="feature-card"><div class="feature-card-heading"><div class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <polyline points="17 1 21 5 17 9" />
           <path d="M3 11V9a4 4 0 014-4h14" />
           <polyline points="7 23 3 19 7 15" />
           <path d="M21 13v2a4 4 0 01-4 4H3" />
-        </svg>
-      </div>
-      <h4 class="text-[32px] leading-[1.2] tracking-[.12em] mb-2">Consistency = Results</h4>
-      <p class="text-sm">Coach Emery teaches how to build habits and stay accountable — the real path to success.</p>
-    </div>
-
-    <!-- Feature 3 -->
-    <div class="p-6 rounded-lg w-[300px] h-[360px] flex flex-col text-center">
-      <div class="w-[80px] h-[80px] bg-[#d9d9d9]/80 rounded-md flex items-center justify-center mx-auto mb-4">
-        <!-- Users Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        </svg></div><h3>Consistency = Results</h3></div><p>Coach Emery teaches how to build habits and stay accountable — the real path to success.</p></article>
+<article class="feature-card"><div class="feature-card-heading"><div class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#27f5f5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M16 3.128a4 4 0 010 7.744" />
           <path d="M22 21v-2a4 4 0 00-3-3.87" />
           <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
-        </svg>
-      </div>
-      <h4 class="text-[32px] leading-[1.2] tracking-[.12em] mb-2">Mentorship Beyond the Court</h4>
-      <p class="text-sm">Athletes receive guidance on discipline, mindset, and leadership — not just drills.</p>
-    </div>
-
-  </div>
-</section>
-
-  <!-- TESTIMONIALS SECTION -->
-  <section id="testimonials" class="w-full min-h-[500px] bg-[#303636] px-[16px] sm:px-[24px] md:px-[32px] lg:px-[100px] py-[64px] sm:py-[80px] md:py-[96px]">
- 
-    <!-- Section Title -->
-    <h2 class="font-semibold text-center text-[32px] font-bold mb-12">
-      What Athletes &amp; Parents Are Saying?
-    </h2>
-
-    <!-- Testimonial Cards -->
-<div class="flex flex-wrap justify-center gap-6 md:gap-8 px-[12px]">
-
-  <!-- Testimonial 1 -->
-  <div class="bg-white text-black p-6 rounded-xl w-[290px] flex flex-col shadow-md">
-    <p class="text-left text-xl font-extrabold leading-snug mb-6">
-      “Coach Emery helped my daughter become more confident and focused — on and off the court.”
-    </p>
-    <div class="flex items-center">
-      <div class="w-10 h-10 rounded-full border-2 border-[#4ab5b5] overflow-hidden">
-        <img src="Assets/Images/avatar-jessica.jpg" alt="Jessica" class="w-full h-full object-cover rounded-full">
-      </div>
-      <div class="ml-4">
-        <p class="font-semibold text-[#27f5f5]">Jessica H.</p>
-        <p class="text-sm text-gray-500">Parent</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Testimonial 2 -->
-  <div class="bg-white text-black p-6 rounded-xl w-[290px] flex flex-col shadow-md">
-    <p class="text-left text-xl font-extrabold leading-snug mb-6">
-      “My son has grown tremendously. Emery really connects with young athletes.”
-    </p>
-    <div class="flex items-center">
-      <div class="w-10 h-10 rounded-full border-2 border-[#4ab5b5] overflow-hidden">
-        <img src="Assets/Images/avatar-dennis.jpg" alt="Dennis" class="w-full h-full object-cover rounded-full">
-      </div>
-      <div class="ml-4">
-        <p class="font-semibold text-[#27f5f5]">Dennis M.</p>
-        <p class="text-sm text-gray-500">Parent</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Testimonial 3 -->
-  <div class="bg-white text-black p-6 rounded-xl w-[290px] flex flex-col shadow-md">
-    <p class="text-left text-xl font-extrabold leading-snug mb-6">
-      “I improved my game and mindset every session. Coach pushes you the right way.”
-    </p>
-    <div class="flex items-center">
-      <div class="w-10 h-10 rounded-full border-2 border-[#4ab5b5] overflow-hidden">
-        <img src="Assets/Images/avatar-nate.jpg" alt="Nate" class="w-full h-full object-cover rounded-full">
-      </div>
-      <div class="ml-4">
-        <p class="font-semibold text-[#27f5f5]">Liam S.</p>
-        <p class="text-sm text-gray-500">College Prospect</p>
-      </div>
-    </div>
-  </div>
-
-</div>
-
+        </svg></div><h3>Mentorship Beyond the Court</h3></div><p>Athletes receive guidance on discipline, mindset, and leadership — not just drills.</p></article></div></div>
   </section>
-<!-- CTA SECTION -->
-  <section class="bg-[#4ab5b5] w-full h-auto md:h-[448px] flex flex-col items-center justify-center text-white px-4 sm:px-6 md:px-8 lg:px-[96px] py-16 sm:py-20 md:py-0 text-center">
-    
-  <h2 class="text-[32px] font-bold mt-12">
-    Ready to Level Up?
-  </h2>
-  
-  <p class="mt-16 max-w-xl text-2xl font-semibold">
-    Let's build a plan that gets your child results on and off the court.
-  </p>
-  
-  <a href="https://calendly.com/emerywilliams4/newvision-basketball-training"
-     target="_blank"
-     class="mt-10 uppercase px-8 py-4 border border-black text-black rounded-full transition-all duration-300 hover:translate-y-[-4px] hover:bg-black hover:text-white inline-block">
-    Book Now
-  </a>
-</section>
-  <!-- FOOTER -->
-  <footer class="bg-[#303636] text-white w-full px-[16px] sm:px-[24px] md:px-[32px] lg:px-[100px] py-[48px]">
-    <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-8">
-      
-      <!-- Left: Logo -->
-      <div class="w-[160px]">
-        <img src="https://assets.codepen.io/14601186/logo.svg" alt="Coach Emery Logo" class="w-full h-auto">
-      </div>
-
-      <!-- Center: Nav Links -->
-      <div class="flex gap-6">
-        <a href="#about" class="hover:underline">About</a>
-        <a href="#plans" class="hover:underline">Training Plans</a>
-        <a href="#testimonials" class="hover:underline">Testimonials</a>
-      </div>
-
-      <!-- Right: Copyright -->
-      <div class="text-sm text-gray-300">&copy; 2025 Newvision Athletic Training LLC. All rights reserved.</div>
-
-    </div>
-  </footer>
-
+  <section id="testimonials" class="section-space testimonials-section"><div class="page-shell"><div class="section-heading"><p class="eyebrow">On and off the court</p><h2>What Athletes &amp; Parents<br> <span>Are Saying?</span></h2></div><div class="card-grid"><figure class="quote-card"><span class="quote-mark" aria-hidden="true">“</span><blockquote>“Coach Emery helped my daughter become more confident and focused — on and off the court.”</blockquote><figcaption><img src="Assets/Images/avatar-jessica.jpg" alt="Jessica" width="48" height="48"><div><strong>Jessica H.</strong><span>Parent</span></div></figcaption></figure>
+<figure class="quote-card"><span class="quote-mark" aria-hidden="true">“</span><blockquote>“My son has grown tremendously. Emery really connects with young athletes.”</blockquote><figcaption><img src="Assets/Images/avatar-dennis.jpg" alt="Dennis" width="48" height="48"><div><strong>Dennis M.</strong><span>Parent</span></div></figcaption></figure>
+<figure class="quote-card"><span class="quote-mark" aria-hidden="true">“</span><blockquote>“I improved my game and mindset every session. Coach pushes you the right way.”</blockquote><figcaption><img src="Assets/Images/avatar-nate.jpg" alt="Nate" width="48" height="48"><div><strong>Liam S.</strong><span>College Prospect</span></div></figcaption></figure></div></div></section>
+  <section class="cta-section section-space"><div class="page-shell"><p class="eyebrow">Train with a purpose</p><h2>Ready to <span>Level Up?</span></h2><p class="cta-copy">Let's build a plan that gets your child results on and off the court.</p><div class="cta-actions"><a href="https://calendly.com/emerywilliams4/newvision-basketball-training" target="_blank" class="button button-primary button-large">Book Now <span aria-hidden="true">↗</span></a><button type="button" class="button button-outline button-large mobile-contact" onclick="document.getElementById('headerContactBtn').click()">Contact Us</button></div></div></section>
+</main>
+<footer class="concept-footer"><div class="page-shell footer-inner"><img src="https://assets.codepen.io/14601186/logo.svg" alt="Coach Emery Logo" class="footer-logo"><nav aria-label="Footer navigation"><a href="#about">About</a><a href="#plans">Training Plans</a><a href="#testimonials">Testimonials</a></nav><p>&copy; 2025 Newvision Athletic Training LLC. All rights reserved.</p></div></footer>
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     new Typed("#typed-hero", {
@@ -427,7 +244,7 @@
       action="https://usebasin.com/f/b5d29e21a683" 
       method="POST"
       class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl w-[90%] max-w-[500px] relative space-y-5 border-t-[6px] border-[#27f5f5] animate-fadeInSlow">
-    <button type="button" class="absolute top-4 right-4 text-black text-2xl" onclick="closeContactForm()">×</button>
+    <button type="button" class="absolute top-4 right-4 text-black text-2xl" onclick="closeContactForm()" aria-label="Close contact form">×</button>
     <h3 class="text-xl font-semibold mb-4 text-center text-[#00B5E2]">Ready to Ball? Let’s Chat</h3>
     <input type="text" name="Name" placeholder="Your Name" required 
   class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#27f5f5] transition text-black" />
