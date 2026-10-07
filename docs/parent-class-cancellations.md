@@ -14,8 +14,11 @@ coach sees parent cancellations at `/coach/cancellations.html`, including
 the athlete, class, venue, seat type, and cancellation time. A regular weekly
 assignment remains in force; only the selected dated seat is cancelled.
 Approval of makeup eligibility, credits, fees and refunds remains separate
-until Emery approves the policy. No email, SMS, or receipt is sent by this
-slice; the coach contacts the parent directly. The parent page says so.
+until Emery approves the policy. Coaches can enable email alerts for new parent
+cancellations on this page; see [notification deployment](parent-cancellation-coach-email.md).
+The email names the athlete and dated class and links to the protected cancellation
+history. The coach still contacts the parent directly about makeup eligibility.
+No parent cancellation email, SMS, receipt, credit, or refund is generated.
 
 Raw cancellation rows have no browser table grants. Narrow RPCs check current
 guardian or coach access. The rollback-only SQL gate covers cross-family

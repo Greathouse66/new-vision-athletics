@@ -76,9 +76,9 @@ select jobid, jobname, schedule, active
 from cron.job where jobname = 'nva_drop_in_notifications_1m';
 ```
 
-The worker HTTP response now has separate `parent` and `coach` results, for
-example `{"parent":{"status":"sent"},"coach":{"status":"idle"}}`.
-It attempts both queues each tick, even if one queue is unavailable, and returns
+The worker HTTP response has separate `parent` and `coach` results, plus a
+`cancellation` result after the [cancellation update](parent-cancellation-coach-email.md).
+It attempts each queue each tick, even if one queue is unavailable, and returns
 HTTP 503 for a queue error. Existing coach alerts keep their provider idempotency
 keys; parent confirmations use a separate key namespace.
 
