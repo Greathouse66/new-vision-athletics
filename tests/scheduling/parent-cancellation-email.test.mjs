@@ -113,7 +113,7 @@ test("all three email queues can send concurrently with separate event keys", { 
   };
   const response = await runNotifications(f.admin, coachConfig, parentConfig, send, f.log);
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { parent: { status: "sent" }, coach: { status: "sent" }, cancellation: { status: "sent" } });
+  assert.deepEqual(await response.json(), { parent: { status: "sent" }, coach: { status: "sent" }, cancellation: { status: "sent" }, report: { status: "idle" } });
   const messages = f.calls.filter((call) => call[0] === "email").map((call) => call[2]);
   assert.equal(new Set(messages.map((args) => args.headers["Idempotency-Key"])).size, 3);
   assert.equal(messages.filter((args) => JSON.parse(args.body).to[0] === payload.to).length, 2);

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow"><title>Progress reports | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css"><link rel="stylesheet" href="/styles/reports.css">
+  <script type="module" src="/coach/reports.js"></script>
+</head><body class="report-page">
+  <header class="report-header"><a href="/" class="brand">New Vision Athletics<small>Coach workspace</small></a><button id="sign-out" type="button" class="secondary" hidden>Sign out</button></header>
+  <main class="report-main">
+    <nav class="report-nav" aria-label="Coach tools"><a href="/coach/">Dashboard</a><a href="/coach/records.html">Athlete roster</a><a href="/coach/families.html">Parent access</a><a href="/coach/billing.html">Tuition</a><a href="/coach/reports.html" aria-current="page">Progress reports</a></nav>
+    <h1>Progress reports</h1>
+    <p class="report-intro">Upload an existing PDF for an athlete. Drafts are private; publish when it is ready for their linked parents.</p>
+    <p id="status" role="status" aria-live="polite">Checking your account…</p>
+    <div id="report-content" hidden><div class="report-toolbar"><div><label for="athlete">Athlete</label><select id="athlete" required></select></div><button id="new-report" type="button">New report</button></div><div class="report-columns"><section class="report-history" aria-labelledby="history-heading"><div class="report-column-heading"><h2 id="history-heading">Report history</h2><span id="report-total"></span></div><div id="report-list"></div><button id="load-more" type="button" class="secondary" hidden>Load older reports</button></section>
+<section class="report-editor" aria-labelledby="editor-heading"><h2 id="editor-heading">Upload a report</h2>
+<form id="report-form">
+  <label for="title">Report title</label><input id="title" name="title" maxlength="120" placeholder="October progress report" required>
+  <label for="report-date">Reporting date</label><input id="report-date" name="report_date" type="date" min="1900-01-01" max="2100-12-31" required>
+  <label for="coach-note">Message to parents (optional)</label><textarea id="coach-note" name="coach_note" maxlength="1000" placeholder="A short message to accompany the report"></textarea>
+  <label for="pdf" id="file-label">PDF report</label><input id="pdf" name="pdf" type="file" accept="application/pdf,.pdf" required>
+  <p id="current-file"></p><p class="note">PDF files up to 10 MB. Saving a draft does not notify parents. Preview and publish it from the report history when ready. Unpublish a report before editing or replacing its PDF.</p>
+  <button id="save-report" type="submit">Upload and save draft</button>
+</form></section></div></div>
+  </main>
+  <dialog id="pdf-viewer" aria-labelledby="pdf-heading">
+    <div class="pdf-toolbar"><h2 id="pdf-heading">Progress report</h2><div><a id="pdf-download">Download PDF</a><button id="pdf-close" type="button" class="secondary">Close</button></div></div>
+    <iframe title="Progress report PDF preview"></iframe>
+    <p class="pdf-fallback">If the preview does not display on your device, use Download PDF to open the report.</p>
+  </dialog>
+</body></html>

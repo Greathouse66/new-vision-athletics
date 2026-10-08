@@ -94,7 +94,7 @@ test("the scheduled worker processes both queues with separate recipients and ke
   const f = fixture({ coachJob: true });
   const response = await runNotifications(f.admin, coachConfig, parentConfig, f.send, f.log);
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { parent: { status: "sent" }, coach: { status: "sent" }, cancellation: { status: "idle" } });
+  assert.deepEqual(await response.json(), { parent: { status: "sent" }, coach: { status: "sent" }, cancellation: { status: "idle" }, report: { status: "idle" } });
   const requests = f.calls.filter((call) => call[0] === "email").map((call) => call[2]);
   assert.deepEqual(requests.map((args) => JSON.parse(args.body).to), [[payload.to], ["coach@example.invalid"]]);
   assert.notEqual(requests[0].headers["Idempotency-Key"], requests[1].headers["Idempotency-Key"]);

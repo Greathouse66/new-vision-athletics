@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow"><title>Progress reports | New Vision Athletics</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/styles/portal.css"><link rel="stylesheet" href="/styles/reports.css">
+  <script type="module" src="/parent/reports.js"></script>
+</head><body class="report-page">
+  <header class="report-header"><a href="/" class="brand">New Vision Athletics<small>Parent portal</small></a><button id="sign-out" type="button" class="secondary" hidden>Sign out</button></header>
+  <main class="report-main">
+    <nav class="report-nav" aria-label="Parent shortcuts"><a href="/parent/">My athletes</a><a href="/parent/payments.html">Tuition</a><a href="/parent/sessions.html">Sessions</a><a href="/parent/drop-ins.html">Drop-ins</a><a href="/parent/reports.html" aria-current="page">Progress reports</a></nav>
+    <h1>Progress reports</h1>
+    <p class="report-intro">View reports from Coach Emery and follow your athlete’s development over time.</p>
+    <p id="status" role="status" aria-live="polite">Checking your account…</p>
+    <div id="report-content" hidden><div class="report-toolbar"><div><label for="athlete">Athlete</label><select id="athlete" required></select></div></div><section class="parent-report-history" aria-labelledby="history-heading"><div class="report-column-heading"><h2 id="history-heading">Report history</h2><span id="report-total"></span></div><div id="report-list"></div><button id="load-more" type="button" class="secondary" hidden>Load older reports</button></section></div>
+  </main>
+  <dialog id="pdf-viewer" aria-labelledby="pdf-heading">
+    <div class="pdf-toolbar"><h2 id="pdf-heading">Progress report</h2><div><a id="pdf-download">Download PDF</a><button id="pdf-close" type="button" class="secondary">Close</button></div></div>
+    <iframe title="Progress report PDF preview"></iframe>
+    <p class="pdf-fallback">If the preview does not display on your device, use Download PDF to open the report.</p>
+  </dialog>
+</body></html>
