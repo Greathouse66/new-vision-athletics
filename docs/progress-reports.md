@@ -64,6 +64,8 @@ Local tests exercise real migrations and PostgreSQL RLS in PGlite with a minimal
 
 PDF buttons show loading, success, or failure feedback directly below each report's buttons. A stalled request stops after 20 seconds and allows another attempt. Downloads validate PDF bytes and size independently of the response MIME (some servers deliver PDFs as generic binary). Upload MIME validation remains unchanged. If a hosted download fails, record the visible message and safe Storage status code; do not make the bucket public or relax family access to troubleshoot it.
 
+Each preview/download now makes a GET to `/storage/v1/object/authenticated/athlete-progress-reports/<reserved-path>` with the current Auth session token in the Authorization header and the existing publishable key in the apikey header. No credentials appear in the URL. A fresh `cacheNonce` plus `cache: no-store` avoids reusing an older denied download response. This client update deploys through the preview build and requires no additional migration or worker deployment.
+
 ## Access and storage
 
 The `athlete-progress-reports` bucket is private, PDF-only, and limited to 10 MiB. Coaches can upload only to a server-reserved path on a draft. Client overwrites and deletions are denied. Each replacement gets a new immutable file path.

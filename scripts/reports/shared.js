@@ -1,5 +1,6 @@
 import { downloadName } from './files.mjs';
 import { fetchReportPdf } from './download.mjs';
+import { storageDownloadConfig } from '../auth/client.js';
 export const pageSize = 50;
 export function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -76,7 +77,7 @@ export function setupPdfViewer() {
   window.addEventListener('pagehide',closePdf);
 }
 export async function openPdf(client, file, title, download = false) {
-  const blob = await fetchReportPdf(client, file);
+  const blob = await fetchReportPdf(client, file, storageDownloadConfig);
   closePdf();
   if (download) {
     const url = URL.createObjectURL(blob), link = element('a');
