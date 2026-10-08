@@ -1,0 +1,60 @@
+/* Upload-only reports, scoped away from all existing portal screens. */
+.report-page { display:block; padding:0; font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:#f3f8f8; color:#243536; }
+.report-header { width:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem max(1rem,calc((100% - 72rem)/2)); background:#303636; color:white; }
+.report-header .brand { color:#27f5f5; }
+.report-header small { display:block; margin-top:.3rem; color:#d6e4e4; font-size:.75rem; }
+.report-main { width:min(calc(100% - 2rem),72rem); margin:0 auto; padding:1.5rem 0 3rem; }
+.report-main h1,.report-main h2,.report-main h3 { font-family:'Barlow Condensed',Impact,sans-serif; }
+.report-main h1 { font-size:clamp(2rem,5vw,3rem); margin:.5rem 0; }
+.report-main h2 { font-size:1.6rem; }
+.report-main h3 { font-size:1.4rem; margin:.2rem 0; overflow-wrap:anywhere; }
+.report-nav { display:flex; flex-wrap:wrap; gap:.6rem 1rem; padding:1rem 0; }
+.report-nav a { color:#135c63; min-height:2.75rem; display:inline-flex; align-items:center; font-size:.85rem; font-weight:700; }
+.report-intro { max-width:48rem; color:#4b6265; }
+.report-toolbar { display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end; justify-content:space-between; margin:1rem 0 1.5rem; }
+.report-toolbar > div { flex:1; max-width:30rem; min-width:0; }
+.report-toolbar label { margin:.25rem 0 .5rem; }
+.report-toolbar button { margin:0; }
+.report-columns { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:1.5rem; align-items:start; }
+.report-column-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.8rem; }
+.report-column-heading h2 { margin:0; }
+.report-column-heading span { font-size:.8rem; color:#4b6265; }
+#report-list { display:grid; gap:1rem; }
+.report-card,.report-editor { padding:1.25rem; border:1px solid #d6e4e4; border-radius:1rem; background:white; box-shadow:0 6px 24px #1836380c; min-width:0; }
+.report-card { border-top:4px solid #27f5f5; }
+.report-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem; }
+.report-date { margin:0; font-size:.8rem; color:#4b6265; }
+.report-card h2 { margin:.4rem 0; overflow-wrap:anywhere; }
+.report-badge { padding:.25rem .65rem; border-radius:999px; font-size:.72rem; font-weight:700; white-space:nowrap; }
+.report-badge.draft { background:#fff0cb; color:#6d4b00; }
+.report-badge.published { background:#d9f8f3; color:#07584f; }
+.report-note { white-space:pre-wrap; overflow-wrap:anywhere; font-size:.9rem; }
+.report-file-info { font-size:.75rem; color:#4b6265; overflow-wrap:anywhere; }
+.report-feedback:empty { display:none; }
+.report-feedback { margin:1rem 0 0; padding:.7rem; border-radius:.5rem; background:#e8f5f5; font-size:.85rem; overflow-wrap:anywhere; }
+.report-feedback[data-error="true"] { background:#fff0e8; color:#85320f; }
+.report-actions { display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1rem; }
+.report-actions button { margin:0; min-height:2.75rem; font-size:.78rem; }
+.report-editor h2 { margin:0; }
+.report-editor label { margin:1rem 0 .4rem; font-size:.85rem; }
+.report-editor textarea { width:100%; min-height:6rem; padding:.8rem; border:1px solid #7a9699; border-radius:.5rem; font:inherit; resize:vertical; }
+.report-editor .note { margin:1rem 0; font-size:.78rem; }
+.report-editor #current-file { font-size:.78rem; overflow-wrap:anywhere; }
+.report-empty { padding:1.4rem; margin:0; background:white; border-radius:.8rem; color:#4b6265; }
+.parent-report-history { max-width:52rem; }
+#pdf-viewer { width:min(calc(100% - 1rem),70rem); max-height:95dvh; padding:1rem; border:0; border-radius:.8rem; }
+#pdf-viewer::backdrop { background:#102222a8; }
+.pdf-toolbar { display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between; }
+.pdf-toolbar h2 { margin:0; font-size:1.2rem; overflow-wrap:anywhere; }
+.pdf-toolbar > div { display:flex; align-items:center; gap:1rem; }
+#pdf-download { color:#135c63; font-weight:700; }
+#pdf-viewer iframe { width:100%; height:65dvh; border:1px solid #d6e4e4; margin-top:1rem; }
+.pdf-fallback { color:#4b6265; font-size:.8rem; }
+@media(max-width:750px) {
+ .report-columns { grid-template-columns:minmax(0,1fr); }
+ .report-editor { order:-1; }
+ .report-header { padding:1rem; }
+ .report-card-head { flex-wrap:wrap; }
+ .report-toolbar button { width:100%; }
+ .report-actions button { flex:1 1 auto; }
+}
