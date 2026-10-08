@@ -9,7 +9,7 @@ const family='11111111-1111-4111-8111-111111111111', other='22222222-2222-4222-8
 const athlete='33333333-3333-4333-8333-333333333333', sibling='44444444-4444-4444-8444-444444444444';
 const portal='https://newvision-athletics.com/parent/reports.html', sender='receipts@example.invalid';
 before(async()=>{db=await testDatabase()}); after(async()=>{await db?.close()});
-async function as(role,user=''){await db.exec(`reset role; select set_config('request.jwt.claim.sub','${user}',false); select set_config('storage.operation','storage.object.get_authenticated',false); set role ${role}`)}
+async function as(role,user=''){await db.exec(`reset role; select set_config('request.jwt.claim.sub','${user}',false); select set_config('storage.operation','storage.object.get_authenticated',false); select set_config('request.method','',false); select set_config('request.path','',false); set role ${role}`)}
 async function denied(fn,pattern=/permission denied|Coach access required|row-level security/){
  await db.exec('savepoint denied');try{await assert.rejects(fn,pattern)}finally{await db.exec('rollback to savepoint denied; release savepoint denied')}
 }
@@ -169,4 +169,54 @@ test('parent downloads require authentication; reusable signed URL creation is d
  }
  await db.query("select set_config('storage.operation','storage.object.get_authenticated',false)");
  assert.equal((await db.query('select * from storage.objects')).rows.length,1);
+}));
+
+async function requestContext(method,path,operation=''){
+ await db.query("select set_config('request.method',$1,false),set_config('request.path',$2,false),set_config('storage.operation',$3,false)",[method,path,operation]);
+}
+test('direct private GET downloads work without an operation label, including the SDK legacy route',async()=>fixture(async()=>{
+ const {id,file}=await ready();
+ // A coach can preview a draft through the same private download paths.
+ await as('authenticated',coach);
+ for(const prefix of ['/object/','/object/authenticated/','/storage/v1/object/','/storage/v1/object/authenticated/']){
+  await requestContext('GET',`${prefix}athlete-progress-reports/${file.object_path}?cacheNonce=test`);
+  assert.deepEqual((await db.query('select name from storage.objects')).rows.map(r=>r.name),[file.object_path]);
+ }
+ await publish(id);await as('authenticated',parent);
+ for(const operation of ['', 'object.get', 'storage.object.get']){
+  await requestContext('GET',`/object/athlete-progress-reports/${file.object_path}`,operation);
+  assert.equal((await db.query('select * from storage.objects')).rows.length,1);
+ }
+}));
+test('download compatibility still hides drafts, other families, replaced PDFs, and revoked access',async()=>fixture(async()=>{
+ const {id,file}=await ready();const path=`/object/athlete-progress-reports/${file.object_path}`;
+ await as('authenticated',parent);await requestContext('GET',path);
+ assert.equal((await db.query('select * from storage.objects')).rows.length,0);
+ await publish(id);await as('authenticated',stranger);await requestContext('GET',path);
+ assert.equal((await db.query('select * from storage.objects')).rows.length,0);
+ await unpublish(id);const replacement=await upload(id);await attach(id,replacement);await publish(id);
+ await as('authenticated',parent);await requestContext('GET',path);
+ assert.equal((await db.query('select * from storage.objects')).rows.length,0);
+ const current=`/object/athlete-progress-reports/${replacement.object_path}`;
+ await requestContext('GET',current);assert.equal((await db.query('select * from storage.objects')).rows.length,1);
+ await as('authenticated',coach);await db.query('select public.revoke_guardian_access($1,$2)',[family,parent]);
+ await as('authenticated',parent);await requestContext('GET',current);
+ assert.equal((await db.query('select * from storage.objects')).rows.length,0);
+ await as('authenticated',second);await requestContext('GET',current);
+ assert.equal((await db.query('select * from storage.objects')).rows.length,1);
+}));
+test('download compatibility rejects anonymous requests, signing, listing, public/S3 routes and mismatched paths',async()=>fixture(async()=>{
+ const {id,file}=await ready();await publish(id);await as('postgres');
+ await db.exec('create policy test_broad_compatibility on storage.objects for select to public using(true)');
+ const path=`/object/athlete-progress-reports/${file.object_path}`;
+ await as('anon');await requestContext('GET',path);
+ assert.equal((await db.query('select * from storage.objects')).rows.length,0);
+ await as('authenticated',parent);
+ const requests=[['POST',path],['POST',`/object/sign/athlete-progress-reports/${file.object_path}`],
+  ['GET',`/object/sign/athlete-progress-reports/${file.object_path}`],['POST','/object/list/athlete-progress-reports'],
+  ['GET',`/object/public/athlete-progress-reports/${file.object_path}`],['GET',`/s3/athlete-progress-reports/${file.object_path}`],
+  ['GET',path+'.extra'],['GET',`/object/other-bucket/${file.object_path}`],['GET','/rest/v1/objects'],['GET','']];
+ for(const [method,url] of requests){
+  await requestContext(method,url);assert.equal((await db.query('select * from storage.objects')).rows.length,0,`${method} ${url}`);
+ }
 }));
