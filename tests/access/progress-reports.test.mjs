@@ -2,6 +2,7 @@ import { before, after, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { testDatabase } from '../helpers/database.mjs';
 import { deliverReportNotification } from '../../supabase/functions/drop-in-notification-worker/report-delivery.mjs';
+import { downloadReport } from '../../supabase/functions/progress-report-download/download.mjs';
 let db;
 const coach='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', parent='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 const second='cccccccc-cccc-4ccc-8ccc-cccccccccccc', stranger='dddddddd-dddd-4ddd-8ddd-dddddddddddd';
@@ -174,6 +175,31 @@ test('parent downloads require authentication; reusable signed URL creation is d
 async function requestContext(method,path,operation=''){
  await db.query("select set_config('request.method',$1,false),set_config('request.path',$2,false),set_config('storage.operation',$3,false)",[method,path,operation]);
 }
+test('download function uses real file RLS without Storage context: coach drafts, linked parents, revocation and replacement',async()=>fixture(async()=>{
+ const {id,file}=await ready();let fetched=0;
+ const caller={from(table){assert.equal(table,'progress_report_files');return{
+  select(){return this},eq(column,value){assert.equal(column,'id');this.id=value;return this},
+  async maybeSingle(){return{data:(await db.query('select id,object_path,size_bytes from public.progress_report_files where id=$1',[this.id])).rows[0] ?? null}},
+ }}};
+ const admin={storage:{from(bucket){assert.equal(bucket,'athlete-progress-reports');return{
+  async download(){fetched++;return{data:new Blob(['%PDF-1.7\nEND'])}},
+ }}}};
+ async function download(user,fileId=file.file_id){
+  await as('authenticated',user);await requestContext('','','');
+  return downloadReport(new Request('https://example.invalid/download',{method:'POST',body:JSON.stringify({file_id:fileId})}),{caller,admin,userId:user});
+ }
+ assert.equal((await download(coach)).status,200);assert.equal(fetched,1);
+ assert.equal((await download(parent)).status,404);assert.equal(fetched,1);
+ await publish(id);assert.equal((await download(parent)).status,200);assert.equal(fetched,2);
+ assert.equal((await download(stranger)).status,404);assert.equal(fetched,2);
+ await unpublish(id);const replacement=await upload(id);await attach(id,replacement);await publish(id);
+ assert.equal((await download(parent)).status,404);assert.equal(fetched,2);
+ assert.equal((await download(parent,replacement.file_id)).status,200);assert.equal(fetched,3);
+ await as('authenticated',coach);await db.query('select public.revoke_guardian_access($1,$2)',[family,parent]);
+ assert.equal((await download(parent,replacement.file_id)).status,404);assert.equal(fetched,3);
+ assert.equal((await download(second,replacement.file_id)).status,200);assert.equal(fetched,4);
+ await unpublish(id);assert.equal((await download(second,replacement.file_id)).status,404);assert.equal(fetched,4);
+}));
 test('direct private GET downloads work without an operation label, including the SDK legacy route',async()=>fixture(async()=>{
  const {id,file}=await ready();
  // A coach can preview a draft through the same private download paths.

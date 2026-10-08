@@ -14,7 +14,7 @@ Parents see a dated report history with View report and Download PDF. PDF previe
 
 ## Deployment order
 
-Apply the report migrations before updating the existing notification worker or releasing the frontend. No new email secret, scheduled job, or Edge Function is required: report emails use the existing drop-in notification worker, Resend configuration, and scheduler.
+Apply the report migrations before deploying the authenticated download function, updating the existing notification worker, or releasing the frontend. Report emails use the existing drop-in notification worker, Resend configuration, and scheduler; no new email secret or scheduled job is required.
 
 From PowerShell in the existing repository, first check that `git status --short` is empty. If it shows changes, preserve and commit that work before switching branches; do not reset or overwrite it.
 
@@ -41,6 +41,7 @@ If the dry run lists other pending migrations, review those separately before pr
 ```powershell
 npx.cmd supabase db push
 npx.cmd supabase functions deploy drop-in-notification-worker --project-ref mmxvfsuxvodcqhiksxzr
+npx.cmd supabase functions deploy progress-report-download --project-ref mmxvfsuxvodcqhiksxzr
 ```
 
 Then test the pull request's Netlify Deploy Preview using the configured project and permitted preview sign-in URLs. The preview requires the database migrations. After the hosted checks below pass, merge the reviewed pull request through the normal GitHub/Netlify release workflow.
@@ -48,6 +49,8 @@ Then test the pull request's Netlify Deploy Preview using the configured project
 For PR #11, add the exact callback `https://deploy-preview-11--new-vision-athletics.netlify.app/auth/callback.html` under Supabase Authentication → URL Configuration → Redirect URLs. Keep Site URL on the production domain. Request a new sign-in link from the preview's `/auth/sign-in.html`; after clicking it, the browser should remain on the preview domain. Then open `/coach/reports.html` or `/parent/reports.html` there.
 
 If the first two migrations and worker are already deployed, the download compatibility update requires only `20261008220000_progress_report_download_compatibility.sql`. Fetch and fast-forward the feature branch, inspect `supabase db push --dry-run`, then push that migration. No worker redeploy or re-upload is required for this policy update.
+
+If all three migrations and the notification worker are already deployed, the authenticated download-function update needs only a fresh copy of this branch and the `progress-report-download` deployment command above. It uses the project's built-in authenticated user and admin clients; no new secret, SQL change, worker deployment, or report re-upload is needed. Deploy the function before retrying the updated frontend's PDF buttons.
 
 ## Hosted checks before release
 
@@ -64,13 +67,15 @@ Local tests exercise real migrations and PostgreSQL RLS in PGlite with a minimal
 
 PDF buttons show loading, success, or failure feedback directly below each report's buttons. A stalled request stops after 20 seconds and allows another attempt. Downloads validate PDF bytes and size independently of the response MIME (some servers deliver PDFs as generic binary). Upload MIME validation remains unchanged. If a hosted download fails, record the visible message and safe Storage status code; do not make the bucket public or relax family access to troubleshoot it.
 
-Each preview/download now makes a GET to `/storage/v1/object/authenticated/athlete-progress-reports/<reserved-path>` with the current Auth session token in the Authorization header and the existing publishable key in the apikey header. No credentials appear in the URL. A fresh `cacheNonce` plus `cache: no-store` avoids reusing an older denied download response. This client update deploys through the preview build and requires no additional migration or worker deployment.
+Each preview/download now posts only a file ID to `/functions/v1/progress-report-download`, with the current Auth session token in the Authorization header and the existing publishable key in the apikey header. No credentials appear in the URL. The authenticated function queries `progress_report_files` through the caller's existing RLS, reads the authorized server-reserved path with its admin Storage client, validates PDF bytes/size, and rechecks caller access before returning a no-store PDF response. It accepts no client-supplied bucket or object path and creates no signed or public link.
+
+Hosted diagnostics found that the coach could read both report-file records and download their PDFs in the Supabase Dashboard; simulated Storage reads hid the same records when operation/request context was absent. That reproduces a context-dependent denial but does not expose the actual hosted request's database settings. The function avoids relying on those settings for application downloads while preserving the restrictive Storage policies.
 
 ## Access and storage
 
 The `athlete-progress-reports` bucket is private, PDF-only, and limited to 10 MiB. Coaches can upload only to a server-reserved path on a draft. Client overwrites and deletions are denied. Each replacement gets a new immutable file path.
 
-Parents can read only published reports for currently linked athletes, and only each report's current PDF. Downloads use the authenticated Storage endpoint with a fresh access check, not public or reusable signed URLs. The Storage SELECT policy accepts the documented authenticated-download operation or a server-supplied GET request path for that exact private object. This compatibility path handles Storage versions that omit/change operation labels; it still requires authenticated coach/current-parent permission and does not admit signing, listing, public, or S3 routes. Missing both operation and valid request context fails closed. Other buckets' policies are unchanged.
+Parents can read only published reports for currently linked athletes, and only each report's current PDF. Application downloads use the authenticated function with fresh access checks, not public or reusable signed URLs. Direct user Storage reads retain the restrictive SELECT policy: it accepts the authenticated-download operation or a server-supplied GET request path for that exact private object. Missing both operation and valid request context fails closed. Other buckets' policies are unchanged.
 
 A private Storage 404 can mean a missing object or a denied read. If it persists after the compatibility migration, check the stored object records without exposing report contents using this read-only SQL:
 

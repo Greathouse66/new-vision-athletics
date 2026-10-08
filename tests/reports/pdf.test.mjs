@@ -5,33 +5,31 @@ import {fetchReportPdf} from '../../scripts/reports/download.mjs';
 import {renderProgressReportNotification} from '../../supabase/functions/_shared/progress-report-notification.mjs';
 import {runNotifications} from '../../supabase/functions/drop-in-notification-worker/run.mjs';
 const payload={reportId:'11111111-1111-4111-8111-111111111111',parentId:'22222222-2222-4222-8222-222222222222',publication:1,to:'parent@example.invalid',from:'receipts@example.invalid',portalUrl:'https://newvision-athletics.com/parent/reports.html'};
-const file={object_path:`${payload.reportId}/${payload.parentId}.pdf`};
+const file={id:payload.parentId,object_path:`${payload.reportId}/${payload.parentId}.pdf`};
 const config={url:'https://project.example.invalid',key:'sb_publishable_test'};
 const sessionClient={auth:{async getSession(){return{data:{session:{access_token:'test-user-token'}}}}}};
-test('authenticated downloads accept valid PDF bytes with binary or absent delivery MIME',async()=>{
- const nonces=new Set();
+test('authenticated downloads send only a file ID and accept PDF bytes independently of delivery MIME',async()=>{
  for(const type of ['application/pdf','application/octet-stream','','application/pdf; charset=utf-8']){
   const send=async (url,parameters)=>{
    const parsed=new URL(url);
-   assert.equal(parsed.pathname,`/storage/v1/object/authenticated/athlete-progress-reports/${file.object_path}`);
-   assert.equal(parsed.origin,config.url);assert.ok(parsed.searchParams.get('cacheNonce'));assert.ok(!url.includes('test-user-token'));
-   nonces.add(parsed.searchParams.get('cacheNonce'));
-   assert.equal(parameters.method,'GET');assert.equal(parameters.cache,'no-store');assert.equal(parameters.credentials,'omit');assert.equal(parameters.redirect,'error');
+   assert.equal(parsed.pathname,'/functions/v1/progress-report-download');
+   assert.equal(parsed.origin,config.url);assert.equal(parsed.search,'');assert.ok(!url.includes('test-user-token'));
+   assert.equal(parameters.method,'POST');assert.equal(parameters.cache,'no-store');assert.equal(parameters.credentials,'omit');assert.equal(parameters.redirect,'error');
+   assert.deepEqual(JSON.parse(parameters.body),{file_id:file.id});
    assert.equal(parameters.headers.Authorization,'Bearer test-user-token');assert.equal(parameters.headers.apikey,config.key);
    assert.ok(parameters.signal instanceof AbortSignal);
    return new Response(new Blob(['%PDF-1.7\n'],{type}));
   };
   const pdf=await fetchReportPdf(sessionClient,file,config,send);assert.equal(pdf.type,'application/pdf');assert.equal(await pdf.text(),'%PDF-1.7\n');
  }
- assert.equal(nonces.size,4);
 });
-test('download validation still rejects non-PDF bytes and reports safe Storage errors',async()=>{
+test('download validation still rejects non-PDF bytes and reports only safe endpoint errors',async()=>{
  await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>new Response('<html>error</html>')),/does not appear to be a PDF/);
- await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>Response.json({code:'AccessDenied',message:'Private provider error detail'},{status:403})),error=>{
-  assert.match(error.message,/Storage 403/);assert.ok(!error.message.includes('Private provider'));return true;
+ await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>Response.json({code:'access_check_failed',message:'Private provider error detail'},{status:503})),error=>{
+  assert.match(error.message,/Download 503; access_check_failed/);assert.ok(!error.message.includes('Private provider'));return true;
  });
- await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>Response.json({code:'NoSuchKey'},{status:404})),/Storage 404; NoSuchKey/);
- await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>new Response('Provider outage',{status:502})),/Storage 502/);
+ await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>Response.json({code:'report_unavailable'},{status:404})),/Download 404; report_unavailable/);
+ await assert.rejects(fetchReportPdf(sessionClient,file,config,async()=>new Response('Provider outage',{status:502})),/Download 502/);
 });
 test('missing or failed sessions never make a file request; every click uses the current session token',async()=>{
  for(const auth of [{data:{session:null}},{error:{message:'Auth unavailable'}}]){

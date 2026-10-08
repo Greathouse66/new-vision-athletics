@@ -391,6 +391,9 @@ verify_jwt = true
 [functions.billing-export]
 verify_jwt = true
 
+[functions.progress-report-download]
+verify_jwt = true
+
 [functions.receipt-worker]
 verify_jwt = false
 
