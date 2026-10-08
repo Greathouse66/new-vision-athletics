@@ -1,5 +1,5 @@
 import { configured, supabase } from '../auth/client.js';
-import { element, reportDate, loadAthletes, loadReports, setupPdfViewer, openPdf, closePdf } from '../reports/shared.js';
+import { element, reportDate, reportFeedback, loadAthletes, loadReports, setupPdfViewer, openPdf, closePdf } from '../reports/shared.js';
 const status=document.querySelector('#status'), content=document.querySelector('#report-content');
 const selector=document.querySelector('#athlete'),list=document.querySelector('#report-list'),more=document.querySelector('#load-more'),signOut=document.querySelector('#sign-out');
 let reports=[],offset=0,total=0,busy=false;
@@ -8,19 +8,20 @@ function render(){
  list.replaceChildren();
  if(!reports.length)list.append(element('p','No published reports yet. Reports from Coach Emery will appear here when they are ready.','report-empty'));
  for(const report of reports){
-  const card=element('article',undefined,'report-card');card.append(element('p',reportDate(report.report_date),'report-date'),element('h2',report.title));
+  const card=element('article',undefined,'report-card');card.dataset.reportId=report.id;card.append(element('p',reportDate(report.report_date),'report-date'),element('h2',report.title));
   if(report.coach_note)card.append(element('p',report.coach_note,'report-note'));
   const actions=element('div',undefined,'report-actions');
   if(report.file)actions.append(action('View report',()=>view(report,false)),action('Download PDF',()=>view(report,true)));
   else card.append(element('p','This PDF is unavailable. Please contact the coach.'));
-  card.append(actions);list.append(card);
+  const feedback=element('p','','report-feedback');feedback.setAttribute('role','status');
+  card.append(actions,feedback);list.append(card);
  }
  more.hidden=offset>=total;
  document.querySelector('#report-total').textContent=`${total} ${total===1?'report':'reports'}`;
 }
 function setBusy(value){busy=value;content.querySelectorAll('button,select').forEach(n=>n.disabled=value)}
 async function refresh(append=false){const result=await loadReports(supabase,selector.value,append?offset:0,true);reports=append?[...reports,...result.rows]:result.rows;offset=reports.length;total=result.total;render()}
-async function view(report,download){if(busy)return;setBusy(true);try{await openPdf(supabase,report.file,report.title,download)}catch(error){status.textContent=error.message}finally{setBusy(false)}}
+async function view(report,download){if(busy)return;setBusy(true);reportFeedback(report,'Loading PDF…');try{await openPdf(supabase,report.file,report.title,download);reportFeedback(report,download?'Download started.':'PDF preview opened.')}catch(error){status.textContent=error.message;reportFeedback(report,error.message,true)}finally{setBusy(false)}}
 selector.addEventListener('change',async()=>{closePdf();reports=[];list.replaceChildren();setBusy(true);try{await refresh();status.textContent=''}catch(error){status.textContent=error.message}finally{setBusy(false)}});
 more.addEventListener('click',async()=>{if(busy)return;setBusy(true);try{await refresh(true)}catch(error){status.textContent=error.message}finally{setBusy(false)}});
 signOut.addEventListener('click',async()=>{if(busy)return;signOut.disabled=true;closePdf();const result=await supabase.auth.signOut();if(result.error){signOut.disabled=false;status.textContent='Could not sign out.';return}location.replace('/auth/sign-in.html')});

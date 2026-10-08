@@ -43,6 +43,8 @@ npx.cmd supabase functions deploy drop-in-notification-worker --project-ref mmxv
 
 Then test the pull request's Netlify Deploy Preview using the configured project and permitted preview sign-in URLs. The preview requires the database migrations. After the hosted checks below pass, merge the reviewed pull request through the normal GitHub/Netlify release workflow.
 
+For PR #11, add the exact callback `https://deploy-preview-11--new-vision-athletics.netlify.app/auth/callback.html` under Supabase Authentication → URL Configuration → Redirect URLs. Keep Site URL on the production domain. Request a new sign-in link from the preview's `/auth/sign-in.html`; after clicking it, the browser should remain on the preview domain. Then open `/coach/reports.html` or `/parent/reports.html` there.
+
 ## Hosted checks before release
 
 Use a test athlete and parent with existing linked access, plus a different family account:
@@ -55,6 +57,8 @@ Use a test athlete and parent with existing linked access, plus a different fami
 6. Check the original drop-in request, approval, and cancellation notification flows still work.
 
 Local tests exercise real migrations and PostgreSQL RLS in PGlite with a minimal Storage schema. Browser checks use mocked authentication, API responses, uploads, and email delivery. They do not prove a live Supabase Storage HTTP upload or a real Resend delivery; those require the hosted checks above.
+
+PDF buttons show loading, success, or failure feedback directly below each report's buttons. A stalled request stops after 20 seconds and allows another attempt. Downloads validate PDF bytes and size independently of the response MIME (some servers deliver PDFs as generic binary). Upload MIME validation remains unchanged. If a hosted download fails, record the visible message and safe Storage status code; do not make the bucket public or relax family access to troubleshoot it.
 
 ## Access and storage
 

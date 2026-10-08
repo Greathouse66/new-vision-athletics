@@ -1,6 +1,6 @@
 import { configured, supabase } from '../auth/client.js';
 import { reportBucket, validatePdf, downloadName } from '../reports/files.mjs';
-import { element, today, reportDate, loadAthletes, loadReports, loadReport, setupPdfViewer, openPdf, closePdf } from '../reports/shared.js';
+import { element, today, reportDate, reportFeedback, loadAthletes, loadReports, loadReport, setupPdfViewer, openPdf, closePdf } from '../reports/shared.js';
 const status=document.querySelector('#status'), content=document.querySelector('#report-content');
 const selector=document.querySelector('#athlete'), form=document.querySelector('#report-form');
 const list=document.querySelector('#report-list'), more=document.querySelector('#load-more');
@@ -19,13 +19,14 @@ function resetEditor(report=null){
 }
 async function rpc(name,args){const result=await supabase.rpc(name,args);if(result.error)throw result.error;return result.data}
 function errorMessage(error){return error.code==='40001'?'This report changed in another window. Reload before continuing.':error.code==='42501'?'Coach access changed. Reload the page.':error.message??'Could not complete this action.'}
-async function preview(report,download){if(busy)return;setBusy(true);try{await openPdf(supabase,report.file,report.title,download)}catch(error){message(errorMessage(error))}finally{setBusy(false)}}
+async function preview(report,download){if(busy)return;setBusy(true);reportFeedback(report,'Loading PDF…');try{await openPdf(supabase,report.file,report.title,download);reportFeedback(report,download?'Download started.':'PDF preview opened.')}catch(error){message(errorMessage(error));reportFeedback(report,errorMessage(error),true)}finally{setBusy(false)}}
 function action(label,handler){const b=element('button',label,'secondary');b.type='button';b.addEventListener('click',handler);return b}
 function render(){
  list.replaceChildren();
  if(!reports.length)list.append(element('p','No progress reports for this athlete yet. Upload a PDF to start their report history.','report-empty'));
  for(const report of reports){
   const card=element('article',undefined,'report-card');
+  card.dataset.reportId=report.id;
   const header=element('div',undefined,'report-card-head');
   const detail=element('div');detail.append(element('p',reportDate(report.report_date),'report-date'),element('h3',report.title));
   header.append(detail,element('span',report.status==='published'?'Published':'Draft',`report-badge ${report.status}`));card.append(header);
@@ -37,7 +38,8 @@ function render(){
    actions.append(action('Edit draft',()=>{resetEditor(report);form.scrollIntoView({behavior:'smooth',block:'start'})}));
    const publish=action('Publish to parents',()=>changePublication(report,true));publish.disabled=!report.file;publish.dataset.unavailable=String(!report.file);actions.append(publish);
   }else actions.append(action('Unpublish',()=>changePublication(report,false)));
-  card.append(actions);list.append(card);
+  const feedback=element('p','','report-feedback');feedback.setAttribute('role','status');
+  card.append(actions,feedback);list.append(card);
  }
  more.hidden=offset>=total;
  document.querySelector('#report-total').textContent=`${total} ${total===1?'report':'reports'}`;

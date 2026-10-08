@@ -1,10 +1,18 @@
-import { reportBucket, validatePdf, downloadName } from './files.mjs';
+import { downloadName } from './files.mjs';
+import { fetchReportPdf } from './download.mjs';
 export const pageSize = 50;
 export function element(tag, text, className) {
   const node = document.createElement(tag);
   if (text !== undefined) node.textContent = text;
   if (className) node.className = className;
   return node;
+}
+export function reportFeedback(report, text, error = false) {
+  const feedback = document.querySelector(`[data-report-id="${report.id}"] .report-feedback`);
+  if (!feedback) return;
+  feedback.textContent = text;
+  feedback.dataset.error = String(error);
+  if (error) feedback.scrollIntoView({block:'nearest'});
 }
 export function reportDate(value) {
   return new Intl.DateTimeFormat('en-US', {month:'long',day:'numeric',year:'numeric',timeZone:'UTC'})
@@ -68,16 +76,12 @@ export function setupPdfViewer() {
   window.addEventListener('pagehide',closePdf);
 }
 export async function openPdf(client, file, title, download = false) {
-  if (!file || !/^[0-9a-f-]{36}\/[0-9a-f-]{36}\.pdf$/i.test(file.object_path)) throw new Error('No report PDF is available.');
-  // Authenticate every fetch. No public URLs or reusable signed Storage links.
-  const result = await client.storage.from(reportBucket).download(file.object_path, {}, {cache:'no-store'});
-  if (result.error) throw new Error('Could not open the PDF. Access may have changed; reload and try again.');
-  await validatePdf(result.data);
-  const blob = new Blob([result.data],{type:'application/pdf'});
+  const blob = await fetchReportPdf(client, file);
   closePdf();
   if (download) {
     const url = URL.createObjectURL(blob), link = element('a');
-    link.href=url;link.download=downloadName(file.original_name);link.click();
+    link.href=url;link.download=downloadName(file.original_name);
+    document.body.append(link);link.click();link.remove();
     setTimeout(()=>URL.revokeObjectURL(url),30000);
     return;
   }
