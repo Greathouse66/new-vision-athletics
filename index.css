@@ -169,11 +169,14 @@ body {
   .stitch-concept .hero-copy h1 { font-size: 80px; min-height: 154px; }
   .stitch-concept .hero-actions .button-large { font-size: 21px; padding-inline: 24px; }
 }
-@media (max-width: 900px) {
+/* Leave room for the longer drop-in action before collapsing navigation. */
+@media (max-width: 1050px) {
   .stitch-concept .desktop-nav { margin-left: auto; }
   .stitch-concept .desktop-nav > a:not(.header-contact) { display: none; }
   .stitch-concept .header-book { display: none; }
   .stitch-concept .menu-toggle { display: block; }
+}
+@media (max-width: 900px) {
   .stitch-concept .hero-grid, .stitch-concept .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .stitch-concept .hero-copy h1 { max-width: 620px; min-height: 154px; }
   .stitch-concept .hero-tagline { max-width: 580px; }
@@ -186,7 +189,7 @@ body {
   .stitch-concept .impact-inner { font-size: 21px; gap: 14px; }
   .stitch-concept .section-space { padding-block: 72px; }
 }
-@media (min-width: 901px) {
+@media (min-width: 1051px) {
   .stitch-concept .mobile-nav { display: none; }
 }
 @media (max-width: 600px) {

@@ -1,4 +1,5 @@
 import { configured, supabase } from "../auth/client.js";
+import { dropInPath } from "../auth/destination.mjs";
 
 const status = document.querySelector("#status");
 const content = document.querySelector("#family-content");
@@ -107,7 +108,10 @@ signOut.addEventListener("click", async () => {
 async function start() {
   if (!configured) { status.textContent = "Parent portal setup is in progress."; return; }
   const { data: auth, error: authError } = await supabase.auth.getUser();
-  if (authError || !auth.user) { location.replace("/auth/sign-in.html"); return; }
+  if (authError || !auth.user) {
+    location.replace(`/auth/sign-in.html?next=${encodeURIComponent(dropInPath)}`);
+    return;
+  }
   signOut.hidden = false;
   const { data: grants, count: grantCount, error: grantError } = await supabase.from("family_guardians")
     .select("family_id", { count: "exact" }).eq("user_id", auth.user.id);

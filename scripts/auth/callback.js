@@ -1,7 +1,14 @@
 import { configured, supabase } from "./client.js";
-import { signInDestination } from "./destination.mjs";
+import { requestedParentDestination, signInDestination } from "./destination.mjs";
 
 const status = document.querySelector("#status");
+// Capture the request before removing auth details from the address bar.
+const destination = requestedParentDestination(location.search);
+if (destination) {
+  const retry = new URL("/auth/sign-in.html", location.origin);
+  retry.searchParams.set("next", destination);
+  document.querySelector("#retry a").href = retry.href;
+}
 
 async function completeSignIn() {
   if (!configured) throw new Error("setup");
@@ -14,7 +21,7 @@ async function completeSignIn() {
   const { data, error } = await supabase.auth.getSession();
   if (error || !data.session) throw new Error("link");
   history.replaceState(null, "", "/auth/callback.html");
-  location.replace(await signInDestination(supabase));
+  location.replace(await signInDestination(supabase, destination));
 }
 
 function showFailure(error) {
