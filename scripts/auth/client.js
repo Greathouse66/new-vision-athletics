@@ -2,6 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 
 const url = __NVA_SUPABASE_URL__;
 const key = __NVA_SUPABASE_PUBLISHABLE_KEY__;
+// Public build configuration; user access tokens remain in the Auth session.
+export const storageDownloadConfig = Object.freeze({ url, key });
 
 export const configured = Boolean(key);
 export const supabase = configured

@@ -19,6 +19,7 @@ const publicFiles = [
   "parent/payments.html",
   "parent/sessions.html",
   "parent/drop-ins.html",
+  "parent/reports.html",
   "coach/index.html",
   "coach/today.html",
   "coach/families.html",
@@ -29,8 +30,10 @@ const publicFiles = [
   "coach/cancellations.html",
   "coach/records.html",
   "coach/billing.html",
+  "coach/reports.html",
   "styles/portal.css",
   "styles/coach-dashboard.css",
+  "styles/reports.css",
 ];
 
 // Check required sources before replacing the generated output.
@@ -62,6 +65,7 @@ await build({
     "parent/index": resolve(root, "scripts/parent/index.js"),
     "parent/payments": resolve(root, "scripts/parent/payments.js"),
     "parent/sessions": resolve(root, "scripts/parent/sessions.js"),
+    "parent/reports": resolve(root, "scripts/parent/reports.js"),
     "parent/drop-ins": resolve(root, "scripts/parent/drop-ins.js"),
     "coach/index": resolve(root, "scripts/coach/index.js"),
     "coach/today": resolve(root, "scripts/coach/today.js"),
@@ -72,6 +76,7 @@ await build({
     "coach/drop-ins": resolve(root, "scripts/coach/drop-ins.js"),
     "coach/cancellations": resolve(root, "scripts/coach/cancellations.js"),
     "coach/records": resolve(root, "scripts/coach/records.js"),
+    "coach/reports": resolve(root, "scripts/coach/reports.js"),
     "coach/billing": resolve(root, "scripts/coach/billing.js"),
   },
   outdir: output,
