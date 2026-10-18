@@ -1,0 +1,104 @@
+/* Shared lighting only: component styles own color, radius, size and layout.
+   Four shadows, in order: top light, bottom shade, contact, reflected color.
+   Specificity keeps the lighting intact when component backgrounds are set. */
+:root {
+  --button-glow: 20 107 114;
+  --button-glow-opacity: .16;
+  --button-light: .18;
+}
+
+.stitch-concept .button-primary,
+.parent-invitation-card button,
+.dashboard-actions a:not(.dashboard-action-alt) {
+  --button-glow: 39 245 245;
+  --button-glow-opacity: .22;
+  --button-light: .34;
+}
+.stitch-concept .button-outline,
+.stitch-concept #contactForm button[type="submit"],
+.payment-contact {
+  --button-glow: 39 245 245;
+}
+.payment-calendar { --button-glow: 37 99 235; }
+:is(.portal-coach, .portal-parent, .portal-auth) button:not(.secondary),
+.dashboard-today > a,
+.tool-action {
+  --button-glow: 48 54 54;
+  --button-light: .2;
+}
+button.secondary,
+.parent-section-link,
+.parent-tuition-foot a,
+.dashboard-more a {
+  --button-glow: 20 107 114;
+  --button-glow-opacity: .1;
+}
+:is(.portal-header, .parent-header, .dashboard-header) button,
+.dashboard-action-alt {
+  --button-glow: 181 195 195;
+  --button-glow-opacity: .08;
+  --button-light: .14;
+}
+
+:is(button, .button, .nva-button, .dashboard-actions a, .dashboard-today > a,
+    .tool-card .tool-action, .dashboard-more a, .parent-section-link, .parent-tuition-foot a):not(.menu-toggle):not([aria-label="Close contact form"]) {
+  background-image: linear-gradient(to bottom, rgb(255 255 255 / .1), rgb(0 0 0 / .07));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / var(--button-light)),
+    inset 0 -1px 0 rgb(0 0 0 / .2),
+    0 2px 3px rgb(0 0 0 / .2),
+    0 6px 22px rgb(var(--button-glow) / var(--button-glow-opacity));
+  transition: background-color 160ms ease, border-color 160ms ease,
+    color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(button, .button, .nva-button, .dashboard-actions a, .dashboard-today > a,
+      .tool-card .tool-action, .dashboard-more a, .parent-section-link, .parent-tuition-foot a):not(.menu-toggle):not([aria-label="Close contact form"]):not(:disabled):not([aria-disabled="true"]):hover,
+  .tool-card:hover .tool-action:not(.menu-toggle):not([aria-label="Close contact form"]) {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / var(--button-light)),
+      inset 0 -1px 0 rgb(0 0 0 / .22),
+      0 3px 5px rgb(0 0 0 / .22),
+      0 8px 28px rgb(var(--button-glow) / var(--button-glow-opacity));
+  }
+}
+
+/* Keep four layers on press; remove the top light and reverse the gradient. */
+:is(button, .button, .nva-button, .dashboard-actions a, .dashboard-today > a,
+    .tool-card .tool-action, .dashboard-more a, .parent-section-link, .parent-tuition-foot a):not(.menu-toggle):not([aria-label="Close contact form"]):not(:disabled):not([aria-disabled="true"]):active,
+.tool-card:active .tool-action:not(.menu-toggle):not([aria-label="Close contact form"]) {
+  background-image: linear-gradient(to bottom, rgb(0 0 0 / .12), rgb(255 255 255 / .04));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0),
+    inset 0 2px 4px rgb(0 0 0 / .24),
+    0 1px 1px rgb(0 0 0 / .18),
+    0 2px 10px rgb(var(--button-glow) / .08);
+  transform: translateY(1px);
+}
+
+/* Native disabled includes controls inside a disabled fieldset. */
+:is(button, .button, .nva-button):not(.menu-toggle):not([aria-label="Close contact form"]):is(:disabled, [aria-disabled="true"]) {
+  background-image: none;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(button, .button, .nva-button, .dashboard-actions a, .dashboard-today > a,
+      .tool-card .tool-action, .dashboard-more a, .parent-section-link, .parent-tuition-foot a):not(.menu-toggle):not([aria-label="Close contact form"]) {
+    transition: none;
+    transform: none !important;
+  }
+}
+@media (forced-colors: active), print {
+  :is(button, .button, .nva-button, .dashboard-actions a, .dashboard-today > a,
+      .tool-card .tool-action, .dashboard-more a, .parent-section-link, .parent-tuition-foot a):not(.menu-toggle):not([aria-label="Close contact form"]) {
+    background-image: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+
+.nva-button:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }

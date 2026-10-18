@@ -34,6 +34,7 @@ const publicFiles = [
   "coach/reports.html",
   "coach/waivers.html",
   "styles/portal.css",
+  "styles/buttons.css",
   "styles/coach-dashboard.css",
   "styles/reports.css",
   "styles/waivers.css",

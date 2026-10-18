@@ -1,3 +1,5 @@
+@import url("/styles/buttons.css");
+
 /**
  * index.scss
  * - Add any styles you want here!
@@ -61,10 +63,9 @@ body {
   font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; line-height: 1.3;
   white-space: nowrap;
 }
-.stitch-concept .button-primary { color: var(--court); background: var(--cyan); box-shadow: 0 0 24px rgba(39,245,245,.25); }
-.stitch-concept .button-primary:hover { background: white; box-shadow: 0 0 30px rgba(39,245,245,.4); }
+.stitch-concept .button-primary { color: var(--court); background: var(--cyan); }
 .stitch-concept .button-outline { color: var(--cyan); background: rgba(24,28,33,.6); border-color: rgba(39,245,245,.35); }
-.stitch-concept .button-outline:hover { background: rgba(39,245,245,.09); border-color: var(--cyan); }
+.stitch-concept .button-outline:hover { border-color: var(--cyan); }
 .stitch-concept .button-large { padding: 15px 30px; font-size: 24px; }
 .stitch-concept .menu-toggle { display: none; border: 0; background: transparent; color: var(--cyan); padding: 8px; }
 .stitch-concept .menu-toggle svg { width: 28px; height: 28px; }
