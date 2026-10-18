@@ -15,8 +15,10 @@ failed role lookup cannot bypass coach/parent routing.
 
 This continues to require an existing account and linked athlete. It does not
 create a public enrollment form, reserve a seat without approval or bypass any
-existing family-access, skill, capacity, notification or coach-approval rules.
-No database migration or Edge Function deployment is needed.
+existing family-access, capacity, notification or coach-approval rules.
+The homepage link itself needs no database migration or Edge Function deployment.
+For the later change allowing requests across skill levels, see
+[drop-in deployment steps](drop-in-requests.md#allowing-all-skill-levels).
 
 ## Supabase redirect configuration
 
@@ -34,7 +36,7 @@ URL makes the intended callback explicit and supports stricter configuration.
 
 - Run `npm run test:access` and `npm run build` on Node 22.
 - Check all four homepage request links on desktop and mobile.
-- A signed-in test parent should see only their linked athletes and eligible
+- A signed-in test parent should see only their linked athletes and upcoming
   dated classes with space.
 - A signed-out test parent should receive a link and return directly to the
   request page after clicking it. Test the email in another browser too.
