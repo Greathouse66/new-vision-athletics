@@ -9,7 +9,6 @@ const athleteSelect = document.querySelector("#athlete");
 const classSelect = document.querySelector("#class");
 const requestList = document.querySelector("#requests");
 let athletes = [];
-let enrollments = [];
 let classes = [];
 let busy = false;
 
@@ -27,16 +26,8 @@ function when(instant, zone) {
   }).format(new Date(instant));
 }
 
-function eligible(athleteId, entry) {
-  return entry.class_kind === "intro" || enrollments.some((enrollment) =>
-    enrollment.athlete_id === athleteId && enrollment.group_id === entry.group_id &&
-    enrollment.starts_on <= entry.class_date &&
-    (!enrollment.ends_on || enrollment.ends_on > entry.class_date)
-  );
-}
-
 function renderClasses() {
-  const available = classes.filter((entry) => entry.places_left > 0 && eligible(athleteSelect.value, entry));
+  const available = athleteSelect.value ? classes.filter((entry) => entry.places_left > 0) : [];
   classSelect.replaceChildren(option("", "Choose a class"));
   for (const entry of available) {
     classSelect.append(option(entry.occurrence_id,
@@ -70,7 +61,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (busy || !athletes.some((a) => a.id === athleteSelect.value)) return;
   const entry = classes.find((row) => row.occurrence_id === classSelect.value);
-  if (!entry || !eligible(athleteSelect.value, entry)) return;
+  if (!entry || entry.places_left <= 0) return;
   busy = true;
   athleteSelect.disabled = classSelect.disabled = true;
   form.querySelector('button[type="submit"]').disabled = true;
@@ -122,20 +113,16 @@ async function start() {
   }
   if (grantCount > grants.length) throw new Error("Parent account list exceeded the current page limit");
   const familyIds = [...new Set(grants.map((g) => g.family_id))];
-  const [athleteResult, enrollmentResult, classResult] = await Promise.all([
+  const [athleteResult, classResult] = await Promise.all([
     supabase.from("athletes").select("id, family_id, display_name", { count: "exact" })
       .in("family_id", familyIds).order("display_name"),
-    supabase.from("group_enrollments")
-      .select("athlete_id, group_id, starts_on, ends_on", { count: "exact" })
-      .order("starts_on"),
     supabase.rpc("list_open_drop_in_classes"),
   ]);
-  for (const result of [athleteResult, enrollmentResult, classResult]) {
+  for (const result of [athleteResult, classResult]) {
     if (result.error) throw result.error;
     if (result.count > result.data.length) throw new Error("List exceeded the current page limit");
   }
   athletes = athleteResult.data;
-  enrollments = enrollmentResult.data;
   classes = classResult.data.slice(0, 200);
   athleteSelect.replaceChildren(option("", "Choose an athlete"));
   for (const athlete of athletes) athleteSelect.append(option(athlete.id, athlete.display_name));
