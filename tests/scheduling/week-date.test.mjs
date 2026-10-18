@@ -27,3 +27,11 @@ test("today follows Minot calendar at UTC midnight and at daylight saving change
   assert.equal(todayChicago(new Date("2026-10-05T06:00:00Z")), "2026-10-05");
   assert.equal(todayChicago(new Date("2026-11-01T06:00:00Z")), "2026-11-01");
 });
+
+
+test("schedule and class-place screens can explicitly include Saturday and Sunday", () => {
+  assert.deepEqual(classDatesForWeek("2026-10-05", 7), [
+    "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11",
+  ]);
+  assert.deepEqual(classDatesForWeek("2026-10-05", 6), []);
+});

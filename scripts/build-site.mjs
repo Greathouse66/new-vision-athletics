@@ -40,6 +40,7 @@ const publicFiles = [
   "styles/coach-dashboard.css",
   "styles/reports.css",
   "styles/waivers.css",
+  "styles/schedule.css",
 ];
 
 // Check required sources before replacing the generated output.

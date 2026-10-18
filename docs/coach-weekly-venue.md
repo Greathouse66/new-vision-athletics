@@ -21,7 +21,7 @@ venue changes after sessions are published.
 
 Migration `20261003214000_weekly_slots_and_dated_classes.sql` adds the eight
 confirmed weekly class times starting October 5, 2026. The coach can then
-select one to five open dates from Monday through Friday on this page. The
+select confirmed open dates on this page. The
 `create_dated_classes` function checks coach access, the saved weekly venue,
 duplicate dates, and the named venue time zone, then creates every class on
 each selected date in one transaction. Unchecked days create nothing. Dates
@@ -37,3 +37,8 @@ The parent drop-in request and regular class booking flows remain separate.
 They require a dated class, capacity checks, verified parent contact, and a
 coach decision before a seat can be confirmed. No public parent request form
 is enabled by this page.
+
+Migration `20261018220000_coach_weekly_schedule_editor.sql` adds the coach
+weekly rule editor and supports Monday through Sunday. See
+[weekly schedule editing](coach-weekly-schedule-editor.md) for effective dates,
+regular roster carryover, and the preview rollout checklist.

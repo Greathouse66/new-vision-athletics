@@ -4,10 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Weekly venue | New Vision Athletics</title>
+  <title>Weekly schedule | New Vision Athletics</title>
   <link rel="icon" href="/Assets/Icons/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
   <link rel="stylesheet" href="/styles/portal.css">
+  <link rel="stylesheet" href="/styles/schedule.css">
   <script type="module" src="/coach/schedule.js"></script>
 </head>
 <body class="portal-coach">
@@ -38,15 +39,31 @@
         <button id="create-dates" type="submit" disabled>Create classes on selected dates</button>
       </form>
       <p id="dated-status" role="status" aria-live="polite"></p>
-      <h2>Weekly classes</h2>
-      <ul>
-        <li>Monday: Post-Bigs 6–7 pm; Advanced 7–8 pm</li>
-        <li>Tuesday: Foundational 6–7 pm</li>
-        <li>Wednesday: Post-Bigs 6–7 pm; Advanced 7–8 pm</li>
-        <li>Thursday: Foundational 6–7 pm</li>
-        <li>Friday: Intro 6–7 pm; Advanced 7–8 pm</li>
-      </ul>
-      <p class="note">Capacity is 10 per class. Dated classes do not reserve seats or notify parents. Review the venue and open dates before creating them; correcting a created class requires a separate reviewed process.</p>
+      <section class="weekly-preview" aria-labelledby="weekly-heading">
+        <div class="schedule-section-heading"><h2 id="weekly-heading">Weekly classes</h2><button id="open-editor" type="button" class="secondary" aria-expanded="false" aria-controls="schedule-editor">Edit weekly schedule</button></div>
+        <p>Schedule rules for the selected week. Already-created dated classes keep their saved details.</p>
+        <ul id="weekly-classes"></ul>
+      </section>
+      <section id="schedule-editor" class="schedule-editor" aria-labelledby="editor-heading" hidden>
+        <h2 id="editor-heading">Edit weekly schedule</h2>
+        <p>Revise an existing weekly class or add a class. Choose an effective date after already-created classes on the affected weekday. Regular athletes follow revised classes; their skill groups stay unchanged.</p>
+        <form id="weekly-class-form">
+          <label for="template">Weekly class to edit</label><select id="template"><option value="">Add a new weekly class</option></select>
+          <p id="template-info" class="schedule-help"></p>
+          <div class="schedule-fields">
+            <div><label for="class-level">Class level</label><select id="class-level" required><option value="">Choose a class level</option><option value="intro">Intro</option></select></div>
+            <div><label for="class-day">Day</label><select id="class-day" required></select></div>
+            <div><label for="class-time">Start time (Minot local time)</label><input id="class-time" type="time" step="60" required value="18:00"></div>
+            <div><label for="class-duration">Duration (minutes)</label><input id="class-duration" type="number" min="1" max="360" step="1" required value="60"></div>
+            <div><label for="class-capacity">Capacity (1–10)</label><input id="class-capacity" type="number" min="1" max="10" step="1" required value="10"></div>
+            <div><label for="effective-from">Changes begin on</label><input id="effective-from" type="date" required></div>
+          </div>
+          <p id="effective-help" class="schedule-help"></p>
+          <div class="schedule-actions"><button id="save-weekly-class" type="submit">Save weekly class</button><button id="close-editor" type="button" class="secondary">Close editor</button></div>
+        </form>
+        <p id="editor-status" role="status" aria-live="polite"></p>
+      </section>
+      <p class="note">Capacity remains limited to 10 per class. Saving a weekly rule does not create dated classes or send messages. Review and create confirmed open dates separately. Existing dated classes, seats, attendance and requests are preserved.</p>
       <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
         <a href="/coach/index.html">Dashboard</a>
         <a href="/coach/records.html">Athletes</a>
