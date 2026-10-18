@@ -22,10 +22,10 @@ export function isMondayDate(value) {
     date.getUTCDate() === day && date.getUTCDay() === 1;
 }
 
-export function classDatesForWeek(monday) {
-  if (!isMondayDate(monday)) return [];
+export function classDatesForWeek(monday, days = 5) {
+  if (!isMondayDate(monday) || ![5, 7].includes(days)) return [];
   const start = new Date(`${monday}T00:00:00Z`);
-  return Array.from({ length: 5 }, (_, offset) => {
+  return Array.from({ length: days }, (_, offset) => {
     const date = new Date(start);
     date.setUTCDate(start.getUTCDate() + offset);
     return date.toISOString().slice(0, 10);

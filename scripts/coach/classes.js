@@ -52,7 +52,7 @@ function slotLabel(slot) {
   const hour = Number(slot.local_start_time.slice(0, 2));
   const minute = slot.local_start_time.slice(3, 5);
   const localHour = hour % 12 || 12;
-  return `${weekdays[slot.iso_weekday - 1]} ${localHour}:${minute} ${hour < 12 ? "am" : "pm"} · ${className}`;
+  return `${weekdays[slot.iso_weekday - 1]} ${localHour}:${minute} ${hour < 12 ? "am" : "pm"} · ${className} · from ${slot.active_from}${slot.active_until ? ` until ${slot.active_until}` : ""}`;
 }
 
 function classLabel(occurrence) {
@@ -154,10 +154,10 @@ async function loadWeek(preferredOccurrenceId = dropInClass.value) {
     status.textContent = "Choose a Monday for the class week.";
     return;
   }
-  const dates = classDatesForWeek(weekStart.value);
+  const dates = classDatesForWeek(weekStart.value, 7);
   const { data, count, error } = await supabase.from("class_occurrences")
     .select("id, standing_slot_id, class_date, capacity, location_id", { count: "exact" })
-    .gte("class_date", dates[0]).lte("class_date", dates[4])
+    .gte("class_date", dates[0]).lte("class_date", dates.at(-1))
     .order("class_date").order("starts_at").order("id");
   if (error) throw error;
   if (count > data.length) throw new Error("Class week exceeds current page limit");
