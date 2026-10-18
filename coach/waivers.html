@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow"><title>Waivers | New Vision Athletics</title>
+<link rel="icon" href="/favicon-32x32.png" type="image/png">
+<link rel="stylesheet" href="/styles/portal.css"><link rel="stylesheet" href="/styles/waivers.css">
+<script type="module" src="/coach/waivers.js"></script>
+</head><body class="waiver-page">
+<header class="waiver-header"><a href="/">New Vision Athletics<small>Coach portal</small></a><button id="sign-out" type="button" class="secondary" hidden>Sign out</button></header>
+<main class="waiver-main">
+<nav class="waiver-nav" aria-label="Coach shortcuts"><a href="/coach/">Dashboard</a><a href="/coach/records.html">Athletes</a><a href="/coach/families.html">Parent access</a><a href="/coach/reports.html">Progress reports</a><a href="/coach/waivers.html" aria-current="page">Waivers</a></nav>
+<h1>Athlete waivers</h1><p class="waiver-intro">Review which athletes need a waiver and open signed copies, including emergency contact details.</p>
+<p id="status" role="status" aria-live="polite">Checking your account…</p>
+<div id="waiver-content" hidden>
+<p id="waiver-summary" class="waiver-summary"></p>
+<div class="waiver-toolbar"><div><label for="athlete">Athlete</label><select id="athlete"><option value="">Choose an athlete</option></select></div><div><label for="status-filter">Show</label><select id="status-filter"><option value="all">All athletes</option><option value="needs_signing">Needs signing</option><option value="completed">Completed</option></select></div></div>
+<div class="waiver-layout"><section id="waiver-list" aria-label="Athlete waiver statuses"></section>
+<div id="waiver-detail">
+<p id="waiver-empty" class="waiver-panel">Select an athlete to view their waiver status.</p>
+
+<div class="waiver-actions"><button id="print-waiver" type="button" class="secondary" hidden>Print / Save PDF</button></div>
+<article id="signed-record" class="waiver-panel" aria-label="Signed waiver" hidden></article>
+<section id="waiver-history" class="waiver-history" aria-label="Signed waiver history" hidden><h2>Signed waiver history</h2><div id="waiver-history-list"></div></section>
+</div></div></div></main></body></html>

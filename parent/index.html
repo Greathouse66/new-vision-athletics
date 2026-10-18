@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/portal.css">
+  <link rel="stylesheet" href="/styles/waivers.css">
   <script type="module" src="/parent/index.js"></script>
 </head>
 <body class="parent-dashboard">
@@ -34,6 +35,11 @@
           <label for="account-filter">Parent account</label>
           <select id="account-filter"></select>
         </div>
+        <section class="parent-waiver-alert" aria-labelledby="waivers-heading">
+          <h2 id="waivers-heading">Athlete waivers</h2>
+          <p id="waiver-summary" role="status">Loading waiver status…</p>
+          <a href="/parent/waivers.html">Review and sign waivers</a>
+        </section>
         <section class="parent-athletes" aria-labelledby="athletes-heading">
           <div class="parent-section-heading">
             <h2 id="athletes-heading">My athletes</h2>

@@ -90,3 +90,5 @@
   .dashboard-bottom-nav { position: static; max-width: 72rem; margin: 0 auto; border: 0; background: transparent; }
   .dashboard-bottom-nav a { min-height: 3rem; }
 }
+
+.dashboard-more .dashboard-waiver-summary { display:block; margin-top:.25rem; font-size:.75rem; font-weight:500; color:#4b6265; }

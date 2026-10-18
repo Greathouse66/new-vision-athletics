@@ -1,4 +1,5 @@
 import { configured, supabase } from "../auth/client.js";
+import { loadWaiverStatuses } from "../waivers/shared.mjs";
 
 const status = document.querySelector("#status");
 const content = document.querySelector("#coach-content");
@@ -15,6 +16,11 @@ async function start() {
 
   signOut.hidden = false;
   content.hidden = false;
+  loadWaiverStatuses(supabase).then(rows => {
+    const needs = rows.filter(row => row.waiver_status === "needs_signing").length;
+    const completed = rows.filter(row => row.waiver_status === "completed").length;
+    document.querySelector("#waiver-summary").textContent = `${needs} need signing · ${completed} completed`;
+  }).catch(() => { document.querySelector("#waiver-summary").textContent = "Open to check status"; });
   const results = await Promise.all([
     supabase.from("athletes").select("id", { count: "exact", head: true }),
     supabase.from("families").select("id", { count: "exact", head: true }),
