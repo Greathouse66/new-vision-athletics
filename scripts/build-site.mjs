@@ -12,6 +12,8 @@ const publicFiles = [
   "index.js",
   "Pay-Now.html",
   "favicon-32x32.png",
+  "favicon.svg",
+  "Assets/Icons",
   "Assets/Images",
   "auth/sign-in.html",
   "auth/callback.html",
