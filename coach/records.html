@@ -8,6 +8,7 @@
   <link rel="icon" href="/Assets/Icons/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
   <link rel="stylesheet" href="/styles/portal.css">
+  <link rel="stylesheet" href="/styles/record-deletion.css">
   <script type="module" src="/coach/records.js"></script>
 </head>
 <body class="portal-coach">
@@ -57,8 +58,22 @@
             <input id="family-name" name="name" required maxlength="160" autocomplete="off">
             <button type="submit" class="secondary">Save account name</button>
           </form>
+          <p><button id="review-delete-account" type="button" class="secondary">Delete account</button></p>
           <h2>Athletes</h2>
           <ul id="athletes"></ul>
+          <section id="delete-record-panel" class="record-deletion" aria-labelledby="delete-record-heading" hidden>
+            <h2 id="delete-record-heading" tabindex="-1">Review deletion</h2>
+            <p id="delete-record-summary"></p>
+            <ul id="delete-record-athletes"></ul>
+            <p id="delete-record-help"></p>
+            <ul id="delete-record-blockers"></ul>
+            <form id="delete-record-form" hidden>
+              <label for="delete-record-name">Type the exact name shown above to confirm</label>
+              <input id="delete-record-name" type="text" required maxlength="160" autocomplete="off" spellcheck="false">
+              <button id="delete-record-submit" type="submit" class="record-delete-button" disabled>Permanently delete</button>
+            </form>
+            <button id="cancel-record-deletion" type="button" class="secondary">Cancel</button>
+          </section>
           <form id="add-athlete-form">
             <label for="new-athlete-name">Athlete display name</label>
             <input id="new-athlete-name" name="name" required maxlength="160" autocomplete="off">
@@ -98,7 +113,8 @@
       <p class="note">Parent access is managed separately on the <a href="/coach/families.html">access page</a>.
         <a href="/coach/waivers.html">Review athlete waivers</a>.
         Skill levels are on the <a href="/coach/groups.html">skill groups page</a>.
-        This screen does not send invitations, move athletes between accounts, or delete records.</p>
+        Deletion is limited to unused records. Bookings, payments, reports and signed waivers protect records from deletion.
+        Parent sign-in users are managed separately and are never deleted here.</p>
       <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
         <a href="/coach/index.html">Dashboard</a>
         <a href="/coach/records.html" aria-current="page">Athletes</a>

@@ -1,0 +1,21 @@
+.portal-coach .card .record-deletion {
+  width:min(calc(100% - 2rem),64rem);
+  margin:1.5rem auto;
+  padding:1.25rem;
+  background:#fff7f5;
+  border:1px solid #b65b4e;
+  border-radius:.8rem;
+  overflow-wrap:anywhere;
+  scroll-margin-top:6rem;
+}
+.portal-coach .card .record-deletion form { width:100%; margin:1rem 0; }
+.portal-coach .card .record-deletion ul { width:100%; margin:1rem 0; padding:0; }
+.portal-coach .card .record-deletion h2 { margin-top:0; }
+.portal-coach .card button.record-delete-button:not(.secondary) {
+  --button-glow:139 41 35;
+  background-color:#8b2923;
+  color:#fff;
+}
+.portal-coach .card #athletes li { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; }
+.portal-coach .card #athletes li span { flex:1; min-width:8rem; }
+.portal-coach .card #athletes li button { margin:0; }

@@ -23,6 +23,11 @@ const assignGroupForm = document.querySelector("#assign-group-form");
 const individualGroup = document.querySelector("#individual-group");
 const sharedGroup = document.querySelector("#new-athlete-group");
 const assignmentGroup = document.querySelector("#assignment-group");
+const deletionPanel = document.querySelector("#delete-record-panel");
+const deletionForm = document.querySelector("#delete-record-form");
+const deletionName = document.querySelector("#delete-record-name");
+const deletionSubmit = document.querySelector("#delete-record-submit");
+let deletionReview = null;
 
 let families = [];
 let athletes = [];
@@ -45,6 +50,68 @@ function option(id, name) {
 }
 
 function selectedFamily() { return families.find((family) => family.id === familySelect.value); }
+
+function clearDeletionReview() {
+  deletionReview = null;
+  deletionPanel.hidden = true;
+  deletionForm.hidden = true;
+  deletionName.value = "";
+  updateDeletionButton();
+}
+
+function updateDeletionButton() {
+  deletionSubmit.disabled = saving || !deletionReview?.can_delete ||
+    deletionName.value !== deletionReview.confirmation_name;
+}
+
+function deletionError(error) {
+  if (error.code === "PGRST202") return "The account deletion database update has not been applied yet.";
+  if (error.code === "42501") return "Coach access is no longer available. Reload and sign in again.";
+  if (error.code === "40001") return "The record changed. Reload the roster and review deletion again.";
+  if (["55000", "22023"].includes(error.code)) return error.message;
+  return "Could not confirm deletion. Reload the roster before trying again.";
+}
+
+async function reviewDeletion(athleteId = null) {
+  if (saving || !selectedFamily()) return;
+  const familyId = familySelect.value;
+  await save(async () => {
+    clearDeletionReview();
+    const { data, error } = await supabase.rpc("review_unused_account_deletion", {
+      p_family_id: familyId, p_athlete_id: athleteId,
+    });
+    if (error) { setStatus(deletionError(error)); return; }
+    if (familySelect.value !== familyId || !data?.review_token || !Array.isArray(data.athletes) ||
+        !Array.isArray(data.blockers) || !Array.isArray(data.group_enrollments)) {
+      setStatus("Could not review this record. Reload the roster."); return;
+    }
+    deletionReview = data;
+    const account = data.record_type === "account";
+    document.querySelector("#delete-record-heading").textContent = `${account ? "Delete account" : "Delete athlete"}: ${data.confirmation_name}`;
+    document.querySelector("#delete-record-summary").textContent = account
+      ? `This permanently removes the account “${data.family.display_name}” and all ${data.athletes.length} athlete(s) listed below.`
+      : `This permanently removes only this athlete from “${data.family.display_name}”. The account and other athletes stay in place.`;
+    const list = document.querySelector("#delete-record-athletes");
+    list.replaceChildren();
+    for (const athlete of data.athletes) {
+      const item = document.createElement("li"); item.textContent = athlete.display_name; list.append(item);
+    }
+    const blockers = document.querySelector("#delete-record-blockers");
+    blockers.replaceChildren();
+    for (const reason of data.blockers) {
+      const item = document.createElement("li"); item.textContent = reason; blockers.append(item);
+    }
+    document.querySelector("#delete-record-help").textContent = data.can_delete
+      ? `${data.group_enrollments.length} skill-group assignment record(s) will also be removed. A private deletion audit is retained. Parent sign-in users are unchanged. This cannot be undone from the portal.`
+      : "Deletion is blocked by the records listed below. Keep this history; deleting a parent account also requires no parent access or invitation history.";
+    deletionForm.hidden = !data.can_delete;
+    deletionSubmit.textContent = account ? "Permanently delete account" : "Permanently delete athlete";
+    deletionPanel.hidden = false;
+    deletionPanel.scrollIntoView({ block: "start" });
+    document.querySelector("#delete-record-heading").focus({ preventScroll: true });
+    setStatus("");
+  });
+}
 
 async function loadGroups() {
   const { data, count, error } = await supabase.from("skill_groups")
@@ -126,7 +193,12 @@ function renderAthletes(preferredId = athleteSelect.value) {
   groupAthleteSelect.replaceChildren();
   for (const athlete of athletes) {
     const item = document.createElement("li");
-    item.textContent = athlete.display_name;
+    const label = document.createElement("span"); label.textContent = athlete.display_name;
+    const remove = document.createElement("button");
+    remove.type = "button"; remove.className = "secondary"; remove.textContent = "Delete athlete";
+    remove.setAttribute("aria-label", `Delete athlete ${athlete.display_name}`);
+    remove.addEventListener("click", () => reviewDeletion(athlete.id));
+    item.append(label, remove);
     athleteList.append(item);
     athleteSelect.append(option(athlete.id, athlete.display_name));
     groupAthleteSelect.append(option(athlete.id, athlete.display_name));
@@ -196,6 +268,7 @@ async function loadNameCorrections(familyId, request) {
 }
 
 async function loadAthletes(preferredId) {
+  clearDeletionReview();
   const familyId = familySelect.value;
   const request = ++requestNumber;
   ++historyRequest;
@@ -219,19 +292,16 @@ async function loadAthletes(preferredId) {
 async function save(action) {
   if (saving) return;
   saving = true;
-  const buttons = content.querySelectorAll("button[type=submit]");
-  for (const button of buttons) button.disabled = true;
-  familySelect.disabled = true;
-  athleteSelect.disabled = true;
-  groupAthleteSelect.disabled = true;
+  const controls = new Map([...content.querySelectorAll("button, input, select")].map(control => [control, control.disabled]));
+  for (const control of controls.keys()) control.disabled = true;
+  signOut.disabled = true;
   try { await action(); }
   catch { setStatus("Could not save the record. Please refresh and try again."); }
   finally {
-    for (const button of buttons) button.disabled = false;
-    familySelect.disabled = false;
-    athleteSelect.disabled = false;
-    groupAthleteSelect.disabled = false;
+    for (const [control, disabled] of controls) if (control.isConnected) control.disabled = disabled;
+    signOut.disabled = false;
     saving = false;
+    updateDeletionButton();
   }
 }
 
@@ -403,10 +473,40 @@ renameAthleteForm.addEventListener("submit", (event) => {
 });
 
 signOut.addEventListener("click", async () => {
+  if (saving) return;
   signOut.disabled = true;
   const { error } = await supabase.auth.signOut();
   if (error) { signOut.disabled = false; setStatus("Could not sign out."); return; }
   location.replace("/auth/sign-in.html");
+});
+
+document.querySelector("#review-delete-account").addEventListener("click", () => reviewDeletion());
+document.querySelector("#cancel-record-deletion").addEventListener("click", () => {
+  if (saving) return;
+  clearDeletionReview();
+  document.querySelector("#review-delete-account").focus();
+});
+deletionName.addEventListener("input", updateDeletionButton);
+deletionForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (saving || !deletionReview?.can_delete || deletionName.value !== deletionReview.confirmation_name) return;
+  const review = deletionReview, confirmation = deletionName.value;
+  await save(async () => {
+    const { data, error } = await supabase.rpc("delete_unused_account_record", {
+      p_family_id: review.family.id, p_athlete_id: review.athlete_id,
+      p_review_token: review.review_token, p_confirmation_name: confirmation,
+    });
+    if (error) { clearDeletionReview(); setStatus(deletionError(error)); return; }
+    clearDeletionReview();
+    if (typeof data?.deleted_account !== "boolean" || !Number.isInteger(data.deleted_athletes)) {
+      setStatus("The deletion result was unclear. Reload the roster before trying again."); return;
+    }
+    const message = data?.deleted_account
+      ? `Account deleted with ${data.deleted_athletes} athlete(s). Parent sign-in users are unchanged.`
+      : "Athlete deleted. The parent account and other athletes are unchanged.";
+    try { await refresh(review.family.id); setStatus(message); }
+    catch { setStatus("Deleted, but the roster could not refresh. Reload the page."); }
+  });
 });
 
 start().catch(() => setStatus("Could not load the athlete roster. Please try again."));
