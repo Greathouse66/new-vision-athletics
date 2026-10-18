@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow"><title>Waivers | New Vision Athletics</title>
+<link rel="icon" href="/favicon-32x32.png" type="image/png">
+<link rel="stylesheet" href="/styles/portal.css"><link rel="stylesheet" href="/styles/waivers.css">
+<script type="module" src="/parent/waivers.js"></script>
+</head><body class="waiver-page">
+<header class="waiver-header"><a href="/">New Vision Athletics<small>Parent portal</small></a><button id="sign-out" type="button" class="secondary" hidden>Sign out</button></header>
+<main class="waiver-main">
+<nav class="waiver-nav" aria-label="Parent shortcuts"><a href="/parent/">My athletes</a><a href="/parent/payments.html">Tuition</a><a href="/parent/sessions.html">Sessions</a><a href="/parent/drop-ins.html">Drop-ins</a><a href="/parent/reports.html">Progress reports</a><a href="/parent/waivers.html" aria-current="page">Waivers</a></nav>
+<h1>Waivers for your athletes</h1><p class="waiver-intro">Complete a separate waiver for each athlete. You can view and retain completed copies here.</p>
+<p id="status" role="status" aria-live="polite">Checking your account…</p>
+<div id="waiver-content" hidden>
+<p id="waiver-summary" class="waiver-summary"></p>
+<div class="waiver-toolbar"><div><label for="athlete">Athlete</label><select id="athlete"><option value="">Choose an athlete</option></select></div><div><label for="status-filter">Show</label><select id="status-filter"><option value="all">All athletes</option><option value="needs_signing">Needs signing</option><option value="completed">Completed</option></select></div></div>
+<div class="waiver-layout"><section id="waiver-list" aria-label="Athlete waiver statuses"></section>
+<div id="waiver-detail">
+<p id="waiver-empty" class="waiver-panel">Select an athlete to complete or view their waiver.</p>
+<form id="waiver-form" class="waiver-panel" hidden>
+  <h2 id="form-heading">Complete an athlete waiver</h2>
+  <p id="participant-name"></p>
+  <div class="waiver-fields">
+    <div><label for="date-of-birth">Athlete date of birth</label><input id="date-of-birth" name="date_of_birth" type="date" min="1900-01-01" required></div>
+    <div><label for="guardian-name">Parent / legal guardian full name</label><input id="guardian-name" name="guardian_name" autocomplete="name" minlength="2" maxlength="160" required></div>
+    <div><label for="emergency-contact">Emergency contact name</label><input id="emergency-contact" name="emergency_contact" minlength="2" maxlength="160" required></div>
+    <div><label for="emergency-phone">Emergency contact phone</label><input id="emergency-phone" name="emergency_phone" type="tel" autocomplete="tel" minlength="7" maxlength="40" required></div>
+  </div>
+  <section id="waiver-terms" aria-label="Waiver text"></section>
+  <label class="waiver-check"><input id="acknowledgment" name="acknowledgment" type="checkbox" required><span>I have read and accept this waiver and acknowledgment. I am the athlete's parent or legal guardian and have authority to sign for them.</span></label>
+  <label class="waiver-check"><input id="electronic-consent" name="electronic_consent" type="checkbox" required><span id="electronic-consent-text"></span></label>
+  <label for="signature-name">Electronic signature - type your full name</label>
+  <input id="signature-name" name="signature_name" class="waiver-signature" autocomplete="off" minlength="2" maxlength="160" required aria-describedby="signature-help">
+  <p id="signature-help" class="note">Your signature must match the parent / legal guardian name above. The signed copy is saved for this athlete with your verified account email and the signing time. Check all details before signing; completed records cannot be edited.</p>
+  <button id="sign-waiver" type="submit">Sign and complete waiver</button>
+</form>
+<div class="waiver-actions"><button id="print-waiver" type="button" class="secondary" hidden>Print / Save PDF</button></div>
+<article id="signed-record" class="waiver-panel" aria-label="Signed waiver" hidden></article>
+<section id="waiver-history" class="waiver-history" aria-label="Signed waiver history" hidden><h2>Signed waiver history</h2><div id="waiver-history-list"></div></section>
+</div></div></div></main></body></html>

@@ -1,0 +1,65 @@
+.waiver-page { display:block; padding:0; color:#243536; background:#f3f8f8; font-family:system-ui,sans-serif; }
+.waiver-header { width:100%; display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:1rem max(1rem,calc((100% - 72rem)/2)); background:#303636; color:#fff; }
+.waiver-header a { color:#2ff3ee; text-decoration:none; font-weight:800; }
+.waiver-header small { display:block; color:#d9e9e9; margin-top:.25rem; font-size:.75rem; }
+.waiver-main { width:min(calc(100% - 2rem),72rem); margin:auto; padding:1rem 0 3rem; }
+.waiver-main h1 { font-size:clamp(2rem,5vw,3rem); line-height:1.15; margin:1rem 0; }
+.waiver-main h2 { font-size:1.4rem; line-height:1.35; }
+.waiver-nav { display:flex; flex-wrap:wrap; gap:.6rem 1rem; }
+.waiver-nav a { display:inline-flex; align-items:center; min-height:2.75rem; color:#135c63; font-weight:700; }
+.waiver-intro { max-width:48rem; color:#4b6265; }
+.waiver-summary { padding:1rem 1.2rem; border-left:4px solid #15a59d; background:#e4f4f1; border-radius:.5rem; }
+.waiver-toolbar { display:flex; flex-wrap:wrap; gap:1rem; margin:1rem 0; }
+.waiver-toolbar>div { flex:1 1 15rem; min-width:0; }
+.waiver-toolbar label { margin:.5rem 0; }
+.waiver-layout { display:grid; grid-template-columns:minmax(15rem,.8fr) minmax(0,1.8fr); gap:1.5rem; align-items:start; }
+#waiver-list { display:grid; gap:.8rem; }
+.waiver-card,.waiver-panel { background:#fff; border:1px solid #d2e3e3; border-radius:.8rem; padding:1.2rem; min-width:0; }
+.waiver-card h2 { margin:0 0 .6rem; overflow-wrap:anywhere; }
+.waiver-card p { font-size:.85rem; color:#4b6265; }
+.waiver-card button { margin-top:.8rem; }
+.waiver-badge { display:inline-block; border-radius:999px; padding:.3rem .7rem; font-size:.78rem; font-weight:750; }
+.waiver-badge.completed { background:#d8f4e9; color:#125a41; }
+.waiver-badge.needs_signing { background:#fff0cc; color:#735100; }
+.waiver-badge.not_configured { background:#e9eeee; color:#42595c; }
+.waiver-main input,.waiver-main select { max-width:100%; box-sizing:border-box; }
+.waiver-company { color:#135c63; text-transform:uppercase; font-size:.8rem; font-weight:800; letter-spacing:.06em; }
+.waiver-wording { white-space:pre-wrap; line-height:1.7; margin:1.5rem 0; }
+#waiver-terms { border-top:1px solid #d2e3e3; margin-top:1.5rem; padding-top:1rem; }
+.waiver-fields { display:grid; grid-template-columns:1fr 1fr; gap:0 1rem; }
+.waiver-fields>div { min-width:0; }
+.waiver-check { display:flex; align-items:flex-start; gap:.7rem; font-weight:400; line-height:1.5; margin:1.2rem 0; }
+.waiver-check input[type=checkbox] { width:1.3rem; height:1.3rem; flex:0 0 auto; margin:.15rem 0 0; }
+.waiver-signature { font-family:Georgia,serif; font-style:italic; font-size:1.35rem; }
+.waiver-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1rem 0; }
+.waiver-actions button { margin:0; }
+.waiver-facts { display:grid; grid-template-columns: minmax(8rem,.75fr) minmax(0,1.5fr); gap:.7rem 1rem; border-top:1px solid #d2e3e3; padding-top:1.2rem; }
+.waiver-facts dt { font-weight:700; }
+.waiver-facts dd { margin:0; overflow-wrap:anywhere; }
+.waiver-evidence { font-size:.75rem; overflow-wrap:anywhere; color:#4b6265; }
+.waiver-history { margin-top:1.5rem; }
+.waiver-history button { display:block; margin:.6rem 0; text-align:left; }
+.waiver-page [hidden] { display:none!important; }
+.parent-waiver-link { display:block; flex-basis:100%; margin-top:.65rem; font-size:.8rem; color:#135c63; font-weight:700; }
+.parent-waiver-alert { margin:1.2rem 0; padding:1.1rem; border:1px solid #badad6; border-left:4px solid #15988f; border-radius:.7rem; background:#e7f5f2; }
+.parent-waiver-alert p { margin:.3rem 0 .7rem; }
+@media(max-width:760px) {
+ .waiver-layout { grid-template-columns:minmax(0,1fr); }
+ .waiver-fields { grid-template-columns:minmax(0,1fr); }
+ .waiver-facts { grid-template-columns:minmax(0,1fr); gap:.25rem; }
+ .waiver-facts dd { margin-bottom:.7rem; }
+ .waiver-header { padding:1rem; }
+}
+@media print {
+ @page { margin:16mm; }
+ body.waiver-page { background:white; color:#111; font-size:10pt; }
+ .waiver-header,.waiver-nav,.waiver-main>h1,.waiver-intro,#status,.waiver-summary,.waiver-toolbar,#waiver-list,#waiver-form,#waiver-empty,.waiver-actions,.waiver-history { display:none!important; }
+ .waiver-main { width:100%; padding:0; }
+ .waiver-layout { display:block; }
+ .waiver-panel { border:0; padding:0; }
+ #signed-record { display:block!important; }
+ #signed-record h2,#signed-record h3 { break-after:avoid; }
+ .waiver-facts { grid-template-columns: 1fr 2fr; }
+ .waiver-facts dt,.waiver-facts dd { break-inside:avoid; }
+ .waiver-wording { font-size:10pt; line-height:1.5; }
+}
