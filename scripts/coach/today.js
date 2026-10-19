@@ -117,7 +117,7 @@ async function loadRoster() {
   const seatIds = seats.map((seat) => seat.id);
   const [athletes, attendance, audit] = seatIds.length ? await Promise.all([
     checkedList(supabase.from("athletes")
-      .select("id, display_name", { count: "exact" }).in("id", athleteIds), "Athlete list"),
+      .select("id, display_name, archived_at", { count: "exact" }).in("id", athleteIds), "Athlete list"),
     checkedList(supabase.from("class_attendance")
       .select("seat_id, status", { count: "exact" }).in("seat_id", seatIds), "Attendance list"),
     checkedList(supabase.from("class_attendance_audit")
@@ -145,7 +145,7 @@ async function loadRoster() {
       const athlete = athletes.find((entry) => entry.id === seat.athlete_id);
       const mark = attendance.find((entry) => entry.seat_id === seat.id);
       const label = document.createElement("span");
-      label.textContent = `${athlete?.display_name ?? "Athlete needs review"} · ` +
+      label.textContent = `${athlete?.display_name ?? "Athlete needs review"}${athlete?.archived_at ? " · Archived" : ""} · ` +
         `${seat.seat_kind === "regular" ? "Regular" : "Drop-in"} · ` +
         (mark?.status ?? "Not marked");
       item.append(label);

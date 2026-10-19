@@ -103,7 +103,7 @@ async function start(){
  if(role.error)throw new Error('Could not verify coach access.');if(!role.data){message('This account does not have coach access.');return}
  signOut.hidden=false;athletes=await loadAthletes(supabase);
  if(!athletes.length){message('Add an athlete to the roster before uploading reports.');return}
- selector.replaceChildren(...athletes.map(a=>{const o=element('option',a.display_name);o.value=a.id;return o}));
+ selector.replaceChildren(...athletes.map(a=>{const o=element('option',a.display_name + (a.archived_at ? ' · Archived' : ''));o.value=a.id;return o}));
  selectedAthlete=selector.value;resetEditor();await refresh();content.hidden=false;message('');
  supabase.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'){closePdf();content.hidden=true;location.replace('/auth/sign-in.html')}});
 }

@@ -25,7 +25,7 @@ export function today() {
   return `${get('year')}-${get('month')}-${get('day')}`;
 }
 export async function loadAthletes(client, parentId) {
-  let query = client.from('athletes').select('id, display_name, family_id', {count:'exact'}).order('display_name').order('id');
+  let query = client.from('athletes').select('id, display_name, family_id, archived_at', {count:'exact'}).order('display_name').order('id');
   if (parentId) {
     const grants = await client.from('family_guardians').select('family_id', {count:'exact'}).eq('user_id',parentId);
     if (grants.error || grants.count > grants.data.length) throw new Error('Could not load parent access.');

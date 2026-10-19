@@ -42,3 +42,7 @@ the page blocks access. Verify direct parent Data API inserts and updates
 remain denied by RLS. Use the reviewed deletion controls to clean up unused
 disposable records before granting parent access. This screen does not
 require the custom domain or SMTP.
+
+## Athletes who leave
+
+Use **Archive** on the athlete roster for athletes with history. Restore them with **Archived athletes → Reactivate**. See [archive and reactivate](athlete-archiving.md) for booking behavior and retained parent access.

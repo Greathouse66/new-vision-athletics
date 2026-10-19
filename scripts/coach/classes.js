@@ -42,7 +42,8 @@ function addEmptyItem(list, message) {
 }
 
 function athleteName(id) {
-  return athletes.find((athlete) => athlete.id === id)?.display_name ?? "Athlete needs review";
+  const athlete = athletes.find(row => row.id === id);
+  return athlete ? athlete.display_name + (athlete.archived_at ? " · Archived" : "") : "Athlete needs review";
 }
 
 function slotLabel(slot) {
@@ -72,7 +73,7 @@ async function fullList(table, columns, orderColumn) {
 
 async function loadReferenceData() {
   [athletes, slots, groups, locations] = await Promise.all([
-    fullList("athletes", "id, display_name", "display_name"),
+    fullList("athletes", "id, display_name, archived_at", "display_name"),
     fullList("standing_class_slots",
       "id, group_id, class_kind, iso_weekday, local_start_time, capacity, active_from, active_until", "iso_weekday"),
     fullList("skill_groups", "id, name", "name"),
@@ -84,7 +85,7 @@ async function loadReferenceData() {
   for (const slot of slots) regularSlot.append(option(slot.id, slotLabel(slot)));
   for (const select of [regularAthlete, dropInAthlete]) {
     select.replaceChildren(option("", "Choose an athlete"));
-    for (const athlete of athletes) select.append(option(athlete.id, athlete.display_name));
+    for (const athlete of athletes.filter(row => !row.archived_at)) select.append(option(athlete.id, athlete.display_name));
   }
 }
 
@@ -186,6 +187,7 @@ async function performWrite(action, refresh, successMessage) {
     if (error) {
       status.textContent = error.code === "23514" ? "This class is full. Review its seats."
         : error.code === "23505" ? "This athlete already has this place. Review the roster."
+        : error.code === "55000" && error.message?.includes("athlete is archived") ? "This athlete is archived. Reactivate them on the athlete roster before booking."
         : error.code === "42501" ? "Coach access is no longer available."
         : "Could not save this class place. Review the dates and try again.";
       return;

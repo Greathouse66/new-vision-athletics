@@ -36,7 +36,15 @@
         <p>The account is created automatically. Parent access is approved separately.</p>
       </section>
       <section>
-        <h2>All athletes</h2>
+        <h2>Athletes</h2>
+        <label for="roster-status">Show athletes</label>
+        <select id="roster-status">
+          <option value="active">Active athletes</option>
+          <option value="archived">Archived athletes</option>
+          <option value="all">All athletes</option>
+        </select>
+        <p id="roster-count" role="status"></p>
+        <p>Archive athletes who leave and reactivate them when they return. Payments, waivers, reports and history stay available.</p>
         <ul id="roster"></ul>
       </section>
       <section>
@@ -61,6 +69,7 @@
           <p><button id="review-delete-account" type="button" class="secondary">Delete account</button></p>
           <h2>Athletes</h2>
           <ul id="athletes"></ul>
+          <p>Archived athletes cannot make new bookings. Existing confirmed sessions and reserved weekly places stay in place; review them on <a href="/coach/classes.html">Class places</a>. Automatic seats pause while archived and resume for newly created class dates after reactivation.</p>
           <section id="delete-record-panel" class="record-deletion" aria-labelledby="delete-record-heading" hidden>
             <h2 id="delete-record-heading" tabindex="-1">Review deletion</h2>
             <p id="delete-record-summary"></p>

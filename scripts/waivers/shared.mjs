@@ -12,7 +12,10 @@ export async function loadWaiverStatuses(client) {
   if (result.error || !Array.isArray(result.data) || result.count > result.data.length) {
     throw new Error('Could not load all waiver statuses. Please reload.');
   }
-  return result.data;
+  const athletes = await client.from('athletes').select('id, archived_at', {count:'exact'});
+  if (athletes.error || athletes.count > athletes.data.length) throw new Error('Could not load athlete status.');
+  const statuses = new Map(athletes.data.map(a => [a.id,a.archived_at]));
+  return result.data.map(row => ({...row,archived_at:statuses.get(row.athlete_id) ?? null}));
 }
 export async function loadSignedWaiver(client, id) {
   const result = await client.from('athlete_waiver_signatures').select('*').eq('id',id).single();
