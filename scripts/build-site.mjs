@@ -41,6 +41,7 @@ const publicFiles = [
   "styles/reports.css",
   "styles/waivers.css",
   "styles/schedule.css",
+  "styles/record-deletion.css",
 ];
 
 // Check required sources before replacing the generated output.

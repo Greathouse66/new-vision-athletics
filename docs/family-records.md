@@ -25,8 +25,9 @@ Names are display labels, not unique identity keys. Coaches should review
 possible duplicates and confirm the parent account before linking an athlete.
 Membership is stored by ID and cannot be changed from this screen. Parents
 who gain access to an account see every athlete in that account. Athletes do
-not sign in themselves in this version. The page does not delete records,
-because links and past enrollments must remain consistent. Changing an
+not sign in themselves in this version. The page can remove unused records
+through the reviewed [deletion workflow](record-deletion.md); linked operational
+history blocks deletion. Changing an
 individual athlete's name does not automatically rename the account label;
 the coach can correct that separately. Once the name-correction migration is
 applied, both corrections create coach-readable audit events. See
@@ -38,6 +39,6 @@ account with two disposable siblings, a temporary coach role, and a parent-only
 account. Confirm both creation paths and name corrections as coach; verify
 that the parent sees only approved athletes. Remove the coach role and confirm
 the page blocks access. Verify direct parent Data API inserts and updates
-remain denied by RLS. Clean up disposable rows after confirming they have no
-guardian links; remove group enrollments first. This screen does not
+remain denied by RLS. Use the reviewed deletion controls to clean up unused
+disposable records before granting parent access. This screen does not
 require the custom domain or SMTP.
