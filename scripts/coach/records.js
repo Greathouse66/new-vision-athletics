@@ -28,6 +28,7 @@ const deletionForm = document.querySelector("#delete-record-form");
 const deletionName = document.querySelector("#delete-record-name");
 const deletionSubmit = document.querySelector("#delete-record-submit");
 let deletionReview = null;
+const rosterStatus = document.querySelector("#roster-status");
 
 let families = [];
 let athletes = [];
@@ -143,17 +144,25 @@ async function loadFamilies(preferredId = familySelect.value, preferredAthleteId
 
 async function loadRoster() {
   const { data, count, error } = await supabase.from("athletes")
-    .select("id, family_id, display_name", { count: "exact" })
+    .select("id, family_id, display_name, archived_at, archive_revision", { count: "exact" })
     .order("display_name").order("id");
   if (error) throw error;
   if (count > data.length) throw new Error("Athlete roster exceeds the current page limit");
   roster = data;
+  renderRoster();
+}
+
+function renderRoster() {
   rosterList.replaceChildren();
   const accountCounts = new Map();
   for (const athlete of roster) {
     accountCounts.set(athlete.family_id, (accountCounts.get(athlete.family_id) ?? 0) + 1);
   }
-  for (const athlete of roster) {
+  const visible = roster.filter(athlete => rosterStatus.value === "all" ||
+    (rosterStatus.value === "archived") === Boolean(athlete.archived_at));
+  const archivedCount = roster.filter(athlete => athlete.archived_at).length;
+  document.querySelector("#roster-count").textContent = `${roster.length - archivedCount} active · ${archivedCount} archived`;
+  for (const athlete of visible) {
     const item = document.createElement("li");
     const label = document.createElement("span");
     const account = families.find((family) => family.id === athlete.family_id);
@@ -171,15 +180,55 @@ async function loadRoster() {
       loadAthletes(athlete.id).then(() => setStatus(""))
         .catch(() => setStatus("Could not load this account. Please try again."));
     });
-    item.append(label, button);
+    if (athlete.archived_at) label.append(" · Archived");
+    item.append(label, button, archiveButton(athlete));
     rosterList.append(item);
   }
-  if (!roster.length) {
+  if (!visible.length) {
     const item = document.createElement("li");
-    item.textContent = "No athletes have been added yet.";
+    item.textContent = "No athletes in this view.";
     rosterList.append(item);
   }
 }
+
+function archiveButton(athlete) {
+  const button = document.createElement("button");
+  button.type = "button"; button.className = "secondary";
+  button.textContent = athlete.archived_at ? "Reactivate" : "Archive";
+  button.setAttribute("aria-label", `${button.textContent} ${athlete.display_name}`);
+  button.addEventListener("click", () => changeArchiveStatus(athlete));
+  return button;
+}
+
+async function changeArchiveStatus(athlete) {
+  if (saving) return;
+  const archive = !athlete.archived_at;
+  const explanation = archive
+    ? "Hide from active rosters and prevent new bookings? Payments, waivers, reports and history remain. Existing confirmed sessions and reserved weekly places stay in place. Review class places separately."
+    : "Return to active rosters and allow new bookings? Regular assignments resume for newly created class dates. Sessions created during the archive are not backfilled.";
+  if (!confirm(`${archive ? "Archive" : "Reactivate"} ${athlete.display_name}? ${explanation}`)) return;
+  await save(async () => {
+    const { data, error } = await supabase.rpc("set_athlete_archived", {
+      p_athlete_id: athlete.id, p_expected_revision: athlete.archive_revision,
+      p_archived: archive, p_confirmation_name: athlete.display_name,
+    });
+    if (error) {
+      setStatus(error.code === "PGRST202" ? "The athlete archive database update has not been applied yet."
+        : error.code === "40001" ? "This athlete changed. Reload the roster before trying again."
+        : error.code === "42501" ? "Coach access is no longer available. Sign in again."
+        : "Could not update athlete status. Reload before trying again.");
+      return;
+    }
+    if (data?.athlete_id !== athlete.id || data?.archived !== archive || !Number.isInteger(data?.revision)) {
+      setStatus("The status result was unclear. Reload before trying again."); return;
+    }
+    clearDeletionReview();
+    await afterSave(() => refresh(familySelect.value, athlete.id),
+      `${athlete.display_name} ${archive ? "archived. Find them in Archived athletes. Existing class places remain for review." : "reactivated. New bookings are available; check their class places."}`);
+  });
+}
+
+rosterStatus.addEventListener("change", renderRoster);
 
 async function refresh(preferredFamilyId = familySelect.value, preferredAthleteId) {
   await loadGroups();
@@ -193,15 +242,15 @@ function renderAthletes(preferredId = athleteSelect.value) {
   groupAthleteSelect.replaceChildren();
   for (const athlete of athletes) {
     const item = document.createElement("li");
-    const label = document.createElement("span"); label.textContent = athlete.display_name;
+    const label = document.createElement("span"); label.textContent = athlete.display_name + (athlete.archived_at ? " · Archived" : "");
     const remove = document.createElement("button");
     remove.type = "button"; remove.className = "secondary"; remove.textContent = "Delete athlete";
     remove.setAttribute("aria-label", `Delete athlete ${athlete.display_name}`);
     remove.addEventListener("click", () => reviewDeletion(athlete.id));
-    item.append(label, remove);
+    item.append(label, archiveButton(athlete), remove);
     athleteList.append(item);
-    athleteSelect.append(option(athlete.id, athlete.display_name));
-    groupAthleteSelect.append(option(athlete.id, athlete.display_name));
+    athleteSelect.append(option(athlete.id, athlete.display_name + (athlete.archived_at ? " · Archived" : "")));
+    groupAthleteSelect.append(option(athlete.id, athlete.display_name + (athlete.archived_at ? " · Archived" : "")));
   }
   if (!athletes.length) {
     const item = document.createElement("li");
@@ -277,7 +326,7 @@ async function loadAthletes(preferredId) {
   if (!familyId) return;
   const family = selectedFamily();
   const { data, count, error } = await supabase.from("athletes")
-    .select("id, display_name", { count: "exact" }).eq("family_id", familyId)
+    .select("id, display_name, archived_at, archive_revision", { count: "exact" }).eq("family_id", familyId)
     .order("display_name").order("id");
   if (error) throw error;
   if (count > data.length) throw new Error("Athlete list exceeds the current page limit");

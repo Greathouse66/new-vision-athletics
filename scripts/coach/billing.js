@@ -48,7 +48,7 @@ let deliveryRows = [];
 
 function setStatus(message) { status.textContent = message; }
 function labelFor(athlete) {
-  return `${athlete.display_name} · ${families.find((family) => family.id === athlete.family_id)?.display_name ?? "Account"}`;
+  return `${athlete.display_name}${athlete.archived_at ? " · Archived" : ""} · ${families.find((family) => family.id === athlete.family_id)?.display_name ?? "Account"}`;
 }
 function minor(value) {
   const n = Number(value);
@@ -121,6 +121,7 @@ function render() {
   let eligible = 0;
   for (const athlete of athletes) {
     const charge = charges.find((entry) => entry.athlete_id === athlete.id);
+    if (athlete.archived_at && !charge) continue;
     const item = document.createElement("li");
     const name = document.createElement("strong");
     name.textContent = labelFor(athlete);
@@ -194,7 +195,7 @@ function render() {
 
 async function loadRoster() {
   const [athleteResult, familyResult, contactResult, readinessResult] = await Promise.all([
-    supabase.from("athletes").select("id, family_id, display_name", { count: "exact" })
+    supabase.from("athletes").select("id, family_id, display_name, archived_at", { count: "exact" })
       .order("display_name").order("id"),
     supabase.from("families").select("id, display_name", { count: "exact" })
       .order("display_name").order("id"),

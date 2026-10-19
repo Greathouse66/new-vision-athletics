@@ -55,6 +55,7 @@ async function decide(entry, approve) {
     message = error
       ? error.code === "23514" ? "Class is full. Decline the request or free a seat first."
         : error.code === "23505" ? "This athlete already has a confirmed place. Review class places."
+        : error.code === "55000" && error.message?.includes("athlete is archived") ? "This athlete is archived. Reactivate them on the athlete roster before booking."
         : error.code === "42501" ? "Access changed. Reload and review the request."
         : "Could not review the request. Reload before trying again."
       : approve ? "Approved and reserved. Parent email confirmation is handled automatically."

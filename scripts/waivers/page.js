@@ -34,14 +34,15 @@ export async function startWaivers(role) {
   }
   function renderList() {
     const completed = rows.filter(row => row.waiver_status === 'completed').length;
-    const needs = rows.filter(row => row.waiver_status === 'needs_signing').length;
-    const pending = rows.length-completed-needs;
+    const needs = rows.filter(row => !row.archived_at && row.waiver_status === 'needs_signing').length;
+    const pending = rows.filter(row => !row.archived_at && row.waiver_status === 'not_configured').length;
     summary.textContent = `${completed} completed · ${needs} need signing${pending ? ` · ${pending} setup pending` : ''}`;
     list.replaceChildren();
-    const visible = rows.filter(row => filter.value === 'all' || row.waiver_status === filter.value);
+    const visible = rows.filter(row => filter.value === 'all' ||
+      (row.waiver_status === filter.value && (filter.value === 'completed' || !row.archived_at)));
     for (const row of visible) {
       const card = node('article', undefined, 'waiver-card');
-      card.append(node('h2', row.athlete_name), node('span', statusLabel(row.waiver_status), `waiver-badge ${row.waiver_status}`));
+      card.append(node('h2', row.athlete_name + (row.archived_at ? ' · Archived' : '')), node('span', row.archived_at && row.waiver_status !== 'completed' ? 'Archived · Current waiver unsigned' : statusLabel(row.waiver_status), `waiver-badge ${row.waiver_status}`));
       if (row.signed_at) card.append(node('p', `Signed ${signedWhen(row.signed_at)}`));
       const button = node('button', row.waiver_status === 'completed' ? 'View completed waiver' : parent ? 'Open athlete waiver' : 'View status', 'secondary');
       button.type = 'button';
@@ -55,7 +56,7 @@ export async function startWaivers(role) {
     const previous = selector.value;
     selector.replaceChildren(node('option', 'Choose an athlete'));
     selector.firstElementChild.value = '';
-    for (const row of rows) { const option = node('option', row.athlete_name); option.value = row.athlete_id; selector.append(option); }
+    for (const row of rows) { const option = node('option', row.athlete_name + (row.archived_at ? ' · Archived' : '')); option.value = row.athlete_id; selector.append(option); }
     if (rows.some(row => row.athlete_id === previous)) selector.value = previous;
     renderList();
   }

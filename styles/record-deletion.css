@@ -19,3 +19,7 @@
 .portal-coach .card #athletes li { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; }
 .portal-coach .card #athletes li span { flex:1; min-width:8rem; }
 .portal-coach .card #athletes li button { margin:0; }
+
+.portal-coach .card #roster li { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; }
+.portal-coach .card #roster li span { flex:1; min-width:9rem; overflow-wrap:anywhere; }
+.portal-coach .card #roster li button { margin:0; }

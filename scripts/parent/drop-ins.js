@@ -72,6 +72,7 @@ form.addEventListener("submit", async (event) => {
     if (error) {
       status.textContent = error.code === "23514" ? "This class filled up. Choose another date."
         : error.code === "23505" ? "This athlete already has a confirmed place."
+        : error.code === "55000" && error.message?.includes("athlete is archived") ? "This athlete is archived. Contact the coach to reactivate them."
         : error.code === "55000" ? "This class request was already declined. Contact the coach."
         : error.code === "42501" ? "Your athlete access changed. Reload the page."
         : "Could not send the request. Check the class and try again.";
@@ -115,7 +116,7 @@ async function start() {
   const familyIds = [...new Set(grants.map((g) => g.family_id))];
   const [athleteResult, classResult] = await Promise.all([
     supabase.from("athletes").select("id, family_id, display_name", { count: "exact" })
-      .in("family_id", familyIds).order("display_name"),
+      .in("family_id", familyIds).is("archived_at", null).order("display_name"),
     supabase.rpc("list_open_drop_in_classes"),
   ]);
   for (const result of [athleteResult, classResult]) {
@@ -129,7 +130,7 @@ async function start() {
   renderClasses();
   await loadRequests();
   content.hidden = false;
-  status.textContent = "";
+  status.textContent = athletes.length ? "" : "No active athletes are available for new requests. Contact the coach to reactivate an athlete. Existing request history is shown below.";
 }
 
 start().catch(() => { status.textContent = "Could not load drop-in requests. Try again."; });

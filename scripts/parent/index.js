@@ -11,6 +11,7 @@ const invitationList = document.querySelector("#invitations");
 const accountSwitcher = document.querySelector("#account-switcher");
 const accountFilter = document.querySelector("#account-filter");
 let dashboard = null;
+const athleteStatus = document.querySelector("#athlete-status");
 
 function showError(message) {
   status.textContent = message;
@@ -82,9 +83,12 @@ function renderDashboard() {
   if (!dashboard) return;
   const familyId = selectedFamilyId();
   const visibleFamilies = dashboard.families.filter((family) => familyId === "all" || family.id === familyId);
-  const visibleAthletes = dashboard.athletes.filter((athlete) => familyId === "all" || athlete.family_id === familyId);
+  const accountAthletes = dashboard.athletes.filter(athlete => familyId === "all" || athlete.family_id === familyId);
+  const visibleAthletes = accountAthletes.filter(athlete => athleteStatus.value === "all" ||
+    (athleteStatus.value === "archived") === Boolean(athlete.archived_at));
+  const activeAthletes = accountAthletes.filter(athlete => !athlete.archived_at);
   const total = document.querySelector("#athlete-total");
-  total.textContent = `${visibleAthletes.length} rostered`;
+  total.textContent = `${activeAthletes.length} active · ${accountAthletes.length - activeAthletes.length} archived`;
   const list = document.querySelector("#families");
   list.replaceChildren();
   for (const family of visibleFamilies) {
@@ -109,7 +113,7 @@ function renderDashboard() {
       group.className = "parent-group-chip";
       const enrollment = dashboard.enrollments.find((row) => row.athlete_id === athlete.id &&
         row.starts_on <= dashboard.today && (!row.ends_on || row.ends_on > dashboard.today));
-      group.textContent = enrollment
+      group.textContent = athlete.archived_at ? "Archived" : enrollment
         ? dashboard.groupNames.get(enrollment.group_id) ?? "Group details unavailable"
         : dashboard.groupsAvailable ? "Group pending" : "Group details unavailable";
       const waiver = dashboard.waivers?.find(row => row.athlete_id === athlete.id);
@@ -117,6 +121,7 @@ function renderDashboard() {
       waiverLink.href = `/parent/waivers.html?athlete=${encodeURIComponent(athlete.id)}`;
       waiverLink.className = "parent-waiver-link";
       waiverLink.textContent = waiver?.waiver_status === "completed" ? "Waiver completed · View copy"
+        : athlete.archived_at ? "View waiver status and history"
         : waiver?.waiver_status === "needs_signing" ? "Waiver needs signing · Complete now"
         : waiver?.waiver_status === "not_configured" ? "Waiver setup pending" : "Waiver status unavailable · Review";
       info.append(name, group, waiverLink);
@@ -126,18 +131,18 @@ function renderDashboard() {
   }
   if (!visibleAthletes.length) {
     const empty = document.createElement("p");
-    empty.textContent = "No athletes have been added to this account yet.";
+    empty.textContent = "No athletes in this view. Use Show athletes to see archived records.";
     list.append(empty);
   }
   const waiverSummary = document.querySelector("#waiver-summary");
-  const visibleWaivers = dashboard.waivers?.filter(row => visibleAthletes.some(athlete => athlete.id === row.athlete_id));
-  if (!visibleWaivers || visibleWaivers.length !== visibleAthletes.length) {
+  const visibleWaivers = dashboard.waivers?.filter(row => activeAthletes.some(athlete => athlete.id === row.athlete_id));
+  if (!visibleWaivers || visibleWaivers.length !== activeAthletes.length) {
     waiverSummary.textContent = "Waiver status unavailable. Open waivers to check your athletes.";
   } else {
     const needs = visibleWaivers.filter(row => row.waiver_status === "needs_signing").length;
     const completed = visibleWaivers.filter(row => row.waiver_status === "completed").length;
-    waiverSummary.textContent = needs ? `${needs} ${needs === 1 ? "athlete needs" : "athletes need"} a signed waiver. ${completed} completed.`
-      : completed === visibleAthletes.length && completed > 0 ? "All your athlete waivers are completed."
+    waiverSummary.textContent = !activeAthletes.length ? "No active athletes need a waiver. Saved copies remain available in waivers." : needs ? `${needs} ${needs === 1 ? "athlete needs" : "athletes need"} a signed waiver. ${completed} completed.`
+      : completed === activeAthletes.length && completed > 0 ? "All your athlete waivers are completed."
       : "Waiver setup is pending for your athletes.";
   }
   const balance = document.querySelector("#balance-summary");
@@ -193,7 +198,7 @@ async function loadFamily() {
   const familyIds = grants.map((grant) => grant.family_id);
   const [{ data: families, error: familyError }, { data: athletes, error: athleteError }] = await Promise.all([
     supabase.from("families").select("id, display_name").in("id", familyIds).order("display_name"),
-    supabase.from("athletes").select("id, family_id, display_name").in("family_id", familyIds).order("display_name"),
+    supabase.from("athletes").select("id, family_id, display_name, archived_at").in("family_id", familyIds).order("display_name"),
   ]);
   if (familyError || athleteError) throw familyError ?? athleteError;
   const athleteIds = athletes.map((athlete) => athlete.id);
@@ -238,6 +243,7 @@ async function loadFamily() {
 }
 
 accountFilter.addEventListener("change", renderDashboard);
+athleteStatus.addEventListener("change", renderDashboard);
 signOut.addEventListener("click", async () => {
   signOut.disabled = true;
   const { error } = await supabase.auth.signOut();

@@ -31,7 +31,7 @@ async function start(){
  const auth=await supabase.auth.getUser();if(auth.error||!auth.data.user){location.replace('/auth/sign-in.html');return}
  signOut.hidden=false;const athletes=await loadAthletes(supabase,auth.data.user.id);
  if(!athletes.length){status.textContent='No athletes linked yet. Review invitations on My athletes or contact the coach.';return}
- selector.replaceChildren(...athletes.map(a=>{const o=element('option',a.display_name);o.value=a.id;return o}));
+ selector.replaceChildren(...athletes.map(a=>{const o=element('option',a.display_name + (a.archived_at ? ' · Archived' : ''));o.value=a.id;return o}));
  await refresh();content.hidden=false;status.textContent='';
  supabase.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'){closePdf();content.hidden=true;location.replace('/auth/sign-in.html')}});
 }
