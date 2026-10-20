@@ -47,8 +47,8 @@ async function settle(job,sent=false,code='temporary'){return db.query('select p
 test('reschedule retains occurrence, original roster date, seat IDs and weekly rules; Today follows actual date',async()=>fixture(async()=>{
   const r=await review(),seats=await rows('public.class_seats'),slots=await rows('public.standing_class_slots');
   const result=await save();assert.equal(result.queued_emails,2);
-  const after=(await rows('public.class_occurrences'))[0];assert.equal(after.class_date,r.occurrence.class_date);assert.equal(after.id,occurrence);
-  assert.notEqual(after.starts_at,r.occurrence.starts_at);assert.equal(after.schedule_revision,2);
+  const after=(await rows('public.class_occurrences'))[0];assert.equal(new Date(after.class_date).toISOString().slice(0,10),r.occurrence.class_date);assert.equal(after.id,occurrence);
+  assert.notEqual(Date.parse(after.starts_at),Date.parse(r.occurrence.starts_at));assert.equal(after.schedule_revision,2);
   assert.deepEqual(await rows('public.class_seats'),seats);assert.deepEqual(await rows('public.standing_class_slots'),slots);
   await as('authenticated',parent);assert.equal((await db.query('select * from public.list_my_cancellable_sessions()')).rows.length,1);
   await as('authenticated',coach);

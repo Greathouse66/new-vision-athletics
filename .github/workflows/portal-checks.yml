@@ -1,8 +1,6 @@
 name: Portal checks
 on:
   pull_request:
-  push:
-    branches: [class-changes-and-closures]
 permissions:
   contents: read
 jobs:
