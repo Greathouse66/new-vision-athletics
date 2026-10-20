@@ -86,9 +86,7 @@ async function loadRoster() {
   }
   status.textContent = "Loading the class roster…";
   const occurrences = await checkedList(
-    supabase.from("class_occurrences")
-      .select("id, standing_slot_id, class_date, starts_at, ends_at, capacity, location_id", { count: "exact" })
-      .eq("class_date", classDate.value).order("starts_at").order("id"),
+    supabase.rpc("list_coach_class_day", { p_date: classDate.value }, { count: "exact" }).order("starts_at").order("id"),
     "Dated class list"
   );
   if (request !== requestNumber) return;
@@ -138,7 +136,7 @@ async function loadRoster() {
     const heading = document.createElement("h2");
     heading.textContent = `${name} · ${classTime(occurrence.starts_at, zone)}–${classTime(occurrence.ends_at, zone)}`;
     const details = document.createElement("p");
-    details.textContent = `${venue?.display_name ?? "Venue needs review"} · ${confirmed.length}/${occurrence.capacity} places`;
+    details.textContent = occurrence.closed_at ? "CLOSED · "+occurrence.closure_reason : `${venue?.display_name ?? "Venue needs review"} · ${confirmed.length}/${occurrence.capacity} places`;
     const list = document.createElement("ul");
     for (const seat of confirmed) {
       const item = document.createElement("li");
