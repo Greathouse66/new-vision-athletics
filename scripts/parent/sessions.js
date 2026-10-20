@@ -70,6 +70,19 @@ async function loadSessions() {
     item.textContent = "Showing the first 200 upcoming sessions.";
     sessionList.append(item);
   }
+  const updates=await supabase.rpc("list_my_class_changes");
+  if(updates.error)throw updates.error;
+  const updateList=document.getElementById("class-updates");updateList.replaceChildren();
+  for(const row of updates.data.slice(0,200)){
+    const item=document.createElement("li");const before=row.before_details,after=row.after_details;
+    item.textContent=row.athlete_name+" · "+row.class_label+" · "+(row.action==="closed"?"Class closed":"Class rescheduled")+
+      " · Originally "+localDate(before.starts_at,before.time_zone)+", "+localTime(before.starts_at,before.time_zone)+" at "+before.location_name+
+      (row.action==="closed"?"": " → "+localDate(after.starts_at,after.time_zone)+", "+localTime(after.starts_at,after.time_zone)+"–"+localTime(after.ends_at,after.time_zone)+" at "+after.location_name)+
+      " · "+row.reason+(row.booking_kind==="pending_request"?(row.action==="closed"?" · Pending drop-in closed.":" · Your drop-in still needs coach approval."):"");
+    updateList.append(item);
+  }
+  if(!updates.data.length){const li=document.createElement("li");li.textContent="No class changes or closures.";updateList.append(li);}
+  if(updates.data.length>200){const li=document.createElement("li");li.textContent="Showing the latest 200 class updates.";updateList.append(li);}
   const { data: cancelled, error: historyError } = await supabase.rpc("list_my_parent_cancellations");
   if (historyError) throw historyError;
   cancellationList.replaceChildren();

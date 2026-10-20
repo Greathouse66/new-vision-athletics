@@ -1,6 +1,8 @@
 import { configured, supabase } from "../auth/client.js";
 import { classDatesForWeek, currentOrNextMondayChicago, isMondayDate } from "./week-date.mjs";
 
+import { classChanges } from "./class-changes.js";
+
 const status = document.querySelector("#status");
 const content = document.querySelector("#coach-content");
 const signOut = document.querySelector("#sign-out");
@@ -26,6 +28,10 @@ let occurrences = [];
 let seats = [];
 let busy = false;
 let weekRequest = 0;
+
+const changes=classChanges({supabase,content,isBusy:()=>busy,refresh:()=>loadWeek(),lock(value){
+  busy=value;for(const el of content.querySelectorAll("button,input,select,textarea"))el.disabled=value;
+}});
 
 function option(value, label) {
   const result = document.createElement("option");
@@ -60,7 +66,10 @@ function classLabel(occurrence) {
   const slot = slots.find((item) => item.id === occurrence.standing_slot_id);
   const venue = locations.find((item) => item.id === occurrence.location_id)?.display_name
     ?? "Venue needs review";
-  return `${occurrence.class_date} · ${slotLabel(slot)} · ${venue}`;
+  const className=slot?.class_kind==="intro"?"Intro":groups.find(g=>g.id===slot?.group_id)?.name??"Class";
+  const zone=locations.find(item=>item.id===occurrence.location_id)?.time_zone??"America/Chicago";
+  const actual=new Intl.DateTimeFormat("en-US",{timeZone:zone,dateStyle:"medium",timeStyle:"short"}).format(new Date(occurrence.starts_at));
+  return `${actual} · ${className} · ${venue}${occurrence.closed_at?" · CLOSED":""}`;
 }
 
 async function fullList(table, columns, orderColumn) {
@@ -77,7 +86,7 @@ async function loadReferenceData() {
     fullList("standing_class_slots",
       "id, group_id, class_kind, iso_weekday, local_start_time, capacity, active_from, active_until", "iso_weekday"),
     fullList("skill_groups", "id, name", "name"),
-    fullList("class_locations", "id, display_name", "display_name"),
+    fullList("class_locations", "id, display_name, time_zone", "display_name"),
   ]);
   slots.sort((a, b) => a.iso_weekday - b.iso_weekday ||
     a.local_start_time.localeCompare(b.local_start_time));
@@ -137,8 +146,11 @@ function renderWeek(preferredOccurrenceId) {
     const used = seats.filter((seat) => seat.occurrence_id === occurrence.id).length;
     const item = document.createElement("li");
     item.textContent = `${label} · ${used}/${occurrence.capacity} seats`;
+    const button=document.createElement("button");button.type="button";button.className="secondary";
+    button.textContent=occurrence.closed_at?"View closure & emails":"Change / close class";
+    button.disabled=busy;button.addEventListener("click",()=>changes.open(occurrence,locations));item.append(button);
     weekClasses.append(item);
-    dropInClass.append(option(occurrence.id, `${label} · ${used}/${occurrence.capacity} seats`));
+    if(!occurrence.closed_at)dropInClass.append(option(occurrence.id, `${label} · ${used}/${occurrence.capacity} seats`));
   }
   addEmptyItem(weekClasses, "No dated classes have been created for this week.");
   dropInClass.value = occurrences.some((entry) => entry.id === preferredOccurrenceId)
@@ -147,6 +159,7 @@ function renderWeek(preferredOccurrenceId) {
 }
 
 async function loadWeek(preferredOccurrenceId = dropInClass.value) {
+  changes.close();
   const request = ++weekRequest;
   occurrences = [];
   seats = [];
@@ -157,7 +170,7 @@ async function loadWeek(preferredOccurrenceId = dropInClass.value) {
   }
   const dates = classDatesForWeek(weekStart.value, 7);
   const { data, count, error } = await supabase.from("class_occurrences")
-    .select("id, standing_slot_id, class_date, capacity, location_id", { count: "exact" })
+    .select("id, standing_slot_id, class_date, starts_at, ends_at, capacity, location_id, schedule_revision, closed_at", { count: "exact" })
     .gte("class_date", dates[0]).lte("class_date", dates.at(-1))
     .order("class_date").order("starts_at").order("id");
   if (error) throw error;
@@ -200,6 +213,7 @@ async function performWrite(action, refresh, successMessage) {
     for (const control of content.querySelectorAll("button, select, input")) control.disabled = false;
     busy = false;
     renderSelectedSeats();
+    changes.restore();
   }
 }
 

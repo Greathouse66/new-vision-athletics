@@ -1,3 +1,4 @@
+import { deliverClassChangeNotification } from "./class-change-delivery.mjs";
 import { deliverNotification } from "./delivery.mjs";
 import { deliverApprovalNotification } from "./approval-delivery.mjs";
 import { deliverReportNotification } from "./report-delivery.mjs";
@@ -11,6 +12,7 @@ export async function runNotifications(admin, coachConfig, parentConfig, send = 
   const cancellationConfig = { ...coachConfig,
     reviewUrl: new URL("/coach/cancellations.html", coachConfig.reviewUrl).href };
   await Promise.all([
+    ["class_changes", deliverClassChangeNotification, parentConfig],
     ["parent", deliverApprovalNotification, parentConfig], ["coach", deliverNotification, coachConfig],
     ["cancellation", deliverCancellationNotification, cancellationConfig],
     ["report", deliverReportNotification, { ...parentConfig,

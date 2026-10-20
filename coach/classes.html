@@ -16,7 +16,7 @@
       <a href="/" class="brand">New Vision Athletics</a>
       <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
     </header>
-    <h1>Class places</h1>
+    <h1>Class places & changes</h1>
     <p id="status" role="status" aria-live="polite">Checking coach access…</p>
     <div id="coach-content" hidden>
       <p><a href="/coach/index.html">Coach workspace</a> · <a href="/coach/schedule.html">Plan class dates</a></p>
@@ -42,6 +42,32 @@
         <label for="week-start">Week starting Monday</label>
         <input id="week-start" type="date" required>
         <ul id="week-classes"></ul>
+        <section id="class-change-editor" aria-labelledby="change-heading" hidden>
+          <h2 id="change-heading" tabindex="-1">Change an existing class</h2>
+          <p id="change-current"></p>
+          <p class="note">This changes one dated class. Regular weekly assignments stay in place. Times use the selected venue's time zone. A closed class cannot be reopened here.</p>
+          <form id="class-change-form">
+            <label for="change-action">Action</label>
+            <select id="change-action"><option value="rescheduled">Reschedule or change venue</option><option value="closed">Cancel / close this class</option></select>
+            <fieldset id="change-time-fields">
+              <legend>New class details</legend>
+              <label for="change-location">Venue</label><select id="change-location" required></select>
+              <p id="change-zone"></p>
+              <label for="change-start">Local date and start time</label><input id="change-start" type="datetime-local" required>
+              <label for="change-duration">Duration in minutes</label><input id="change-duration" type="number" min="1" max="360" required>
+            </fieldset>
+            <label for="change-reason">Reason shared with affected parents</label>
+            <textarea id="change-reason" minlength="3" maxlength="500" required></textarea>
+            <button id="review-class-change" type="submit">Review change & affected families</button>
+          </form>
+          <div id="change-review" hidden aria-live="polite"></div>
+          <button id="save-class-change" type="button" hidden>Confirm change & queue emails</button>
+          <button id="cancel-class-change" class="secondary" type="button">Close editor</button>
+          <p id="change-status" role="status" aria-live="polite"></p>
+          <h3>Change history & email delivery</h3>
+          <button id="refresh-change-history" type="button" class="secondary">Refresh delivery status</button>
+          <ul id="change-history"></ul>
+        </section>
         <form id="drop-in-form">
           <h2>Coach-confirmed drop-in</h2>
           <p>Use this only after speaking with a parent. A confirmed drop-in takes one seat in one dated class.</p>
@@ -54,7 +80,7 @@
         <h2>Seats in selected class</h2>
         <ul id="seat-list"></ul>
       </section>
-      <p class="note">Parent drop-in requests and messages are not enabled here. Cancelling a dated seat keeps its history and does not end a regular weekly assignment. Coach changes should be checked with the family directly.</p>
+      <p class="note">Class changes and closures queue emails to verified parents of confirmed athletes and pending drop-in requests. Review missing contacts and email delivery after saving. Cancelling an individual seat still requires contacting that family directly. Makeup and refund decisions are handled separately.</p>
       <nav class="portal-mobile-nav" aria-label="Coach shortcuts">
         <a href="/coach/index.html">Dashboard</a>
         <a href="/coach/records.html">Athletes</a>
