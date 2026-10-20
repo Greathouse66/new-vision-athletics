@@ -1,0 +1,44 @@
+name: Verify class changes in production
+on:
+  push:
+    branches: [verify-class-changes-production]
+permissions:
+  contents: read
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify live coach and parent assets
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const origin = "https://newvision-athletics.com";
+          const checks = [
+            ["/coach/classes.html", ["id=\"class-change-editor\"", "id=\"class-change-form\""]],
+            ["/parent/sessions.html", ["id=\"class-updates\""]],
+            ["/coach/classes.js", ["save_coach_class_change", "review_coach_class_change"]],
+            ["/parent/sessions.js", ["list_my_class_changes"]],
+          ];
+          for (let attempt=1; attempt<=18; attempt++) {
+            const results = await Promise.all(checks.map(async ([path, markers]) => {
+              try {
+                const response=await fetch(origin+path+"?verify-class-changes="+Date.now(), {
+                  headers: {"Cache-Control":"no-cache"}, signal: AbortSignal.timeout(10000)
+                });
+                const body=await response.text();
+                return {path,status:response.status,ok:response.ok && markers.every(m=>body.includes(m))};
+              } catch {return {path,status:"unavailable",ok:false};}
+            }));
+            console.log(JSON.stringify({attempt,results}));
+            if(results.every(r=>r.ok)) {
+              console.log("Live coach and parent HTML and JavaScript contain the approved class-change feature.");
+              process.exit(0);
+            }
+            if(attempt<18) await new Promise(r=>setTimeout(r,5000));
+          }
+          throw new Error("Live feature verification did not pass");
+          NODE
